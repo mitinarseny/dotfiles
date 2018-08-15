@@ -1,5 +1,5 @@
 # Dev Set for macOS
-List of all things that should be installed on macOS. See [this instructions](https://sourabhbajaj.com/mac-setup/) for more detailed information.
+List of all things that should be installed on macOS. See [these instructions](https://sourabhbajaj.com/mac-setup/) for more detailed information.
 
 ## Homebrew
 Install [brew](https://brew.sh).  

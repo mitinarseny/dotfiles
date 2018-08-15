@@ -2,8 +2,10 @@
 List of all things that should be installed on macOS. See [this instructions](https://sourabhbajaj.com/mac-setup/) for more detailed information.
 
 ## Homebrew
-Install [brew](https://brew.sh).
-Install all formulas from `brew_formulas`.
+Install [brew](https://brew.sh).  
+Install all formulas from `brew_formulas` via `brew install`.  
+Install all cask formulas from `brew_cask_formulas` via `brew xask install`.
+
 
 ## Zsh + Oh-My-Zsh
 1. Install [Z shell](http://zsh.sourceforge.net): `brew install zsh`

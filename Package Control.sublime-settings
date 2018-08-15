@@ -1,1 +1,24 @@
-../Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"A File Icon",
+		"Alignment",
+		"API Blueprint",
+		"ayu",
+		"DashDoc",
+		"Emmet",
+		"Git",
+		"Gitignore",
+		"Jedi - Python autocompletion",
+		"MarkdownEditing",
+		"Package Control",
+		"SideBarEnhancements",
+		"SublimeCodeIntel",
+		"SublimeLinter",
+		"ZSH"
+	]
+}

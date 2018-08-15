@@ -1,1 +1,13 @@
-../Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings
+{
+	"color_scheme": "Packages/ayu/ayu-mirage.tmTheme",
+	"font_face": "Fira Code Retina",
+	"font_options":
+	[
+	],
+	"font_size": 12,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"theme": "ayu-mirage.sublime-theme"
+}

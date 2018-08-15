@@ -1,4 +1,4 @@
-# System Configuration
+# Dev Set for macOS
 List of all things that should be installed on macOS. See [this instructions](https://sourabhbajaj.com/mac-setup/) for more detailed information.
 
 ## Homebrew

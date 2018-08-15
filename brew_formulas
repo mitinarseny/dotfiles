@@ -1,0 +1,16 @@
+cmake
+drafter
+gdbm
+htop
+httpie
+libffi
+openssl
+python
+readline
+rethinkdb
+sqlite
+xz
+zsh
+zsh-autosuggestions
+zsh-completions
+zsh-syntax-highlighting

@@ -1,0 +1,15 @@
+{
+	"color_scheme": "Packages/ayu/ayu-mirage.tmTheme",
+	"font_face": "Fira Code Retina",
+	"font_options":
+	[
+	],
+	"font_size": 12,
+	"ignored_packages":
+	[
+		"Markdown",
+		"Vintage"
+	],
+	"theme": "ayu-mirage.sublime-theme",
+	"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", "__pycache__", ".idea"],
+}

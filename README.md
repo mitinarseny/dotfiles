@@ -17,7 +17,7 @@ Install all cask formulas from `brew_cask_formulas` via `brew cask install`.
 Copy `.gitconfig` -> `~/.gitconfig`
 
 ## iTerm2
-Install [iTerm2](https://www.iterm2.com).
+Install [iTerm2](https://www.iterm2.com).  
 Install `iTerm2_profile` and `ayu.itermcolors`.
 
 ## Sublime Text 3

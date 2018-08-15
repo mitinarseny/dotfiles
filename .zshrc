@@ -1,1 +1,1 @@
-/Users/mitinarseny/.zshrc
+../.zshrc

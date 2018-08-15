@@ -1,0 +1,1 @@
+/Users/mitinarseny/.bash_profile

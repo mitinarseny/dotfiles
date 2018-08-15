@@ -7,6 +7,7 @@
 	"font_size": 12,
 	"ignored_packages":
 	[
+		"Markdown",
 		"Vintage"
 	],
 	"theme": "ayu-mirage.sublime-theme"

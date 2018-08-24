@@ -1,4 +1,4 @@
-# Dev Set for macOS
+# Dotfiles
 List of all things that should be installed on macOS. See [these instructions](https://sourabhbajaj.com/mac-setup/) for more detailed information.
 
 ## Homebrew

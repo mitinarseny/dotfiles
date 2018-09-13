@@ -18,7 +18,11 @@ Copy `git/.gitconfig` -> `~/.gitconfig`
 
 ## iTerm2 
 Install `iTerm2/iTerm2_profile` and `iTerm2/ayu.itermcolors`.
+[Install Shell Integration](https://www.iterm2.com/documentation-shell-integration.html)
 
 ## Sublime Text 3  
 Install settings from `subl/Preferences.sublime-settings`.  
 Install packages from `subl/Package Constrol.sublime-settings`.
+
+## Dictionary.app
+Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.

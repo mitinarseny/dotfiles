@@ -26,3 +26,6 @@ Install packages from `subl/Package Constrol.sublime-settings`.
 
 ## Dictionary.app
 Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.
+
+## Mac Media Keys to Control Streaming Services
+In Safari or Google Chrome go to `Dovelop -> Allow JavaScript from Apple Events`.

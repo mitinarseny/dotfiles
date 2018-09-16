@@ -10,5 +10,6 @@
 		"Markdown",
 		"Vintage"
 	],
-	"theme": "ayu-mirage.sublime-theme"
+	"theme": "ayu-mirage.sublime-theme",
+	"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", "__pycache__", ".idea"],
 }

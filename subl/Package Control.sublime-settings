@@ -6,19 +6,28 @@
 	"installed_packages":
 	[
 		"A File Icon",
+		"AdvancedNewFile",
 		"Alignment",
-		"All Autocomplete",
-		"API Blueprint",
+		"Anaconda",
 		"ayu",
 		"Dockerfile Syntax Highlighting",
+		"DotENV",
 		"Git",
+		"GitGutter",
 		"Gitignore",
+		"Hermes",
+		"INI",
 		"LaTeXYZ",
 		"Markdown Extended",
+		"Origami",
 		"Package Control",
+		"Protobuf Syntax Hightlighting",
+		"requirementstxt",
 		"SideBarEnhancements",
-		"SublimeCodeIntel",
 		"SublimeLinter",
+		"SublimeLinter-flake8",
+		"SublimeREPL",
+		"Zen Tabs",
 		"ZSH"
 	]
 }

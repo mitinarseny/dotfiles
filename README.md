@@ -24,6 +24,9 @@ Install [Shell Integration](https://www.iterm2.com/documentation-shell-integrati
 Install settings from `subl/Preferences.sublime-settings`.  
 Install packages from `subl/Package Constrol.sublime-settings`.
 
+## Quicklook
+`.ipynb`: [ipynb-quicklook](https://github.com/tuxu/ipynb-quicklook)
+
 ## Dictionary.app
 Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.
 

@@ -3,7 +3,7 @@ List of all things that should be installed on macOS. See [these instructions](h
 
 ## Homebrew
 Install [brew](https://brew.sh).  
-Install all required brew formulas and casks with: `brew bundle dump`
+Install all required brew formulas and casks with: `brew bundle`
 
 
 ## Zsh + Oh-My-Zsh

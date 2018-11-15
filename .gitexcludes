@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Dev
+*.env
+
+# Python
+*venv
+
+# IDEs
+*.sublime-*
+.vscode

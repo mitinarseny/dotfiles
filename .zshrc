@@ -1,3 +1,4 @@
+# Init
 export TERM="xterm-256color"
 source $(brew --prefix)/share/antigen/antigen.zsh
 
@@ -7,7 +8,7 @@ export GOPATH=$HOME/dev/go
 # Functions
 function mkc() {mkdir -p "$@" && cd "$@";}
 
-export ZSH_AUTOSUGGEST_USE_ASYNC=1
+export ZSH_AUTOSUGGEST_USE_ASYNC=true
 export CASE_SENSITIVE=0
 export CLICOLOR=1
 
@@ -51,4 +52,9 @@ antigen apply
 # Enable notifications
 source ~/.antigen/bundles/marzocchi/zsh-notify/notify.plugin.zsh
 
+# Enable iTerm Shell Integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Set some enviroment variables
+export EDITOR=nano
+export PAGER=most

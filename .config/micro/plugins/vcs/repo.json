@@ -1,0 +1,14 @@
+[{
+  "Name": "vcs",
+  "Description": "shows changes since last commit",
+  "Tags": ["version control", "git", "mercurial", "hg"],
+  "Versions": [
+    {
+      "Version": "0.5.2",
+      "Url": "https://bitbucket.org/dermetfan/micro-vcs/get/0.5.2.zip",
+      "Require": {
+        "micro": ">=1.3.1"
+      }
+    }
+  ]
+}]

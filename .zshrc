@@ -42,7 +42,7 @@ antigen bundle sindresorhus/pure
 
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-autosuggestions
-antigen bubdle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-completions
 
 antigen bundle hlissner/zsh-autopair
 antigen bundle zdharma/fast-syntax-highlighting
@@ -60,6 +60,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Set some enviroment variables
 export EDITOR=micro
-export PAGER=most
+export PAGER=less
+
+# Config Less
+export LESSOPEN="| src-hilite-lesspipe.sh %s"
+export LESS=' -R '
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

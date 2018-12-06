@@ -56,5 +56,5 @@ source ~/.antigen/bundles/marzocchi/zsh-notify/notify.plugin.zsh
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Set some enviroment variables
-export EDITOR=nano
+export EDITOR=micro
 export PAGER=most

@@ -43,6 +43,7 @@ source $ZSH_CONFIG_DIR/completion.zsh
 source $ZSH_CONFIG_DIR/env.zsh
 source $ZSH_CONFIG_DIR/aliases.zsh
 source $ZSH_CONFIG_DIR/devenv.zsh
+source $ZSH_CONFIG_DIR/keybinds.zsh
 
 # Tmux
 # ZSH_TMUX_AUTOSTART=true

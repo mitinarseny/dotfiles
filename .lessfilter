@@ -1,0 +1,16 @@
+#!/bin/sh
+case "$1" in
+    .bashrc|.bash_aliases|.bash_environment|.zshrc)
+        pygmentize -f 16m -l sh -O style=$PYGMENTIZE_STYLE "$1";;
+	.py)
+		pygmentize -f 16m -l py3 -O style=$PYGMENTIZE_STYLE "$1";;
+
+    *)
+        if grep -q "#\!/bin/sh" "$1" 2> /dev/null; then
+            pygmentize -f 16m -l sh -O style=$PYGMENTIZE_STYLE "$1"
+        else
+			pygmentize -f 16m -O style=$PYGMENTIZE_STYLE "$1"
+        fi
+esac
+
+exit 0

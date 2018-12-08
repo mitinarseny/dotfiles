@@ -1,26 +1,10 @@
-# Init
-export TERM="xterm-256color"
-source $(brew --prefix)/share/antigen/antigen.zsh
-
-# Dev
-export GOPATH=$HOME/dev/go
-
 # Functions
 function mkc() {mkdir -p "$@" && cd "$@";}
-
-export ZSH_AUTOSUGGEST_USE_ASYNC=true
-export CASE_SENSITIVE=0
-export CLICOLOR=1
-
-# Tmux
-# ZSH_TMUX_AUTOSTART=true
-# ZSH_TMUX_ITERM2=true
 
 ###############
 ### Antigen ###
 ###############
-
-
+source $(brew --prefix)/share/antigen/antigen.zsh
 
 antigen use oh-my-zsh
 
@@ -52,18 +36,14 @@ antigen bundle marzocchi/zsh-notify
 
 antigen apply
 
-# Enable notifications
-source ~/.antigen/bundles/marzocchi/zsh-notify/notify.plugin.zsh
+# Source other files
+export ZSH_CONFIG_DIR=$HOME/.zsh
+source $ZSH_CONFIG_DIR/config.zsh
+source $ZSH_CONFIG_DIR/completion.zsh
+source $ZSH_CONFIG_DIR/env.zsh
+source $ZSH_CONFIG_DIR/aliases.zsh
+source $ZSH_CONFIG_DIR/devenv.zsh
 
-# Enable iTerm Shell Integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Set some enviroment variables
-export EDITOR=micro
-export PAGER=less
-
-# Config Less
-export LESSOPEN="| src-hilite-lesspipe.sh %s"
-export LESS=' -R '
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Tmux
+# ZSH_TMUX_AUTOSTART=true
+# ZSH_TMUX_ITERM2=true

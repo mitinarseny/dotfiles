@@ -12,6 +12,13 @@ Install all required brew formulas and casks with:
 brew
 ```
 
+## Copy
+Copy files and directories to your `~` with this command:
+
+```commandLine
+cp -R ./.zshrc ./.tmux.conf ./.lessfilter ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/
+```
+
 ## Dictionary.app
 
 Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.

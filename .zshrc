@@ -37,7 +37,7 @@ antigen bundle marzocchi/zsh-notify
 antigen apply
 
 # Source other files
-export ZSH_CONFIG_DIR=$HOME/.zsh
+ZSH_CONFIG_DIR=$HOME/.zsh
 source $ZSH_CONFIG_DIR/config.zsh
 source $ZSH_CONFIG_DIR/completion.zsh
 source $ZSH_CONFIG_DIR/env.zsh

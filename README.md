@@ -9,7 +9,7 @@ Install [brew](https://brew.sh).
 Install all required brew formulas and casks with:
 
 ```commandLine
-brew
+brew bundle
 ```
 
 ## Copy

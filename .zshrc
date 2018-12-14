@@ -1,9 +1,11 @@
 # Functions
+
 function mkc() {mkdir -p "$@" && cd "$@";}
 
 ###############
 ### Antigen ###
 ###############
+
 source $(brew --prefix)/share/antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -23,6 +25,7 @@ antigen bundle redis-cli
 antigen bundle sudo
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
+antigen bundle wfxr/forgit
 
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-autosuggestions
@@ -37,6 +40,7 @@ antigen bundle marzocchi/zsh-notify
 antigen apply
 
 # Source other files
+
 ZSH_CONFIG_DIR=$HOME/.zsh
 source $ZSH_CONFIG_DIR/config.zsh
 source $ZSH_CONFIG_DIR/completion.zsh
@@ -46,5 +50,6 @@ source $ZSH_CONFIG_DIR/devenv.zsh
 source $ZSH_CONFIG_DIR/keybinds.zsh
 
 # Tmux
+
 # ZSH_TMUX_AUTOSTART=true
 # ZSH_TMUX_ITERM2=true

@@ -6,9 +6,9 @@ export CLICOLOR=1
 
 export LANG=${LANG:-en_US.UTF-8}
 
-export PAGER=less
+export PAGER="less -RF"
 export EDITOR=micro
-export LESS='-R -i -w -M -z-4'
+export LESS='-i -w -M -z-4'
 
 # Less config
 eval "$(SHELL=/bin/sh lesspipe.sh)"
@@ -27,3 +27,6 @@ export LESS_TERMCAP_us=$'\e[04;38;5;146m' # begin underline
 export MPLBACKEND="module://itermplot"
 
 export TERM="xterm-256color"
+
+# bat
+export BAT_CONFIG_PATH=$HOME/.bat.conf

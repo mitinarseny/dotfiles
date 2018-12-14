@@ -12,6 +12,7 @@ Install all required brew formulas and casks with:
 brew bundle
 ```
 
+
 ## Copy
 Copy files and directories to your `~` with this command:
 

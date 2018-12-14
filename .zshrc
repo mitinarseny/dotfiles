@@ -1,10 +1,4 @@
-# Functions
-
-function mkc() {mkdir -p "$@" && cd "$@";}
-
-###############
-### Antigen ###
-###############
+# Antigen 
 
 source $(brew --prefix)/share/antigen/antigen.zsh
 
@@ -48,6 +42,7 @@ source $ZSH_CONFIG_DIR/env.zsh
 source $ZSH_CONFIG_DIR/aliases.zsh
 source $ZSH_CONFIG_DIR/devenv.zsh
 source $ZSH_CONFIG_DIR/keybinds.zsh
+source $ZSH_CONFIG_DIR/functions.zsh
 
 # Tmux
 

@@ -19,10 +19,18 @@ Copy files and directories to your `~` with this command:
 cp -R ./.zshrc ./.tmux.conf ./.lessfilter ./.gitconfig ./.gitexcludes ./.config ./.zsh ~
 ```
 
-## Dictionary.app
+## Config
+
+### `bat`
+
+```commandLine
+cd ~/.bat/ && bat cache --source . --init
+```
+
+### Dictionary.app
 
 Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.
 
-## Mac Media Keys to Control Streaming Services
+### BeardedSpice: Mac Media Keys to Control Streaming Services
 
 In Safari or Google Chrome go to `Dovelop -> Allow JavaScript from Apple Events`.

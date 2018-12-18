@@ -1,3 +1,6 @@
+# Zsh
+WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+
 # Async ZSH
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 

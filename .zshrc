@@ -31,6 +31,8 @@ antigen bundle zdharma/fast-syntax-highlighting
 antigen bundle denysdovhan/gitio-zsh
 antigen bundle marzocchi/zsh-notify
 
+antigen bundle unixorn/autoupdate-antigen.zshplugin
+
 antigen apply
 
 # Source other files

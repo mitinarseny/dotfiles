@@ -17,7 +17,7 @@ brew bundle
 Copy files and directories to your `~` with this command:
 
 ```commandLine
-cp -R ./.zshrc ./.tmux.conf ./.lessfilter ./.gitconfig ./.gitexcludes ./.config ./.zsh ~
+cp -R ./.zshrc ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~
 ```
 
 ## Config

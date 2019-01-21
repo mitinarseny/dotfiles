@@ -33,7 +33,6 @@ brew "insect"
 brew "pandoc"
 brew "jupyter"
 brew "less"
-brew "lesspipe"
 brew "micro"
 brew "mono", link: false
 brew "neovim"

@@ -24,6 +24,7 @@ antigen bundle wfxr/forgit
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
+antigen bundle psprint/zsh-cmd-architect
 
 antigen bundle hlissner/zsh-autopair
 antigen bundle zdharma/fast-syntax-highlighting

@@ -13,10 +13,6 @@ export PAGER="less -RF"
 export EDITOR=micro
 export LESS='-i -w -M -z-4'
 
-# Less config
-eval "$(SHELL=/bin/sh lesspipe.sh)"
-export PYGMENTIZE_STYLE='monokai'
-
 # Less Colors for Man Pages
 export LESS_TERMCAP_mb=$'\e[01;31m'       # begin blinking
 export LESS_TERMCAP_md=$'\e[01;38;5;74m'  # begin bold

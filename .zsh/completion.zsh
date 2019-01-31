@@ -48,5 +48,4 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
 
 
 # Fuzzy finder
-[ -f $HOME/.zsh/plugins/zsh-interactive-cd.plugin.zsh ] && source $HOME/.zsh/plugins/zsh-interactive-cd.plugin.zsh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh

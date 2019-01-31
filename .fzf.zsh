@@ -13,7 +13,7 @@ fi
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 
 export FZF_DEFAULT_OPTS="
-	--preview=\"(bat {} 2> /dev/null || tree -L 2 -C {}) 2> /dev/null | head -200\"
+	--preview=\"(bat {} || tree -L 2 -C {}) 2> /dev/null | head -200\"
 	--color fg:-1,bg:-1,hl:#FFA759,fg+:-1,bg+:-1,hl+:#FFA759
 	--color info:#5C6773,prompt:#D4BFFF,spinner:#95E6CB,pointer:#73D0FF,marker:#FF3333
 	--cycle

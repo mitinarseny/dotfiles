@@ -16,3 +16,4 @@ setopt EXTENDED_HISTORY
 
 # Enable iTerm Shell Integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+zstyle ':notify:*' command-complete-timeout 10

@@ -6,7 +6,13 @@
 
 # Python
 *venv
+**/__pycache__/
+*.py[cod]
+*.pyc
 
 # IDEs
 *.sublime-*
 .vscode
+.idea
+
+iTermocil.yml

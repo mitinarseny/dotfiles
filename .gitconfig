@@ -8,4 +8,7 @@
   type = cat-file -t
   dump = cat-file -p
 [core]
-	excludesfile = /Users/mitinarseny/.gitexcludes
+	excludesfile = ~/.gitexcludes
+[user]
+	name = Arseny Mitin
+	email = mitinarseny@gmail.com

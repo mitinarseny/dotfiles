@@ -36,18 +36,24 @@ antigen bundle unixorn/autoupdate-antigen.zshplugin
 
 antigen apply
 
-# Source other files
+# Tmux
+
+# ZSH_TMUX_AUTOSTART=true
+# ZSH_TMUX_ITERM2=true
+
+# ZSH config
 
 ZSH_CONFIG_DIR=$HOME/.zsh
 source $ZSH_CONFIG_DIR/config.zsh
-source $ZSH_CONFIG_DIR/completion.zsh
+
+source $ZSH_CONFIG_DIR/completion/completion.zsh
+source $ZSH_CONFIG_DIR/completion/_swagger
+
 source $ZSH_CONFIG_DIR/env.zsh
 source $ZSH_CONFIG_DIR/aliases.zsh
 source $ZSH_CONFIG_DIR/devenv.zsh
 source $ZSH_CONFIG_DIR/keybinds.zsh
 source $ZSH_CONFIG_DIR/functions.zsh
 
-# Tmux
-
-# ZSH_TMUX_AUTOSTART=true
-# ZSH_TMUX_ITERM2=true
+autoload -U compinit
+compinit

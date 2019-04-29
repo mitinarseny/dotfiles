@@ -1,1 +1,0 @@
-alias tree='tree -C'

@@ -1,40 +1,99 @@
-# Antigen 
+export ZSH_CONFIG_DIR=$HOME/.zsh
+# ZPlug
+export ZPLUG_HOME=$(brew --prefix)/opt/zplug
+source $ZPLUG_HOME/init.zsh
 
-source $(brew --prefix)/share/antigen/antigen.zsh
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-antigen use oh-my-zsh
+zplug "plugins/brew", from:oh-my-zsh
+zplug "plugins/common-aliases", from:oh-my-zsh
+zplug "plugins/colorize", from:oh-my-zsh
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/golang", from:oh-my-zsh, ignore:oh-my-zsh.sh
+zplug "plugins/heroku", from:oh-my-zsh
+zplug "plugins/httpie", from:oh-my-zsh
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/python", from:oh-my-zsh
+zplug "plugins/redis-cli", from:oh-my-zsh
+zplug "plugins/sudo", from:oh-my-zsh
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", from:github, use:"pure.zsh", as:theme, on:"mafredri/zsh-async"
+zplug "b4b4r07/enhancd", from:github, use:"init.sh", on:"junegunn/fzf-bin"
+zplug "wfxr/forgit", from:github
+zplug "zsh-users/zsh-history-substring-search", from:github
+zplug "zsh-users/zsh-autosuggestions", from:github
+zplug "zsh-users/zsh-completions", from:github
+zplug "psprint/zsh-cmd-architect", from:github
+zplug "hlissner/zsh-autopair", from:github, use:"autopair.zsh", defer:2
+zplug "zdharma/fast-syntax-highlighting", from:github, use:"fast-syntax-highlighting.plugin.zsh"
+zplug "denysdovhan/gitio-zsh", from:github, use:"gitio.plugin.zsh"
+zplug "marzocchi/zsh-notify", from:github, use:"notify.plugin.zsh"
 
-antigen bundle brew
-antigen bundle common-aliases
-antigen bundle colorize
-antigen bundle docker
-antigen bundle docker-compose
-antigen bundle git
-antigen bundle golang
-antigen bundle heroku
-antigen bundle httpie
-antigen bundle pip
-antigen bundle python
-antigen bundle redis-cli
-antigen bundle sudo
-antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure
-antigen bundle wfxr/forgit
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
-antigen bundle zsh-users/zsh-history-substring-search
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-completions
-antigen bundle psprint/zsh-cmd-architect
+# Docker completion
+[ ! -f "$ZSH_CONFIG_DIR/completion/_docker" ] && curl -sL "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker" > $ZSH_CONFIG_DIR/completion/_docker 
+[ ! -f "$ZSH_CONFIG_DIR/completion/_docker-compose" ] && curl -sL "https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/zsh/_docker-compose" > $ZSH_CONFIG_DIR/completion/_docker-compose
 
-antigen bundle hlissner/zsh-autopair
-antigen bundle zdharma/fast-syntax-highlighting
+fpath=(
+    $ZSH_CONFIG_DIR/completion
+    $fpath
+)
 
-antigen bundle denysdovhan/gitio-zsh
-antigen bundle marzocchi/zsh-notify
+zplug load
 
-antigen bundle unixorn/autoupdate-antigen.zshplugin
+# Config enhancd
+if zplug check b4b4r07/enhancd; then
+    export ENHANCD_COMPLETION_BEHAVIOR=list
+    export ENHANCD_FILTER=fzf
+fi
 
-antigen apply
+# Enable iTerm Shell Integration
+if [ ! -f "${HOME}/.iterm2_shell_integration.zsh" ]; then
+    curl -sL https://iterm2.com/misc/$(basename $SHELL)_startup.in -o $HOME/.iterm2_shell_integration.$(basename $SHELL)
+fi
+source $HOME/.iterm2_shell_integration.$(basename $SHELL)
+zstyle ':notify:*' command-complete-timeout 10
+
+# Config fzf
+export FZF_DEFAULT_OPTS="
+    --preview=\"(bat {} || tree -L 2 -C {}) 2> /dev/null | head -200\"
+    --color fg:-1,bg:-1,hl:#FFA759,fg+:-1,bg+:-1,hl+:#FFA759
+    --color info:#5C6773,prompt:#D4BFFF,spinner:#95E6CB,pointer:#73D0FF,marker:#FF3333
+    --cycle
+    -1 -0
+"
+## Auto-completion
+if [ -f "$(brew --prefix)/opt/fzf/shell/completion.zsh" ]; then
+    [[ $- == *i* ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2> /dev/null
+else
+    echo "[CONFIG_ERROR]: fzf completion does not exist!"
+fi
+## Key bindings
+if [ -f "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" ]; then
+    source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
+else
+    echo "[CONFIG_ERROR]: fzf key bindings does not exist!"
+fi
+
+# Check bat config
+if [ -f "$HOME/.bat.conf" ]; then
+    export BAT_CONFIG_PATH=$HOME/.bat.conf
+else
+    echo "[CONFIG_ERROR]: bat config does not exist!"
+fi
+
+# Golang
+if [ -d "$HOME/dev/go" ]; then
+    export GOPATH=$HOME/dev/go
+else
+    echo "[CONFIG_ERROR]: \$GOPATH does not exist!"
+fi
 
 # Tmux
 
@@ -51,7 +110,7 @@ setopt HIST_BEEP			# Beep when accessing non-existent history.
 setopt AUTO_CD              # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD			# Push the old directory onto the stack on cd.
 
-export WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+export WORDCHARS='*?_-[]~&;!#$%^(){}<>'
 
 # Hitory
 export HISTSIZE=10000
@@ -60,10 +119,6 @@ export HISTFILE=~/.zsh_history
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY
-
-# Enable iTerm Shell Integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-zstyle ':notify:*' command-complete-timeout 10
 
 # Completion
 setopt AUTO_MENU
@@ -122,7 +177,7 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
 compctl -g '~/.itermocil/*(:t:r)' itermocil
 
 # Fuzzy finder
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+
 
 # Async ZSH
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
@@ -150,26 +205,9 @@ export MPLBACKEND="module://itermplot"
 
 export TERM="xterm-256color"
 
-# bat
-export BAT_CONFIG_PATH=$HOME/.bat.conf
-
-# Golang
-export GOPATH=$HOME/dev/go
-
-ZSH_CONFIG_DIR=$HOME/.zsh
-
 # Aliases
 alias tree='tree -C'
 
 # Functions
 set -o extendedglob
 for f ($ZSH_CONFIG_DIR/my_functions/*.zsh(N.))  . $f
-
-# Other completions
-fpath=(
-    $ZSH_CONFIG_DIR/completion/
-    $fpath
-)
-
-autoload -U compinit 
-compinit

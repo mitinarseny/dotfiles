@@ -15,11 +15,19 @@
     ```
 
 1. Copy dotfiles to your `~`:
-    ```bash
-    cp -R ./.zshrc ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/.bat ~
-    ```
 
+    ```bash
+    cp -R ./.zshrc ./.zsh-plugins.txt ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/.bat ~
+    ```
+    
+1. Prepare ZSH plugins:
+
+    ```bash
+    antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
+    ```
+    
 1. Config [`bat`](https://github.com/sharkdp/bat):
+
     ```bash
     cd ~/.bat/ && bat cache --source . --init
     ```

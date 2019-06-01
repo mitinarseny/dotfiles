@@ -17,7 +17,7 @@
 1. Copy dotfiles to your `~`:
 
     ```bash
-    cp -R ./.zshrc ./.zsh-plugins.txt ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/.bat ~
+    cp -R ./.zshrc ./.zsh-plugins.txt ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ./.bat ~
     ```
     
 1. Prepare ZSH plugins:

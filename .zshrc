@@ -28,6 +28,7 @@ zplug "hlissner/zsh-autopair", from:github, use:"autopair.zsh", defer:2
 zplug "zdharma/fast-syntax-highlighting", from:github, use:"fast-syntax-highlighting.plugin.zsh"
 zplug "denysdovhan/gitio-zsh", from:github, use:"gitio.plugin.zsh"
 zplug "marzocchi/zsh-notify", from:github, use:"notify.plugin.zsh"
+zplug "kwhrtsk/docker-fzf-completion", from:github, use:"docker-fzf.zsh", defer:2
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -61,6 +62,7 @@ source $HOME/.iterm2_shell_integration.$(basename $SHELL)
 zstyle ':notify:*' command-complete-timeout 10
 
 # Config fzf
+export FZF_COMPLETION_TRIGGER=','
 export FZF_DEFAULT_OPTS="
     --preview=\"(bat {} || tree -L 2 -C {}) 2> /dev/null | head -200\"
     --color fg:-1,bg:-1,hl:#FFA759,fg+:-1,bg+:-1,hl+:#FFA759
@@ -68,18 +70,7 @@ export FZF_DEFAULT_OPTS="
     --cycle
     -1 -0
 "
-## Auto-completion
-if [ -f "$(brew --prefix)/opt/fzf/shell/completion.zsh" ]; then
-    [[ $- == *i* ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2> /dev/null
-else
-    echo "[CONFIG_ERROR]: fzf completion does not exist!"
-fi
-## Key bindings
-if [ -f "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" ]; then
-    source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
-else
-    echo "[CONFIG_ERROR]: fzf key bindings does not exist!"
-fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Check bat config
 if [ -f "$HOME/.bat.conf" ]; then
@@ -110,7 +101,7 @@ setopt HIST_BEEP			# Beep when accessing non-existent history.
 setopt AUTO_CD              # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD			# Push the old directory onto the stack on cd.
 
-export WORDCHARS='*?_-[]~&;!#$%^(){}<>'
+export WORDCHARS='*?_-[]~;!#%^(){}<>'
 
 # Hitory
 export HISTSIZE=10000
@@ -176,9 +167,6 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
 # iTermocil
 compctl -g '~/.itermocil/*(:t:r)' itermocil
 
-# Fuzzy finder
-
-
 # Async ZSH
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 
@@ -207,6 +195,7 @@ export TERM="xterm-256color"
 
 # Aliases
 alias tree='tree -C'
+alias tb="nc termbin.com 9999"
 
 # Functions
 set -o extendedglob

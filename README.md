@@ -8,28 +8,33 @@
 * [`brew`](https://brew.sh): package-manager for macOS. It can be used to install command-line utilites as well as GUI apps.
 
 ## Installation
+1. Clone this repo:
+
+   ```bash
+   cd ~
+   git clone https://github.com/mitinarseny/dotfiles.git .dotfiles
+   ```
+1. Symlink `.zshrc` to your `~`:
+   ```bash
+   ln -s ~/.dotfiles/.zshrc
+   ```
 1. Install brew formulas and casks:
 
     ```bash
+    cd ~/.dotfiles
     brew bundle
-    ```
-
-1. Copy dotfiles to your `~`:
-
-    ```bash
-    cp -R ./.zshrc ./.zsh-plugins.txt ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ./.bat ~
     ```
     
 1. Prepare ZSH plugins:
 
     ```bash
-    antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
+    antibody bundle < ~/.dotfiles/.zsh_plugins.txt > ~/.dotfiles/.zsh_plugins.sh
     ```
     
 1. Config [`bat`](https://github.com/sharkdp/bat):
 
     ```bash
-    cd ~/.bat/ && bat cache --source . --init
+    cd ~/.dotfiles/.bat/ && bat cache --source . --init
     ```
     
 1. Allow JavaScript from Apple Events in Safari:

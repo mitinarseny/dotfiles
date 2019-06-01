@@ -11,17 +11,21 @@
 1. Clone this repo:
 
    ```bash
-   cd ~
-   git clone https://github.com/mitinarseny/dotfiles.git .dotfiles
+   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
    ```
 1. Symlink `.zshrc` to your `~`:
    ```bash
-   ln -s ~/.dotfiles/.zshrc
+   ln -s ~/.dotfiles/.zshrc ~
    ```
+1. Go to `.dotfiles`:
+
+   ```bash
+   cd ~/.dotfiles
+   ```
+   
 1. Install brew formulas and casks:
 
     ```bash
-    cd ~/.dotfiles
     brew bundle
     ```
     

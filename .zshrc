@@ -1,64 +1,30 @@
+_zpcompinit_custom() {
+  setopt extendedglob local_options
+  autoload -Uz compinit
+  local zcd=${ZDOTDIR:-$HOME}/.zcompdump
+  local zcdc="$zcd.zwc"
+  # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
+  # in the background as this is doesn't affect the current session
+  if [[ -f "$zcd"(#qN.m+1) ]]; then
+        compinit -i -d "$zcd"
+        { rm -f "$zcdc" && zcompile "$zcd" } &!
+  else
+        compinit -C -d "$zcd"
+        { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+  fi
+}
+
+source ~/.zsh_plugins.sh
+
+_zpcompinit_custom
+
 export ZSH_CONFIG_DIR=$HOME/.zsh
-# ZPlug
-export ZPLUG_HOME=$(brew --prefix)/opt/zplug
-source $ZPLUG_HOME/init.zsh
-
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-zplug "plugins/brew", from:oh-my-zsh
-zplug "plugins/common-aliases", from:oh-my-zsh
-zplug "plugins/colorize", from:oh-my-zsh
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/golang", from:oh-my-zsh, ignore:oh-my-zsh.sh
-zplug "plugins/heroku", from:oh-my-zsh
-zplug "plugins/httpie", from:oh-my-zsh
-zplug "plugins/pip", from:oh-my-zsh
-zplug "plugins/python", from:oh-my-zsh
-zplug "plugins/redis-cli", from:oh-my-zsh
-zplug "plugins/sudo", from:oh-my-zsh
-zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", from:github, use:"pure.zsh", as:theme, on:"mafredri/zsh-async"
-zplug "b4b4r07/enhancd", from:github, use:"init.sh", on:"junegunn/fzf-bin"
-zplug "wfxr/forgit", from:github
-zplug "zsh-users/zsh-history-substring-search", from:github
-zplug "zsh-users/zsh-autosuggestions", from:github
-zplug "zsh-users/zsh-completions", from:github
-zplug "psprint/zsh-cmd-architect", from:github
-zplug "hlissner/zsh-autopair", from:github, use:"autopair.zsh", defer:2
-zplug "zdharma/fast-syntax-highlighting", from:github, use:"fast-syntax-highlighting.plugin.zsh"
-zplug "denysdovhan/gitio-zsh", from:github, use:"gitio.plugin.zsh"
-zplug "marzocchi/zsh-notify", from:github, use:"notify.plugin.zsh"
-zplug "kwhrtsk/docker-fzf-completion", from:github, use:"docker-fzf.zsh", defer:2
-
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Docker completion
-[ ! -f "$ZSH_CONFIG_DIR/completion/_docker" ] && curl -sL "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker" > $ZSH_CONFIG_DIR/completion/_docker 
-[ ! -f "$ZSH_CONFIG_DIR/completion/_docker-compose" ] && curl -sL "https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/zsh/_docker-compose" > $ZSH_CONFIG_DIR/completion/_docker-compose
-
-fpath=(
-    $ZSH_CONFIG_DIR/completion
-    $fpath
-)
-
-zplug load
 
 # Config enhancd
-if zplug check b4b4r07/enhancd; then
-    export ENHANCD_COMPLETION_BEHAVIOR=list
-    export ENHANCD_FILTER=fzf
-fi
-
-# Enable iTerm Shell Integration
-if [ ! -f "${HOME}/.iterm2_shell_integration.zsh" ]; then
-    curl -sL https://iterm2.com/misc/$(basename $SHELL)_startup.in -o $HOME/.iterm2_shell_integration.$(basename $SHELL)
-fi
-source $HOME/.iterm2_shell_integration.$(basename $SHELL)
+# if zplug check b4b4r07/enhancd; then
+#     export ENHANCD_COMPLETION_BEHAVIOR=list
+#     export ENHANCD_FILTER=fzf
+# fi
 zstyle ':notify:*' command-complete-timeout 10
 
 # Config fzf
@@ -196,6 +162,17 @@ export TERM="xterm-256color"
 # Aliases
 alias tree='tree -C'
 alias tb="nc termbin.com 9999"
+alias l='ls -lFh'     #size,show type,human readable
+alias la='ls -lAFh'   #long list,show almost all,show type,human readable
+alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
+alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
+alias ll='ls -l'      #long list
+alias ldot='ls -ld .*'
+alias lS='ls -1FSsh'
+alias lart='ls -1Fcart'
+alias lrt='ls -1Fcrt'
+alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
+alias grep='grep --color'
 
 # Functions
 set -o extendedglob

@@ -1,37 +1,35 @@
 # Dotfiles
 
-My own collection of dotfiles for macOS.  
-Inspired by [hlissner dotfiles](https://github.com/hlissner/dotfiles/tree/master/shell/zsh) and [these instructions](https://sourabhbajaj.com/mac-setup/).
+> This is my set of dotfiles for macOS that I use as a developer. It was carefully collected and organized by myself.  
+  Inspired by [caarlos0 dotfiles](https://github.com/caarlos0/dotfiles), [hlissner dotfiles](https://github.com/hlissner/dotfiles/tree/master/shell/zsh) and [these instructions](https://sourabhbajaj.com/mac-setup/).
 
-## Homebrew
+## Dependencies
 
-Install [brew](https://brew.sh).  
-Install all required brew formulas and casks with:
+* [`brew`](https://brew.sh): package-manager for macOS. It can be used to install command-line utilites as well as GUI apps.
 
-```commandLine
-brew bundle
-```
+## Installation
+1. Install brew formulas and casks:
 
+    ```bash
+    brew bundle
+    ```
 
-## Copy
-Copy files and directories to your `~` with this command:
+1. Copy dotfiles to your `~`:
+    ```bash
+    cp -R ./.zshrc ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/.bat ~
+    ```
 
-```commandLine
-cp -R ./.zshrc ./.tmux.conf ./.gitconfig ./.gitexcludes ./.config ./.zsh ~/.bat ~
-```
+1. Config [`bat`](https://github.com/sharkdp/bat):
+    ```bash
+    cd ~/.bat/ && bat cache --source . --init
+    ```
+    
+1. Allow JavaScript from Apple Events in Safari:
+    In order to allow [BeardedSpice](https://github.com/beardedspice/beardedspice) to make it able to control streaming services, run this:
+    ```bash
+    defaults write -app Safari AllowJavaScriptFromAppleEvents 1
+    ```
 
-## Config
-
-### `bat`
-
-```commandLine
-cd ~/.bat/ && bat cache --source . --init
-```
-
+## Links
 ### Dictionary.app
-
-Go [here](https://rutracker.org/forum/viewtopic.php?t=4264270) to download dictionaries.
-
-### BeardedSpice: Mac Media Keys to Control Streaming Services
-
-In Safari or Google Chrome go to `Dovelop -> Allow JavaScript from Apple Events`.
+Download additional dictionaries from [here](https://rutracker.org/forum/viewtopic.php?t=4264270)

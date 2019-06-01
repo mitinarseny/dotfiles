@@ -17,7 +17,7 @@
 1. Symlink `.zshrc` to your `~`:
 
    ```bash
-   ln -s ./.zshrc ~
+   ln -s .zshrc ~
    ```
    
 1. Install brew formulas and casks:

@@ -11,7 +11,8 @@
 1. Clone this repo:
 
    ```bash
-   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles && cd ~
+   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
+   cd ~/.dotfiles
    ```
    
 1. Symlink `.zshrc` to your `~`:

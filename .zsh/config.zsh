@@ -54,8 +54,8 @@ export FZF_DEFAULT_OPTS="
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Check bat config
-if [ -f "$HOME/.bat.conf" ]; then
-    export BAT_CONFIG_PATH=$HOME/.bat.conf
+if [ -f "$DOTFILES/.bat.conf" ]; then
+    export BAT_CONFIG_PATH=$DOTFILES/.bat.conf
 else
     echo "[CONFIG_ERROR]: bat config does not exist!"
 fi

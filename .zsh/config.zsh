@@ -44,8 +44,9 @@ export MPLBACKEND="module://itermplot"
 
 # Config fzf
 export FZF_COMPLETION_TRIGGER=','
+export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_DEFAULT_OPTS="
-    --preview=\"(bat {} || tree -L 2 -C {}) 2> /dev/null | head -200\"
+    --preview='([[ -f {} ]] && bat {} || ([[ -d {} ]] && tree -L 2 -C {})) | head -n 200'
     --color fg:-1,bg:-1,hl:#FFA759,fg+:-1,bg+:-1,hl+:#FFA759
     --color info:#5C6773,prompt:#D4BFFF,spinner:#95E6CB,pointer:#73D0FF,marker:#FF3333
     --cycle

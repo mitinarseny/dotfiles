@@ -1,4 +1,5 @@
 export DOTFILES="$HOME/.dotfiles"
+export XDG_CONFIG_HOME="$DOTFILES/.config"
 
 _zpcompinit_custom() {
   setopt extendedglob local_options

@@ -14,10 +14,10 @@
    git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
    ```
    
-1. Symlink `.zshrc` to your `~`:
+1. Symlink `.zshrc` and `.config/` to your `~`:
 
    ```bash
-   ln -s ~/.dotfiles/.zshrc ~
+   ln -s ~/.dotfiles/.zshrc ~/.dotfiles/.config ~
    ```
    
 1. Install brew formulas and casks:

@@ -1,1 +1,3 @@
 .zsh_plugins.sh
+.config/micro/*/*
+!.config/micro/settings.json

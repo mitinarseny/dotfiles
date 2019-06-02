@@ -12,19 +12,18 @@
 
    ```bash
    git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
-   cd ~/.dotfiles
    ```
    
 1. Symlink `.zshrc` to your `~`:
 
    ```bash
-   ln -s .zshrc ~
+   ln -s ~/.dotfiles/.zshrc ~
    ```
    
 1. Install brew formulas and casks:
 
     ```bash
-    brew bundle
+    brew bundle --file=~/.dotfiles/Brewfile
     ```
     
 1. Prepare ZSH plugins:

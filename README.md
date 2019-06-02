@@ -36,7 +36,7 @@
 1. Config [`bat`](https://github.com/sharkdp/bat):
 
     ```bash
-    cd ~/.dotfiles/.bat/ && bat cache --source . --init
+    bat cache --source ~/.dotfiles/.bat --init
     ```
     
 1. Allow JavaScript from Apple Events in Safari:

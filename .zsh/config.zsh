@@ -62,6 +62,9 @@ fi
 
 zstyle ':notify:*' command-complete-timeout 10
 
+# Jupyter
+export JUPYTER_CONFIG_DIR=$DOTFILES/.jupyter
+
 # Tmux
 # ZSH_TMUX_AUTOSTART=true
 # ZSH_TMUX_ITERM2=true

@@ -18,27 +18,14 @@
   ```bash
   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
   ```
-* Symlink `.zshrc` and `.config/` to your `~`:
-  ```bash
-  ln -s ~/.dotfiles/.zshrc ~/.dotfiles/.config ~
-  ```
 * Install brew formulas and casks:
   ```bash
   brew bundle --file=~/.dotfiles/Brewfile
   ```
-* Prepare ZSH plugins:
+* Setup:
   ```bash
-  antibody bundle < ~/.dotfiles/.zsh_plugins.txt > ~/.dotfiles/.zsh_plugins.sh
+  ~/.dotfiles/setup.sh
   ```
-* Config [`bat`](https://github.com/sharkdp/bat):
-  ```bash
-  bat cache --source ~/.dotfiles/.bat --init
-  ```  
-* Allow JavaScript from Apple Events in Safari:  
-  ```bash
-  defaults write -app Safari AllowJavaScriptFromAppleEvents 1
-  ```
-  In order to allow [BeardedSpice](https://github.com/beardedspice/beardedspice) to control streaming services.
   
 ## Links
 ### Dictionary.app

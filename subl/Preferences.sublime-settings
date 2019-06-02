@@ -1,15 +1,22 @@
 {
-	"color_scheme": "Packages/ayu/ayu-mirage.tmTheme",
-	"font_face": "Fira Code Retina",
-	"font_options":
+	"color_scheme": "Packages/ayu/ayu-mirage.sublime-color-scheme",
+	"folder_exclude_patterns":
 	[
+		".svn",
+		".git",
+		".hg",
+		"CVS",
+		"__pycache__",
+		".idea"
 	],
-	"font_size": 12,
+	"font_face": "Fira Code Retina",
+	"font_size": 16,
+	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
 		"Markdown",
 		"Vintage"
 	],
 	"theme": "ayu-mirage.sublime-theme",
-	"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", "__pycache__", ".idea"],
+	"translate_tabs_to_spaces": true
 }

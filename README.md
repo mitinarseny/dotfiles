@@ -5,45 +5,41 @@
 
 ## Dependencies
 
-* [`brew`](https://brew.sh): package-manager for macOS. It can be used to install command-line utilites as well as GUI apps.
+* [`curl`](https://curl.haxx.se): cli for transferring data with URLs
+* [`brew`](https://brew.sh): package-manager for macOS
+* [`git`](https://git-scm.com): cli for the most popular VCS today
+  Install it with 
+  ```bash
+  brew install git
+  ```
 
 ## Installation
-1. Clone this repo:
-
-   ```bash
-   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
-   ```
-   
-1. Symlink `.zshrc` and `.config/` to your `~`:
-
-   ```bash
-   ln -s ~/.dotfiles/.zshrc ~/.dotfiles/.config ~
-   ```
-   
-1. Install brew formulas and casks:
-
-    ```bash
-    brew bundle --file=~/.dotfiles/Brewfile
-    ```
-    
-1. Prepare ZSH plugins:
-
-    ```bash
-    antibody bundle < ~/.dotfiles/.zsh_plugins.txt > ~/.dotfiles/.zsh_plugins.sh
-    ```
-    
-1. Config [`bat`](https://github.com/sharkdp/bat):
-
-    ```bash
-    bat cache --source ~/.dotfiles/.bat --init
-    ```
-    
-1. Allow JavaScript from Apple Events in Safari:
-    In order to allow [BeardedSpice](https://github.com/beardedspice/beardedspice) to make it able to control streaming services, run this:
-    ```bash
-    defaults write -app Safari AllowJavaScriptFromAppleEvents 1
-    ```
-
+* Clone this repo:
+  ```bash
+  git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
+  ```
+* Symlink `.zshrc` and `.config/` to your `~`:
+  ```bash
+  ln -s ~/.dotfiles/.zshrc ~/.dotfiles/.config ~
+  ```
+* Install brew formulas and casks:
+  ```bash
+  brew bundle --file=~/.dotfiles/Brewfile
+  ```
+* Prepare ZSH plugins:
+  ```bash
+  antibody bundle < ~/.dotfiles/.zsh_plugins.txt > ~/.dotfiles/.zsh_plugins.sh
+  ```
+* Config [`bat`](https://github.com/sharkdp/bat):
+  ```bash
+  bat cache --source ~/.dotfiles/.bat --init
+  ```  
+* Allow JavaScript from Apple Events in Safari:  
+  ```bash
+  defaults write -app Safari AllowJavaScriptFromAppleEvents 1
+  ```
+  In order to allow [BeardedSpice](https://github.com/beardedspice/beardedspice) to control streaming services.
+  
 ## Links
 ### Dictionary.app
 Download additional dictionaries from [here](https://rutracker.org/forum/viewtopic.php?t=4264270)

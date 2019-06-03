@@ -52,7 +52,6 @@ export FZF_DEFAULT_OPTS="
     --cycle
     -1 -0
 "
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Check bat config
 if [ -f "$DOTFILES/.bat.conf" ]; then

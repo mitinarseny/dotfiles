@@ -8,4 +8,4 @@
   type = cat-file -t
   dump = cat-file -p
 [core]
-	excludesfile = ~/.gitexcludes
+  excludesfile = ~/.gitexcludes

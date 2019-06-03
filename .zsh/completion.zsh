@@ -50,5 +50,9 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
   ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
 )'
 
+# fzf
+[[ $- == *i* ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2> /dev/null
+source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
+
 # iTermocil
 compctl -g '~/.itermocil/*(:t:r)' itermocil

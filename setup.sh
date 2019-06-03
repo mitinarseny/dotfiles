@@ -12,7 +12,7 @@ antibody bundle < $DOTFILES/.zsh_plugins.txt > $DOTFILES/.zsh_plugins.sh
 bat cache --source $DOTFILES/.bat --build
 
 # setup iTerm2
-defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/iterm2_profile"
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES/iterm2_profile"
 defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 
 # setup Sublime Text: symlink preferencies

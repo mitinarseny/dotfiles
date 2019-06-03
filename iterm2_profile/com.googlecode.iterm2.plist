@@ -1556,8 +1556,8 @@
 	<false/>
 	<key>NSSplitView Subview Frames NSColorPanelSplitView</key>
 	<array>
-		<string>0.000000, 0.000000, 228.000000, 303.000000, NO, NO</string>
-		<string>0.000000, 304.000000, 228.000000, 43.000000, NO, NO</string>
+		<string>0.000000, 0.000000, 228.000000, 267.000000, NO, NO</string>
+		<string>0.000000, 268.000000, 228.000000, 43.000000, NO, NO</string>
 	</array>
 	<key>NSTableView Columns v2 KeyBingingTable</key>
 	<data>
@@ -1596,9 +1596,9 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>346 187 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>863 508 796 486 0 0 1680 1050 </string>
+	<string>608 533 796 486 0 0 1680 1050 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 535 850 492 0 0 1680 1027 </string>
+	<string>0 535 850 492 0 0 1680 1050 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>176 41 794 477 0 0 1440 877 </string>
 	<key>New Bookmarks</key>

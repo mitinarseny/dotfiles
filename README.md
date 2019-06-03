@@ -5,7 +5,7 @@
 
 ## Dependencies
 
-* [`curl`](https://curl.haxx.se): cli for transferring data with URLs
+* [`curl`](https://curl.haxx.se): command-line tool for transferring data with URLs
 * [`brew`](https://brew.sh): package-manager for macOS
 * [`git`](https://git-scm.com): cli for the most popular VCS today
   Install it with 

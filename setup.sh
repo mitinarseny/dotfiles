@@ -3,7 +3,7 @@
 export DOTFILES=~/.dotfiles
 
 # symlink files
-ln -sf $DOTFILES/.zshrc $DOTFILES/.config $DOTFILES/.gitexcludes $DOTFILES/.tmux.conf ~
+ln -sf $DOTFILES/.zshrc $DOTFILES/.config $DOTFILES/.gitconfig $DOTFILES/.gitexcludes $DOTFILES/.tmux.conf ~
 
 # prepare zsh plugins
 antibody bundle < $DOTFILES/.zsh_plugins.txt > $DOTFILES/.zsh_plugins.sh

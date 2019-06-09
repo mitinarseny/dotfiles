@@ -10,13 +10,14 @@
 		".idea"
 	],
 	"font_face": "Fira Code Retina",
-	"font_size": 16,
+	"font_size": 15,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
 		"Markdown",
 		"Vintage"
 	],
+	"open_files_in_new_window": false,
 	"theme": "ayu-mirage.sublime-theme",
 	"translate_tabs_to_spaces": true
 }

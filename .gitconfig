@@ -9,3 +9,6 @@
   dump = cat-file -p
 [core]
   excludesfile = ~/.gitexcludes
+[user]
+	name = Arseny Mitin
+	email = mitinarseny@gmail.com

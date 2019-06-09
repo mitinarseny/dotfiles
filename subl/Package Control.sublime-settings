@@ -22,6 +22,7 @@
 		"Markdown Extended",
 		"NASM x86 Assembly",
 		"nginx",
+		"nord-sublime-text",
 		"Origami",
 		"Package Control",
 		"Pretty JSON",
@@ -34,5 +35,9 @@
 		"SublimeREPL",
 		"Zen Tabs",
 		"ZSH"
+	],
+	"repositories":
+	[
+		"https://github.com/arcticicestudio/nord-sublime-text/tree/develop"
 	]
 }

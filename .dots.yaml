@@ -1,0 +1,61 @@
+links:
+  ~/.zshrc:
+    path: .zshrc
+    force: true
+  ~/.gitexcludes:
+    path: .gitexcludes
+    force: true
+  ~/.gitconfig:
+    path: .gitconfig
+    force: true
+  ~/.editorconfig:
+    path: .editorconfig
+    force: true
+  ~/.tmux.conf:
+    path: .tmux.conf
+    force: true
+  ~/.bat.conf:
+    path: .bat.conf
+    force: true
+  ~/.config/micro/settings.json:
+    path: .config/micro/settings.json
+    force: true
+  ~/.config/htop/htoprc:
+    path: .config/htop/htoprc
+    force: true
+  ~/.jupyter/custom/fonts/firacode.otf:
+    path: .jupyter/custom/fonts/firacode.otf
+    force: true
+  ~/.jupyter/custom/custom.css:
+    path: .jupyter/custom/custom.css
+    force: true
+
+commands:
+  - command: antibody bundle < .zsh_plugins.txt > ~/.zsh_plugins.sh
+    description: load zsh plugins
+  - command: bat cache --source .bat/ --build
+    description: init bat cache
+
+hosts:
+  macos:
+    links:
+      ~/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings:
+        path: subl/Package Control.sublime-settings
+        force: true
+      ~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings:
+        path: subl/Preferences.sublime-settings
+        force: true
+
+    defaults:
+      apps:
+        iTerm:
+          PrefsCustomFolder:
+            type: string
+            value: $DOTFILES/iterm2_profile
+          LoadPrefsFromCustomFolder:
+            type: bool
+            value: true
+        Safari:
+          AllowJavaScriptFromAppleEvents: 
+            value: 1
+            description: fix BeardedSpice

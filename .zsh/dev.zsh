@@ -1,6 +1,5 @@
 # Golang
-if [ -d "$HOME/dev/go" ]; then
+if [[ $(command -v go) ]]; then
+    [[ ! -d "$HOME/dev/go" ]] && mkdir -p $HOME/dev/go
     export GOPATH=$HOME/dev/go
-else
-    echo "[CONFIG_ERROR]: \$GOPATH does not exist!"
 fi

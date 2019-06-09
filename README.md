@@ -1,6 +1,6 @@
 # Dotfiles
 
-> This is my set of dotfiles for macOS that I use as a developer. It was carefully collected and organized by myself.  
+> This is my set of dotfiles for macOS that I use as a developer.  
   Inspired by [caarlos0 dotfiles](https://github.com/caarlos0/dotfiles), [hlissner dotfiles](https://github.com/hlissner/dotfiles/tree/master/shell/zsh) and [these instructions](https://sourabhbajaj.com/mac-setup/).
 
 ## Dependencies
@@ -12,6 +12,7 @@
   ```bash
   brew install git
   ```
+* [`dots`](https://github.com/mitinarseny/dots)
 
 ## Installation
 * Clone this repo:
@@ -24,7 +25,7 @@
   ```
 * Setup:
   ```bash
-  ~/.dotfiles/setup.sh
+  dots up macos -c ~/.dotfiles/.dots.yaml
   ```
   
 ## Links

@@ -17,7 +17,7 @@ _zpcompinit_custom() {
   fi
 }
 
-source $DOTFILES/.zsh_plugins.sh
+source ~/.zsh_plugins.sh
 
 _zpcompinit_custom
 

@@ -2,6 +2,9 @@ links:
   ~/.zshrc:
     path: .zshrc
     force: true
+  ~/.zsh/:
+    path: .zsh/**
+    force: true
   ~/.gitexcludes:
     path: .gitexcludes
     force: true
@@ -14,26 +17,14 @@ links:
   ~/.tmux.conf:
     path: .tmux.conf
     force: true
-  ~/.bat.conf:
-    path: .bat.conf
-    force: true
-  ~/.config/micro/settings.json:
-    path: .config/micro/settings.json
-    force: true
-  ~/.config/htop/htoprc:
-    path: .config/htop/htoprc
-    force: true
-  ~/.jupyter/custom/fonts/firacode.otf:
-    path: .jupyter/custom/fonts/firacode.otf
-    force: true
-  ~/.jupyter/custom/custom.css:
-    path: .jupyter/custom/custom.css
+  ~/.config/:
+    path: .config/**
     force: true
 
 commands:
-  - command: antibody bundle < .zsh_plugins.txt > ~/.zsh_plugins.sh
+  - command: antibody bundle < zsh_plugins.txt > ~/.zsh_plugins.sh
     description: load zsh plugins
-  - command: bat cache --source .bat/ --build
+  - command: bat cache --source .config/bat/ --build
     description: init bat cache
 
 hosts:

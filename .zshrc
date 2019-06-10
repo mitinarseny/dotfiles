@@ -1,5 +1,4 @@
-export DOTFILES="$HOME/.dotfiles"
-export XDG_CONFIG_HOME="$DOTFILES/.config"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 _zpcompinit_custom() {
   setopt extendedglob local_options
@@ -17,13 +16,13 @@ _zpcompinit_custom() {
   fi
 }
 
-source ~/.zsh_plugins.sh
+source .zsh_plugins.sh
 
 _zpcompinit_custom
 
 # Functions
 set -o extendedglob
-export ZSH_CONFIG_DIR=$DOTFILES/.zsh
+export ZSH_CONFIG_DIR=$HOME/.zsh
 
 typeset -U config_files
 config_files=($ZSH_CONFIG_DIR/**.zsh)

@@ -54,16 +54,12 @@ export FZF_DEFAULT_OPTS="
 "
 
 # Check bat config
-if [ -f "$DOTFILES/.bat.conf" ]; then
-    export BAT_CONFIG_PATH=$DOTFILES/.bat.conf
-else
-    echo "[CONFIG_ERROR]: bat config does not exist!"
-fi
+[[ $(command -v bat) && -f "~/.config/bat/config" ]] && export BAT_CONFIG_PATH="~/.config/bat/config"
 
 zstyle ':notify:*' command-complete-timeout 10
 
 # Jupyter
-export JUPYTER_CONFIG_DIR=$DOTFILES/.jupyter
+[[ $(command -v jupyter) && -d "~/.config/jupyter" ]] && export JUPYTER_CONFIG_DIR="~/.config/jupyter"
 
 # Tmux
 # ZSH_TMUX_AUTOSTART=true

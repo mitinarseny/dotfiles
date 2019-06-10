@@ -13,7 +13,7 @@ export TERM="xterm-256color"
 # Hitory
 export HISTSIZE=10000
 export SAVEHIST=10000
-export HISTFILE=~/.zsh_history
+export HISTFILE=$HOME/.zsh_history
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY
@@ -54,12 +54,12 @@ export FZF_DEFAULT_OPTS="
 "
 
 # Check bat config
-[[ $(command -v bat) && -f "~/.config/bat/config" ]] && export BAT_CONFIG_PATH="~/.config/bat/config"
+[[ $(command -v bat) && -f "$HOME/.config/bat/config" ]] && export BAT_CONFIG_PATH="$HOME/.config/bat/config"
 
 zstyle ':notify:*' command-complete-timeout 10
 
 # Jupyter
-[[ $(command -v jupyter) && -d "~/.config/jupyter" ]] && export JUPYTER_CONFIG_DIR="~/.config/jupyter"
+[[ $(command -v jupyter) && -d "$HOME/.config/jupyter" ]] && export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
 
 # Tmux
 # ZSH_TMUX_AUTOSTART=true

@@ -55,4 +55,4 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
 source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
 
 # iTermocil
-compctl -g '~/.itermocil/*(:t:r)' itermocil
+compctl -g '$HOME/.itermocil/*(:t:r)' itermocil

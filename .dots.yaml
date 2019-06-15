@@ -88,8 +88,9 @@ macos:
     - description: Disable the “Are you sure you want to open this application?” dialog
       command: defaults write com.apple.LaunchServices LSQuarantine -bool false
     
-    - description: Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
-      command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+    # commented out as it broke all my app icons
+    # - description: Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+    #   command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
     - description: Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window
       command: sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName

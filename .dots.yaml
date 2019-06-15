@@ -1,52 +1,50 @@
-links:
-  ~/.zshrc:
-    path: .zshrc
-    force: true
-  ~/.zsh/:
-    path: .zsh/**
-    force: true
-  ~/.gitexcludes:
-    path: .gitexcludes
-    force: true
-  ~/.gitconfig:
-    path: .gitconfig
-    force: true
-  ~/.editorconfig:
-    path: .editorconfig
-    force: true
-  ~/.tmux.conf:
-    path: .tmux.conf
-    force: true
-  ~/.config/:
-    path: .config/**
-    force: true
+default:
+  links:
+    ~/.zshrc:
+      path: .zshrc
+      force: true
+    ~/.zsh/:
+      path: .zsh/*
+      force: true
+    ~/.gitexcludes:
+      path: .gitexcludes
+      force: true
+    ~/.gitconfig:
+      path: .gitconfig
+      force: true
+    ~/.editorconfig:
+      path: .editorconfig
+      force: true
+    ~/.tmux.conf:
+      path: .tmux.conf
+      force: true
+    ~/.config/:
+      path: .config/*
+      force: true
+    ~/.iterm2_profile/:
+      path: iterm2_profile/*
+      force: true
 
-commands:
-  - command: antibody bundle < zsh_plugins.txt > ~/.zsh_plugins.sh
-    description: load zsh plugins
-  - command: bat cache --source .config/bat/ --build
-    description: init bat cache
+  commands:
+    - command: antibody bundle < zsh_plugins.txt > ~/.zsh_plugins.sh
+      description: load zsh plugins
+    - command: bat cache --source .config/bat/ --build
+      description: init bat cache
 
-hosts:
-  macos:
-    links:
-      ~/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings:
-        path: subl/Package Control.sublime-settings
-        force: true
-      ~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings:
-        path: subl/Preferences.sublime-settings
-        force: true
-
-    defaults:
-      apps:
-        iTerm:
-          PrefsCustomFolder:
-            type: string
-            value: $DOTFILES/iterm2_profile
-          LoadPrefsFromCustomFolder:
-            type: bool
-            value: true
-        Safari:
-          AllowJavaScriptFromAppleEvents: 
-            value: 1
-            description: fix BeardedSpice
+macos:
+  extends: default
+  variables:
+    - HOME:
+        command: echo ~
+  links:
+    ~/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings:
+      path: subl/Package Control.sublime-settings
+      force: true
+    ~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings:
+      path: subl/Preferences.sublime-settings
+      force: true
+  commands:
+    - defaults write -app iTerm PrefsCustomFolder $HOME/.iterm2_profile
+    - defaults write -app iTerm LoadPrefsFromCustomFolder -bool true
+    - command: defaults write -app Safari AllowJavaScriptFromAppleEvents 1
+      description: fix BeardedSpice

@@ -114,11 +114,13 @@ macos:
       command: defaults write NSGlobalDomain AppleLanguages -array "en" "ru"
 
     - description: Set locale to US and currency to RUB
-      command: defaults write NSGlobalDomain AppleLocale -string "en_US@currency=RUB"
+      command: defaults write NSGlobalDomain AppleLocale -string "ru_RU@currency=RUB"
 
     - description: Set measurement units to centimeters
       command: defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
 
+    - description: Set termperature units to Celsuis
+      command: defaults write NSGlobalDomain AppleTemperatureUnit -string "Celsuis"
     - description: Set metric units
       command: defaults write NSGlobalDomain AppleMetricUnits -bool true
 
@@ -128,6 +130,12 @@ macos:
     # see `sudo systemsetup -listtimezones` for other timezones
     - description: Set the timezone
       command: sudo systemsetup -settimezone "Europe/Moscow" > /dev/null
+
+    - description: Set clock to digital
+      command: defaults write com.apple.menuextra.clock IsAnalog -bool false
+
+    - description: Set clock format
+      command: defaults write com.apple.menuextra.clock DateFormat -string "d EEE HH:mm" && killall SystemUIServer
 
     - description: Stop iTunes from responding to the keyboard media keys
       command: launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null

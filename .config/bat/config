@@ -5,3 +5,4 @@
 --map-syntax py:py3
 --map-syntax h:cpp
 --map-syntax .ignore:.gitignore
+--pager="less -RF"

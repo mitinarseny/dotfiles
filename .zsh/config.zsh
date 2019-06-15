@@ -26,9 +26,9 @@ export CLICOLOR=1
 
 export LANG=${LANG:-en_US.UTF-8}
 
-export PAGER="less -RF"
 export EDITOR=micro
-export LESS='-i -w -M -z-4'
+export LESS='-q -i -w -M -z-4'
+export PAGER="less -RF"
 
 # Less Colors for Man Pages
 export LESS_TERMCAP_mb=$'\e[01;31m'       # begin blinking

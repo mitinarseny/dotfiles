@@ -44,7 +44,460 @@ macos:
       path: subl/Preferences.sublime-settings
       force: true
   commands:
-    - defaults write -app iTerm PrefsCustomFolder $HOME/.iterm2_profile
-    - defaults write -app iTerm LoadPrefsFromCustomFolder -bool true
-    - command: defaults write -app Safari AllowJavaScriptFromAppleEvents 1
-      description: fix BeardedSpice
+    # https://mths.be/macos
+    - description: Close any open System Preferences panes, to prevent them from overriding settings we’re about to change
+      command: osascript -e 'tell application "System Preferences" to quit'
+    
+    - description: Ask for the administrator password upfront
+      command: sudo -v
+
+    ############################################################
+    #                    General UI/UX                         #
+    ############################################################
+
+    - description: Disable the sound effects on boot
+      command: sudo nvram SystemAudioVolume=" "
+    
+    - description: Show battery percentage 
+      command: defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+
+    - description: Hide battery time remaining
+      command: defaults write com.apple.menuextra.battery ShowTime -string "NO"  
+
+    - description: Set sidebar icon size to small
+      command: defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
+    
+    - description: Automatic show scrollbars
+      command: defaults write NSGlobalDomain AppleShowScrollBars -string "Automatic"
+    
+    - description: Expand save panel by default
+      command: defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+    
+    - description: Expand save panel by default
+      command: defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+    
+    - description: Expand print panel by default
+      command: defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+    
+    - description: Expand print panel by default
+      command: defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+    
+    - description: Save to disk (not to iCloud) by default
+      command: defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+    - description: Disable the “Are you sure you want to open this application?” dialog
+      command: defaults write com.apple.LaunchServices LSQuarantine -bool false
+    
+    - description: Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+      command: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+
+    - description: Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window
+      command: sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+    - description: Disable automatic capitalization
+      command: defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+    - description: Disable smart dashes
+      command: defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+    - description: Disable automatic period substitution
+      command: defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
+    - description: Disable smart quotes
+      command: defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+    - description: Disable auto-correct
+      command: defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+    - description: Set languages to English and Russian
+      command: defaults write NSGlobalDomain AppleLanguages -array "en" "ru"
+
+    - description: Set locale to US and currency to RUB
+      command: defaults write NSGlobalDomain AppleLocale -string "en_US@currency=RUB"
+
+    - description: Set measurement units to centimeters
+      command: defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+
+    - description: Set metric units
+      command: defaults write NSGlobalDomain AppleMetricUnits -bool true
+
+    - description: Show language menu in the top right corner of the boot screen
+      command: sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
+
+    # see `sudo systemsetup -listtimezones` for other timezones
+    - description: Set the timezone
+      command: sudo systemsetup -settimezone "Europe/Moscow" > /dev/null
+
+    - description: Stop iTunes from responding to the keyboard media keys
+      command: launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
+
+    ############################################################
+    #                        Screen                            #
+    ############################################################
+
+    - description: Always ask for password
+      command: defaults write com.apple.screensaver askForPassword -int 1
+
+    - description: Ask for password after zero delay
+      command: defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+    - description: Save screenshots to ~/screenshots
+      command: defaults write com.apple.screencapture location -string "${HOME}/screenshots"
+
+    # other options: BMP, GIF, JPG, PDF, TIFF
+    - description: Save screenshots in PNG format
+      command: defaults write com.apple.screencapture type -string "png"
+
+    - description: Disable shadow in screenshots
+      command: defaults write com.apple.screencapture disable-shadow -bool true
+
+    # - description: Enable subpixel font rendering on non-Apple LCDs
+    #   command: defaults write NSGlobalDomain AppleFontSmoothing -int 1
+
+    ############################################################
+    #                        Finder                            #
+    ############################################################
+
+    - description: Set ~ as the default location for new Finder windows
+      command: defaults write com.apple.finder NewWindowTarget -string "PfHm"
+
+    - description: Set ~ as the default location for new Finder windows
+      command: defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
+    - description: Show external hard drives on desktop
+      command: defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+
+    - description: Do not show hard drives on desktop
+      command: defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+
+    - description: Show mounted servers on desktop
+      command: defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+
+    - description: Show rmovable media on desktop
+      command: defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
+    - description: Show sidebar
+      command: defaults write com.apple.finder ShowSidebar -bool true
+
+    - description: Do not show status bar
+      command: defaults write com.apple.finder ShowStatusBar -bool false
+
+    - description: Do not show recent tags
+      command: defaults write com.apple.finder ShowRecentTags -bool false
+
+    - description: Do not show preview pane
+      command: defaults write com.apple.finder ShowPreviewPane -bool false
+
+    - description: Show path bar
+      command: defaults write com.apple.finder ShowPathbar -bool true
+
+    - description: Show all filename extensions
+      command: defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+    - description: Display full POSIX path as Finder window title
+      command: defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+    - description: Keep folders on top when sorting by name
+      command: defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+    - description: When performing a search, search the current folder by default
+      command: defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+    - description: Disable the warning when changing a file extension
+      command: defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+    - description: Enable spring loading for directories
+      command: defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+
+    - description: Remove the spring loading delay for directories
+      command: defaults write NSGlobalDomain com.apple.springing.delay -float 0
+
+    - description: Avoid creating .DS_Store files on network
+      command: defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+
+    - description: Avoid creating .DS_Store files on USB volumes
+      command: defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+    - description: Automatically open a new Finder window when a volume is mounted
+      command: defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+
+    - description: Automatically open a new Finder window when a volume is mounted
+      command: defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+
+    - description: Automatically open a new Finder window when a volume is mounted
+      command: defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+
+    - description: Enable snap-to-grid for icons on the desktop and in other icon views
+      command: /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+
+    - description: Enable snap-to-grid for icons on the desktop and in other icon views
+      command: /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+
+    - description: Enable snap-to-grid for icons on the desktop and in other icon views
+      command: /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+
+    - description: Use panes view in all Finder windows by default
+      command: defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
+    - description: Enable AirDrop over Ethernet and on unsupported Macs running Lion
+      command: defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
+
+    - description: Show the ~/Library folder
+      command: chflags nohidden ~/Library
+
+    - description: Show the /Volumes folder
+      command: sudo chflags nohidden /Volumes
+
+    - description: Expand panes in File Info - “General”, “Open with”, and “Sharing & Permissions”
+      command: defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
+
+    ############################################################
+    #            Dock, Dashboard, and hot corners              #
+    ############################################################
+
+    - description: Set the icon size of Dock items to 32 pixels
+      command: defaults write com.apple.dock tilesize -int 32
+
+    - description: Do not minimize windows into their application’s icon
+      command: defaults write com.apple.dock minimize-to-application -bool false
+
+    - description: Show indicator lights for open applications in the Dock
+      command: defaults write com.apple.dock show-process-indicators -bool true
+
+    - description: Disable Dashboard
+      command: defaults write com.apple.dashboard mcx-disabled -bool true
+
+    - description: Don’t show Dashboard as a Space
+      command: defaults write com.apple.dock dashboard-in-overlay -bool true
+
+    - description: Automatically hide and show the Dock
+      command: defaults write com.apple.dock autohide -bool true
+
+    - description: Don’t show recent applications in Dock
+      command: defaults write com.apple.dock show-recents -bool false
+
+    ############################################################
+    #                     Safari & WebKit                      #
+    ############################################################
+  
+    - description: fix BeardedSpice
+      command: defaults write -app Safari AllowJavaScriptFromAppleEvents 1
+
+    - description: "Privacy: don’t send search queries to Apple"
+      command: defaults write com.apple.Safari UniversalSearchEnabled -bool false
+
+    - description: "Privacy: don’t send search queries to Apple"
+      command: defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+
+    - description: Press Tab to highlight each item on a web page
+      command: defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+
+    - description: Press Tab to highlight each item on a web page
+      command: defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
+
+    - description: Prevent Safari from opening ‘safe’ files automatically after downloading
+      command: defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+    - description: Hide Safari’s bookmarks bar by default
+      command: defaults write com.apple.Safari ShowFavoritesBar -bool false
+
+    - description: Hide Safari’s sidebar in Top Sites
+      command: defaults write com.apple.Safari ShowSidebarInTopSites -bool false
+
+    - description: Enable Safari’s debug menu
+      command: defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+
+    - description: Remove useless icons from Safari’s bookmarks bar
+      command: defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+
+    - description: Enable the Develop menu
+      command: defaults write com.apple.Safari IncludeDevelopMenu -bool true
+
+    - description: Enable the Web Inspector in Safari
+      command: defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+
+    - description: Enable the Develop menu and the Web Inspector in Safari
+      command: defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+    - description: Add a context menu item for showing the Web Inspector in web views
+      command: defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
+    - description: Enable continuous spellchecking
+      command: defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
+
+    - description: Disable auto-correct
+      command: defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
+
+    - description: Warn about fraudulent websites
+      command: defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+
+    - description: Block pop-up windows
+      command: defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
+
+    - description: Block pop-up windows
+      command: defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
+
+    - description: Enable “Do Not Track”
+      command: defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
+    - description: Update extensions automatically
+      command: defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
+
+    ############################################################
+    #                           Mail                           #
+    ############################################################
+
+    - description: Disable send animations in Mail.app
+      command: defaults write com.apple.mail DisableSendAnimations -bool true
+
+    - description: Disable reply animations in Mail.app
+      command: defaults write com.apple.mail DisableReplyAnimations -bool true
+
+    - description: Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
+      command: defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+
+    - description: Disable inline attachments (just show the icons)
+      command: defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+    ############################################################
+    #                       Spotlight                          #
+    ############################################################
+
+    # - description: Hide Spotlight tray-icon (and subsequent helper)
+    #   command: sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
+
+    - description: Change indexing order and disable some search results
+      command: defaults write com.apple.spotlight orderedItems -array '{"enabled" = 1;"name" = "APPLICATIONS";}' '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' '{"enabled" = 1;"name" = "DIRECTORIES";}' '{"enabled" = 1;"name" = "PDF";}' '{"enabled" = 1;"name" = "FONTS";}' '{"enabled" = 1;"name" = "MENU_DEFINITION";}' '{"enabled" = 1;"name" = "MENU_OTHER";}' '{"enabled" = 1;"name" = "MENU_CONVERSION";}' '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' '{"enabled" = 1;"name" = "DOCUMENTS";}' '{"enabled" = 1;"name" = "MESSAGES";}' '{"enabled" = 1;"name" = "CONTACT";}' '{"enabled" = 1;"name" = "EVENT_TODO";}' '{"enabled" = 1;"name" = "IMAGES";}' '{"enabled" = 1;"name" = "BOOKMARKS";}' '{"enabled" = 1;"name" = "MUSIC";}' '{"enabled" = 1;"name" = "MOVIES";}' '{"enabled" = 1;"name" = "PRESENTATIONS";}' '{"enabled" = 1;"name" = "SPREADSHEETS";}' '{"enabled" = 1;"name" = "SOURCE";}' '{"enabled" = 1;"name" = "MENU_WEBSEARCH";}' '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+
+    # - description: Load new settings before rebuilding the index
+    #   command: killall mds > /dev/null 2>&1
+
+    - description: Make sure indexing is enabled for the main volume
+      command: sudo mdutil -i on / > /dev/null
+
+    - description: Rebuild the index from scratch
+      command: sudo mdutil -E / > /dev/null
+
+    ############################################################
+    #                    Terminal & iTerm 2                    #
+    ############################################################
+
+    - description: Only use UTF-8 in Terminal.app
+      command: defaults write com.apple.terminal StringEncodings -array 4
+
+    - description: Disable the annoying line marks
+      command: defaults write com.apple.Terminal ShowLineMarks -int 0
+
+    - description: Don’t display the annoying prompt when quitting iTerm
+      command: defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
+    - description: set iTerm custom preferences folder 
+      command: defaults write -app iTerm PrefsCustomFolder -string "$HOME/.iterm2_profile"
+
+    - description: tell iTerm to load preferences from custom folder
+      command: defaults write -app iTerm LoadPrefsFromCustomFolder -bool true
+
+    ############################################################
+    #                        Time Machine                      #
+    ############################################################
+
+    - description: Prevent Time Machine from prompting to use new hard drives as backup volume
+      command: defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+    - description: Disable local Time Machine backups
+      command: hash tmutil &> /dev/null && sudo tmutil disable
+
+    ############################################################
+    #                    Activity Monitor                      #
+    ############################################################
+
+    - description: Show the main window when launching Activity Monitor
+      command: defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
+    - description: Visualize CPU usage in the Activity Monitor Dock icon
+      command: defaults write com.apple.ActivityMonitor IconType -int 5
+
+    - description: Show all processes in Activity Monitor
+      command: defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+    - description: Sort Activity Monitor results by CPU usage
+      command: defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+
+    - description: Sort Activity Monitor results in descending order
+      command: defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+    #############################################################
+    #       TextEdit, and Disk Utility, QuickTime Player        #
+    #############################################################
+
+    - description: Use plain text mode for new TextEdit documents
+      command: defaults write com.apple.TextEdit RichText -int 0
+
+    - description: Open and save files as UTF-8 in TextEdit
+      command: defaults write com.apple.TextEdit PlainTextEncoding -int 4
+
+    - description: Open and save files as UTF-8 in TextEdit
+      command: defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+    - description: Enable the debug menu in Disk Utility
+      command: defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
+
+    - description: Enable the debug menu in Disk Utility
+      command: defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+    - description: Auto-play videos when opened with QuickTime Player
+      command: defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
+
+    #############################################################
+    #                      Mac App Store                        #
+    #############################################################
+
+    - description: Enable the WebKit Developer Tools in the Mac App Store
+      command: defaults write com.apple.appstore WebKitDeveloperExtras -bool true
+
+    - description: Enable Debug Menu in the Mac App Store
+      command: defaults write com.apple.appstore ShowDebugMenu -bool true
+
+    - description: Enable the automatic update check
+      command: defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+
+    - description: Download newly available updates in background
+      command: defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
+    - description: Install System data files & security updates
+      command: defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
+    - description: Turn on app auto-update
+      command: defaults write com.apple.commerce AutoUpdate -bool true
+
+    #############################################################
+    #                         Photos                            #
+    #############################################################
+
+    - description: Prevent Photos from opening automatically when devices are plugged in
+      command: defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+    #############################################################
+    #                    Transmission.app                       #
+    #############################################################
+
+    - description: Use `~/torrents` to store incomplete downloads
+      command: defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
+
+    - description: Use `~/torrents` to store incomplete downloads
+      command: defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/torrents"
+
+    - description: Use `~/Downloads` to store completed downloads
+      command: defaults write org.m0k.transmission DownloadLocationConstant -bool true
+
+    - description: Hide the donate message
+      command: defaults write org.m0k.transmission WarningDonate -bool false
+
+    - description: Trash original torrent files
+      command: defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
+
+    - description: Don’t prompt for confirmation before removing non-downloading active transfers
+      command: defaults write org.m0k.transmission CheckRemoveDownloading -bool true
+
+    - description: Hide the legal disclaimer
+      command: defaults write org.m0k.transmission WarningLegal -bool false

@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
-
-# based on https://www.chainsawonatireswing.com/2012/09/19/changing-default-applications-on-a-mac-using-the-command-line-then-a-shell-script/
-input="default.apps"
-[[ ! -r "$input" ]] && echo "there is no file: $input" && exit
-egrep -v "^\s*(#|$)" "$input" |
-while IFS=$':' read extension bundle_id; do
-  # check if Bundle ID exists
-  [[ ! $(mdfind -onlyin ~/Applications -onlyin /Applications kMDItemCFBundleIdentifier = "$bundle_id") ]] && echo "bundle id '$bundle_id' doesn't exist!" && continue
-  duti -s $bundle_id .$extension all && echo "*.$extension -> $bundle_id"
+egrep -v "^\s*(#|$)" |
+while IFS=$':' read extension role bundle_id; do
+  # check if Bundle ID exists with lsregister
+  [[ ! $(/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -dump | grep --color=never -o -m 1 "$bundle_id") ]] && echo "bundle id '$bundle_id' doesn't exist!" && continue
+  [[ $role -eq "" ]] && role="all"
+  duti -s $bundle_id .$extension $role && echo "*.$extension -> $(duti -x $extension | head -n 2 | tail -n 1) ($role)"
 done

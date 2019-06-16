@@ -1,11 +1,33 @@
+# Default apps for file extensions for duti (https://github.com/moretension/duti/)
+
+# Format:
+# ext:role:bundle_id
+# for more see duti man pages
+# default role: "all"
+
 # To get bundle id of YourApp run:
 # /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /Applications/YourApp.app/Contents/Info.plist
-json:com.sublimetext.3
-md:com.sublimetext.3
-pdf:net.sourceforge.skim-app.skim
-py:com.sublimetext.3
-sh:com.sublimetext.3
-txt:com.sublimetext.3
-yaml:com.sublimetext.3
-zsh:com.sublimetext.3
-# comment
+
+# To sort – copy, run, paste:
+# pbpaste | sort | pbcopy
+
+# Development
+c::com.sublimetext.3
+cpp::com.sublimetext.3
+h::com.sublimetext.3
+json::com.sublimetext.3
+md::com.sublimetext.3
+nb::com.wolfram.Mathematica
+pdf::net.sourceforge.skim-app.skim
+py::com.sublimetext.3
+sh::com.sublimetext.3
+tex::com.vallettaventures.Texpad
+txt::com.sublimetext.3
+yaml::com.sublimetext.3
+zsh::com.sublimetext.3
+
+# Media
+mov::org.videolan.vlc
+mp3::org.videolan.vlc
+mp4::org.videolan.vlc
+torrent::org.m0k.transmission

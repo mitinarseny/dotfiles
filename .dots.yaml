@@ -513,7 +513,7 @@ macos:
       command: defaults write org.m0k.transmission WarningLegal -bool false
 
     - description: Set default apps for file extensions
-      command: ./set_default_apps.sh
+      command: ./set_default_apps.sh < default.apps
 
 macos_pre:
   commands:

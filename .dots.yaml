@@ -395,11 +395,11 @@ macos:
     - description: Only use UTF-8 in Terminal.app
       command: defaults write com.apple.terminal StringEncodings -array 4
 
-    - description: Disable the annoying line marks
-      command: defaults write com.apple.Terminal ShowLineMarks -int 0
+    # - description: Disable the annoying line marks
+    #   command: defaults write com.apple.Terminal ShowLineMarks -int 0
 
-    - description: Don’t display the annoying prompt when quitting iTerm
-      command: defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+    # - description: Don’t display the annoying prompt when quitting iTerm
+    #   command: defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
     - description: set iTerm custom preferences folder 
       command: defaults write -app iTerm PrefsCustomFolder -string "$HOME/.iterm2_profile"

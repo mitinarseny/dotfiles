@@ -32,7 +32,8 @@ default:
       description: init bat cache
 
 macos:
-  extends: default
+  # extends:
+  #   - default
   variables:
     - HOME:
         command: echo ~
@@ -510,3 +511,17 @@ macos:
 
     - description: Hide the legal disclaimer
       command: defaults write org.m0k.transmission WarningLegal -bool false
+
+    - description: Set default apps for file extensions
+      command: ./set_default_apps.sh
+
+macos_pre:
+  commands:
+    - description: install all brew formulas and casks
+      command: brew bundle --file=Brewfile
+
+macos_full:
+  extends:
+    - default
+    - macos_pre
+    - macos

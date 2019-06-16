@@ -8,24 +8,24 @@
 * [`curl`](https://curl.haxx.se): command-line tool for transferring data with URLs
 * [`brew`](https://brew.sh): package-manager for macOS
 * [`git`](https://git-scm.com): cli for the most popular VCS today
-  Install it with 
+  Install it with:
   ```bash
   brew install git
   ```
-* [`dots`](https://github.com/mitinarseny/dots)
+* [`dots`](https://github.com/mitinarseny/dots): delivery tool for dotfiles written in Go
+  Install it with:
+  ```bash
+  brew install mitinarseny/tap/dots
+  ```
 
 ## Installation
 * Clone this repo:
   ```bash
   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
   ```
-* Install brew formulas and casks:
+* Up:
   ```bash
-  brew bundle --file=~/.dotfiles/Brewfile
-  ```
-* Setup:
-  ```bash
-  dots up macos -c ~/.dotfiles/.dots.yaml
+  dots up macos_full -c ~/.dotfiles/.dots.yaml
   ```
   
 ## Links

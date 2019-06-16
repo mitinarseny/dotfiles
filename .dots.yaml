@@ -522,6 +522,6 @@ macos_pre:
 
 macos_full:
   extends:
-    - default
     - macos_pre
+    - default
     - macos

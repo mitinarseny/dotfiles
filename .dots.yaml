@@ -385,8 +385,8 @@ macos:
     - description: Make sure indexing is enabled for the main volume
       command: sudo mdutil -i on / > /dev/null
 
-    - description: Rebuild the index from scratch
-      command: sudo mdutil -E / > /dev/null
+    # - description: Rebuild the index from scratch
+    #   command: sudo mdutil -E / > /dev/null
 
     ############################################################
     #                    Terminal & iTerm 2                    #

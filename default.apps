@@ -1,5 +1,11 @@
-pdf:net.sourceforge.skim-app.skim
-sh:com.sublimetext.3
-zsh:com.sublimetext.3
+# To get bundle id of YourApp run:
+# /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /Applications/YourApp.app/Contents/Info.plist
+json:com.sublimetext.3
 md:com.sublimetext.3
+pdf:net.sourceforge.skim-app.skim
+py:com.sublimetext.3
+sh:com.sublimetext.3
 txt:com.sublimetext.3
+yaml:com.sublimetext.3
+zsh:com.sublimetext.3
+# comment

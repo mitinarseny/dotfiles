@@ -27,7 +27,7 @@ export CLICOLOR=1
 export LANG=${LANG:-en_US.UTF-8}
 
 export EDITOR=micro
-export LESS='-qiwMRj4a#4z-4'
+export LESS='-iwMRj4a#4z-4'
 export PAGER="less -F"
 
 # Less Colors for Man Pages

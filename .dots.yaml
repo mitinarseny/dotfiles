@@ -28,7 +28,12 @@ default:
     - command: bat cache --source .config/bat/ --build
       description: init bat cache
 
-macos:
+macos_brew:
+  commands:
+    - description: install all brew formulas and casks
+      command: brew bundle --file=Brewfile
+
+macos_defaults:
   # extends:
   #   - default
   variables:
@@ -515,13 +520,8 @@ macos:
     - description: Set default apps for file extensions
       command: ./set_default_apps.sh < default.apps
 
-macos_pre:
-  commands:
-    - description: install all brew formulas and casks
-      command: brew bundle --file=Brewfile
-
-macos_full:
+macos:
   extends:
-    - macos_pre
+    - macos_brew
     - default
-    - macos
+    - macos_defaults

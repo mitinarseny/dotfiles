@@ -25,7 +25,7 @@
   ```
 * Up:
   ```bash
-  dots up macos_full -c ~/.dotfiles/.dots.yaml
+  dots up macos -c ~/.dotfiles/.dots.yaml
   ```
   
 ## Links

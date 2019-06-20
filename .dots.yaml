@@ -4,7 +4,7 @@ default:
       path: .zshrc
       force: true
     ~/.zsh/:
-      path: .zsh/*
+      path: .zsh/**
       force: true
     ~/.gitexcludes:
       path: .gitexcludes
@@ -19,7 +19,7 @@ default:
       path: .tmux.conf
       force: true
     ~/.config/:
-      path: .config/*
+      path: .config/**
       force: true
 
   commands:

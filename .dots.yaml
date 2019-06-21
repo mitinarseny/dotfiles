@@ -298,6 +298,9 @@ macos_defaults:
     - description: fix BeardedSpice
       command: defaults write -app Safari AllowJavaScriptFromAppleEvents 1
 
+    - description: Show status bar
+      command: defaults write com.apple.Safari ShowOverlayStatusBar -bool 1
+    
     - description: "Privacy: don’t send search queries to Apple"
       command: defaults write com.apple.Safari UniversalSearchEnabled -bool false
 

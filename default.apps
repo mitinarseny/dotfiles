@@ -12,22 +12,25 @@
 # pbpaste | sort | pbcopy
 
 # Development
-c::com.sublimetext.3
-cpp::com.sublimetext.3
-h::com.sublimetext.3
-json::com.sublimetext.3
-md::com.sublimetext.3
-nb::com.wolfram.Mathematica
-pdf::net.sourceforge.skim-app.skim
-py::com.sublimetext.3
-sh::com.sublimetext.3
-tex::com.vallettaventures.Texpad
-txt::com.sublimetext.3
-yaml::com.sublimetext.3
-zsh::com.sublimetext.3
+c:com.sublimetext.3:all
+cpp:com.sublimetext.3:all
+h:com.sublimetext.3:all
+json:com.sublimetext.3:all
+md:com.sublimetext.3:all
+nb:com.wolfram.Mathematica:all
+pdf:net.sourceforge.skim-app.skim:all
+py:com.sublimetext.3:all
+sh:com.sublimetext.3:all
+tex:com.vallettaventures.Texpad:all
+txt:com.sublimetext.3:all
+yaml:com.sublimetext.3:all
+zsh:com.sublimetext.3:all
 
 # Media
-mov::org.videolan.vlc
-mp3::org.videolan.vlc
-mp4::org.videolan.vlc
-torrent::org.m0k.transmission
+mov:org.videolan.vlc:all
+mp3:org.videolan.vlc:all
+mp4:org.videolan.vlc:all
+torrent:org.m0k.transmission:all
+
+# URL Schemes
+ssh:com.googlecode.iterm2

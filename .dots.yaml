@@ -41,7 +41,7 @@ macos_defaults:
         command: echo ~
   links:
     ~/.iterm2_profile/:
-      path: iterm2_profile/*
+      path: iterm2_profile/**
       force: true
     ~/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings:
       path: subl/Package Control.sublime-settings
@@ -300,7 +300,7 @@ macos_defaults:
       command: defaults write -app Safari AllowJavaScriptFromAppleEvents 1
 
     - description: Show status bar
-      command: defaults write com.apple.Safari ShowOverlayStatusBar -bool 1
+      command: defaults write com.apple.Safari ShowOverlayStatusBar -bool true
     
     - description: "Privacy: don’t send search queries to Apple"
       command: defaults write com.apple.Safari UniversalSearchEnabled -bool false

@@ -51,6 +51,7 @@ macos_defaults:
       force: true
   commands:
     # https://mths.be/macos
+    # https://www.defaults-write.com/
     - description: Close any open System Preferences panes, to prevent them from overriding settings we’re about to change
       command: osascript -e 'tell application "System Preferences" to quit'
     
@@ -376,6 +377,9 @@ macos_defaults:
 
     - description: Disable inline attachments (just show the icons)
       command: defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+    - description: Disable opening Mail.app in split view while in Full Screen mode
+      command: defaults write com.apple.mail FullScreenPreferSplit -bool false
 
     ############################################################
     #                       Spotlight                          #

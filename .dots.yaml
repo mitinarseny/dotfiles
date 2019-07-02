@@ -144,7 +144,7 @@ macos_defaults:
           command: defaults write com.apple.menuextra.clock IsAnalog -bool false
 
         - description: Set clock format
-          command: defaults write com.apple.menuextra.clock DateFormat -string "d EEE HH:mm" && killall SystemUIServer
+          command: defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  HH:mm" && killall SystemUIServer
 
         - description: Stop iTunes from responding to the keyboard media keys
           command: launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null

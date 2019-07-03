@@ -63,6 +63,8 @@ macos_defaults:
         ############################################################
         #                    General UI/UX                         #
         ############################################################
+        - description: Set system Dark mode
+          command: defaults write -globalDomain AppleInterfaceStyle -string "Dark"
 
         - description: Disable the sound effects on boot
           command: sudo nvram SystemAudioVolume=" "

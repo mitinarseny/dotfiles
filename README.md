@@ -18,16 +18,23 @@
   brew install mitinarseny/tap/dots
   ```
 
-## Installation
+## Install
 * Clone this repo:
   ```bash
   git clone https://github.com/mitinarseny/dotfiles.git ~/.dotfiles
   ```
-* Up:
+* Install with [`dots`](https://github.com/mitinarseny/dots):
   ```bash
   dots up macos -c ~/.dotfiles/.dots.yaml
   ```
-  
+* Install settings for [JetBrains IntelliJ IDEA](https://www.jetbrains.com/idea/):
+  * Launch IntelliJ IDEA
+  * Go to Preferences: `⌘+,`
+  * Go to `Tools -> Settings Repository`
+  * Click `+` button on `Read-only Sources` section
+  * Paste a link to settings repository: `https://github.com/mitinarseny/jetbrains_settings`
+  * Follow the instructions
+
 ## Links
 ### Dictionary.app
 Download additional dictionaries from [here](https://rutracker.org/forum/viewtopic.php?t=4264270)

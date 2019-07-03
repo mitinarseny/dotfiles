@@ -29,12 +29,14 @@
   ```
 * Install settings for [JetBrains IntelliJ IDEA](https://www.jetbrains.com/idea/):
   * Launch IntelliJ IDEA
-  * Go to Preferences: `⌘+,`
-  * Go to `Tools -> Settings Repository`
-  * Click `+` button on `Read-only Sources` section
+  * Go to `File -> Settings Repository`
   * Paste a link to settings repository: `https://github.com/mitinarseny/jetbrains_settings`
-  * Follow the instructions
-
+  * Press `Overwrite Local`
+  * Go to Preferences: `⌘+,'
+  * Navigate to `Plugins`
+  * Search and Install [`Nord`](https://plugins.jetbrains.com/plugin/10321-nord) Theme plugin
+  * Navigate to `Appearance & Behavior -> Appearance`
+  * Choose `Nord` as Theme
 ## Links
 ### Dictionary.app
 Download additional dictionaries from [here](https://rutracker.org/forum/viewtopic.php?t=4264270)

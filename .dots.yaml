@@ -21,6 +21,9 @@ default:
     ~/.config/:
       path: .config/**
       force: true
+    ~/.iterm2_profile/:
+      path: iterm2_profile/**
+      force: true
 
   commands:
     - command: antibody bundle < zsh_plugins.txt > ~/.zsh_plugins.sh

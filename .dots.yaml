@@ -31,8 +31,10 @@ default:
     - command: bat cache --source .config/bat/ --build
       description: init bat cache
 
-macos_brew:
+macos_pre:
   commands:
+    - description: install XCode command-line tools
+      command: xcode-select --install
     - description: install all brew formulas and casks
       command: brew bundle --file=Brewfile
 
@@ -536,6 +538,6 @@ macos_defaults:
 
 macos:
   extends:
-    - macos_brew
+    - macos_pre
     - default
     - macos_defaults

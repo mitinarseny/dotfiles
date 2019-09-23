@@ -9,6 +9,9 @@
 **/__pycache__/
 *.py[cod]
 *.pyc
+**/.ipynb_checkpoints/
+.local
+.ipython
 
 # IDEs
 *.sublime-*

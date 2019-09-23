@@ -12,6 +12,7 @@
 **/.ipynb_checkpoints/
 .local
 .ipython
+.jupyter
 
 # IDEs
 *.sublime-*

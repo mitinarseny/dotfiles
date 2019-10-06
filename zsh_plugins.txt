@@ -13,3 +13,4 @@ marzocchi/zsh-notify
 kwhrtsk/docker-fzf-completion
 docker/cli path:contrib/completion/zsh/ kind:fpath
 docker/compose path:contrib/completion/zsh/ kind:fpath
+jupyter/jupyter_core path:examples/completions-zsh kind:fpath

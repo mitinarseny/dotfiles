@@ -12,19 +12,21 @@
 # pbpaste | sort | pbcopy
 
 # Development
-c:com.sublimetext.3:all
-cpp:com.sublimetext.3:all
-h:com.sublimetext.3:all
-json:com.sublimetext.3:all
-md:com.sublimetext.3:all
+c:com.microsoft.VSCode:all
+cpp:com.microsoft.VSCode:all
+css:com.microsoft.VSCode:all
+h:com.microsoft.VSCode:all
+js:com.microsoft.VSCode:all
+json:com.microsoft.VSCode:all
+md:com.microsoft.VSCode:all
 nb:com.wolfram.Mathematica:all
 pdf:net.sourceforge.skim-app.skim:all
-py:com.sublimetext.3:all
-sh:com.sublimetext.3:all
-tex:com.vallettaventures.Texpad:all
-txt:com.sublimetext.3:all
-yaml:com.sublimetext.3:all
-zsh:com.sublimetext.3:all
+py:com.microsoft.VSCode:all
+sh:com.microsoft.VSCode:all
+tex:com.microsoft.VSCode:all
+txt:com.microsoft.VSCode:all
+yaml:com.microsoft.VSCode:all
+zsh:com.microsoft.VSCode:all
 
 # Media
 mov:org.videolan.vlc:all

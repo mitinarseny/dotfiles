@@ -27,6 +27,10 @@
   ```bash
   dots up macos -c ~/.dotfiles/.dots.yaml
   ```
+* Collect zsh plugins with:
+  ```bash
+  antibody bundle < ~/.dotfiles/zsh_plugins.txt > ~/.zsh_plugins.sh
+  ```
 * Install settings for [JetBrains IntelliJ IDEA](https://www.jetbrains.com/idea/):
   * Launch IntelliJ IDEA
   * Go to `File -> Settings Repository`

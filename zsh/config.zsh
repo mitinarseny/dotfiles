@@ -11,7 +11,7 @@ export WORDCHARS='*?_-[]~;!#%^(){}<>'
 
 export EDITOR='vim'
 export VEDITOR='code'
-export PAGER="less -F"
+export PAGER="less"
 
 # Hitory
 export HISTSIZE=10000

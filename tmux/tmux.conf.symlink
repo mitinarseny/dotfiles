@@ -1,0 +1,55 @@
+set -g status-bg black
+set -g status-fg cyan
+
+# auto-reload
+bind r source-file ~/.tmux.conf
+
+
+#####################
+### Key Buildings ###
+#####################
+
+# remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# split panes using | and - with current pane path
+bind | split-window -h -c '#{pane_current_path}'
+bind - split-window -v -c '#{pane_current_path}'
+unbind '"'
+unbind '%'
+
+set -g mouse on
+
+bind -n C-Left select-pane -L
+bind -n C-Right select-pane -R
+bind -n C-Up select-pane -U
+bind -n C-Down select-pane -D
+
+
+# Plugins
+set -g @plugin 'tmux-plugins/tmux-battery'
+set -g @plugin 'samoshkin/tmux-plugin-sysstat'
+
+run -b '~/.tmux/plugins/tpm/tpm'
+
+#####################
+###### Plugins ######
+#####################
+
+# Battery
+set -g @batt_charged_icon "●●●●"
+set -g @batt_charging_icon "◌◌◌◌"
+set -g @batt_attached_icon "◍◍◍◍"
+set -g @batt_full_charge_icon "●●●●"
+set -g @batt_high_charge_icon "●●●◯"
+set -g @batt_medium_charge_icon "●●◯◯"
+set -g @batt_low_charge_icon "●◯◯◯"
+
+
+# System Stats
+set -g @sysstat_mem_view_tmpl '#[fg=#{mem.color}]#{mem.used}#[default]'
+set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}#[default]'
+
+set -g status-right '#{battery_status_fg} #{battery_icon} #{battery_percentage}#[default] | #{sysstat_cpu} #{sysstat_mem} | %H:%M  '

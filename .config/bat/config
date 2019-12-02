@@ -1,8 +1,0 @@
---color=always
---theme="ayu-mirage"
---style="full"
---italic-text=always
---map-syntax py:py3
---map-syntax h:cpp
---map-syntax .ignore:.gitignore
---pager="less -RF"

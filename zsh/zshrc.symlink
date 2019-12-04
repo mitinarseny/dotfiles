@@ -30,7 +30,7 @@ source ~/.zsh_plugins.sh
 
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
-  source "$file"
+  source "${file}"
 done
 
 # init completion
@@ -38,7 +38,7 @@ _zcompinit_custom
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}; do
-  source "$file"
+  source "${file}"
 done
 
 unset config_files

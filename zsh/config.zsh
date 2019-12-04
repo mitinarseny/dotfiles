@@ -9,7 +9,7 @@ setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 export LANG=${LANG:-en_US.UTF-8}
 export WORDCHARS='*?_-[]~;!#%^(){}<>'
 
-export EDITOR='vim'
+export EDITOR='nvim'
 export VEDITOR='code'
 export PAGER="less"
 

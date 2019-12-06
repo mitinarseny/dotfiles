@@ -6,8 +6,8 @@ setopt FLOW_CONTROL
 unsetopt MENU_COMPLETE
 
 # bind UP and DOWN arrow keys
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 
 # Case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list '' \

@@ -18,7 +18,7 @@ echo "  › Show the /Volumes folder"
 sudo chflags nohidden /Volumes
 
 echo "  › Set a really fast key repeat"
-defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain KeyRepeat -int 5
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 echo "  › Require password immediately after sleep or screen saver begins"

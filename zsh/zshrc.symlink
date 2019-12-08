@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export DOTFILES="$(readlink --canonicalize-existing "$(dirname "$(readlink --canonicalize-existing "${HOME}/.zshrc")")/..")"
+export DOTFILES="${HOME}/.dotfiles"
 
 _zcompinit_custom() {
   autoload -Uz compinit

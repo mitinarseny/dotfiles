@@ -1,3 +1,3 @@
 #!/bin/sh
 
-bat cache --build --source "$(dirname "$(readlink --canonicalize-existing "$0")")"
+bat cache --build --source "${DOTFILES}/bat"

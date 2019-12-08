@@ -1,6 +1,6 @@
 #!/bin/sh
 
-bundles="$(dirname "$(readlink --canonicalize-existing "$0")")/bundles.txt"
+bundles="${DOTFILES}/antibody/bundles.txt"
 
 if command -v brew >/dev/null 2>&1; then
   brew tap | grep -q 'getantibody/tap' || brew tap getantibody/tap

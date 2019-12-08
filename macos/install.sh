@@ -1,8 +1,10 @@
-#!/bun/sh
+#!/bin/sh
 
 if [ "$(uname -s)" != "Darwin" ]; then
 	exit 0
 fi
+
+cd $(dirname "$0")
 
 source set-defaults.sh
 

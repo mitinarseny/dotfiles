@@ -1,64 +1,99 @@
+# ===== general =====
 set -g default-terminal "screen-256color"
+setw -g xterm-keys on
+set -q -g status-utf8 on                  # expect UTF-8 (tmux < 2.2)
+setw -q -g utf8 on
 
-set -g status-bg black
-set -g status-fg cyan
+set -g history-limit 50000
 
-# auto-reload
-bind r source-file ~/.tmux.conf
+# remap prefix from 'C-b' to 'C-a'
+set-option -g prefix C-a
+unbind C-b
+bind C-a send-prefix
 
+# edit configuration
+bind e new-window -n "~/.tmux.conf" "sh -c '\${EDITOR:-vim} ~/.tmux.conf'"
+
+# reload configuration
+bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced'
+
+
+# ===== display =====
+set -g base-index 1           # start windows numbering at 1
+setw -g pane-base-index 1     # make pane numbering consistent with windows
+
+setw -g automatic-rename on   # rename window to reflect current program
+set -g renumber-windows on    # renumber windows when a window is closed
+
+set -g set-titles on          # set terminal title
+
+set -g display-panes-time 800 # slightly longer pane indicators display time
+set -g display-time 1500      # slightly longer status messages display time
+
+set -g status-interval 10     # redraw status line every 10 seconds
+
+
+# activity
+set -g monitor-activity on
+set -g visual-activity off
+
+
+# ===== navigation =====
+set -g mouse on
+
+bind | split-window -h -c '#{pane_current_path}'  # split vertically
+bind - split-window -v -c '#{pane_current_path}'  # split horizontally
+unbind '"'
+unbind '%'
+
+bind -n M-Left select-pane -L   # move left
+bind -n M-Right select-pane -R  # move right
+bind -n M-Up select-pane -U     # move up
+bind -n M-Down select-pane -D   # move down
+bind > swap-pane -D             # swap current pane with the next one
+bind < swap-pane -U             # swap current pane with the previous one
+
+# maximize current pane
+bind + resize-pane -Z
+
+# window navigation
+unbind n
+unbind p
+bind -n C-Tab next-window
+bind -n C-S-Tab previous-window
+
+# set -g status-bg black
+# set -g status-fg cyan
 
 #####################
 ### Key Buildings ###
 #####################
 
-# remap prefix from 'C-b' to 'C-a'
-unbind C-b
-set-option -g prefix C-a
-bind-key C-a send-prefix
-
-# split panes using | and - with current pane path
-bind | split-window -h -c '#{pane_current_path}'
-bind - split-window -v -c '#{pane_current_path}'
-unbind '"'
-unbind '%'
-
-set -g mouse on
-
-bind -n M-Left select-pane -L
-bind -n M-Right select-pane -R
-bind -n M-Up select-pane -U
-bind -n M-Down select-pane -D
-
-
-# Activity Monitoring
-setw -g monitor-activity on
-set -g visual-activity on
-
 # Highlighting Current Window Using Specified Colour
-set-window-option -g window-status-current-bg yellow
+# set-window-option -g window-status-current-bg 
 
 # Plugins
-set -g @plugin 'tmux-plugins/tmux-battery'
-set -g @plugin 'samoshkin/tmux-plugin-sysstat'
+# set -g @plugin 'tmux-plugins/tmux-battery'
+# set -g @plugin 'samoshkin/tmux-plugin-sysstat'
 
-run -b '~/.tmux/plugins/tpm/tpm'
+# run -b '~/.tmux/plugins/tpm/tpm'
 
 #####################
 ###### Plugins ######
 #####################
 
 # Battery
-set -g @batt_charged_icon "●●●●"
-set -g @batt_charging_icon "◌◌◌◌"
-set -g @batt_attached_icon "◍◍◍◍"
-set -g @batt_full_charge_icon "●●●●"
-set -g @batt_high_charge_icon "●●●◯"
-set -g @batt_medium_charge_icon "●●◯◯"
-set -g @batt_low_charge_icon "●◯◯◯"
+#set -g @batt_charged_icon "●●●●"
+#set -g @batt_charging_icon "◌◌◌◌"
+#set -g @batt_attached_icon "◍◍◍◍"
+#set -g @batt_full_charge_icon "●●●●"
+#set -g @batt_high_charge_icon "●●●◯"
+#set -g @batt_medium_charge_icon "●●◯◯"
+#set -g @batt_low_charge_icon "●◯◯◯"
 
 
 # System Stats
-set -g @sysstat_mem_view_tmpl '#[fg=#{mem.color}]#{mem.used}#[default]'
-set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}#[default]'
+#set -g @sysstat_mem_view_tmpl '#[fg=#{mem.color}]#{mem.used}#[default]'
+#set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}#[default]'
 
-set -g status-right '#{battery_status_fg} #{battery_icon} #{battery_percentage}#[default] | #{sysstat_cpu} #{sysstat_mem} | %H:%M  '
+set -g status-right '#{battery_status_fg} #{battery_icon} #{battery_percentage}#[default] | #{sysstat_cpu} #{sysstat_mem} | %H:%M'

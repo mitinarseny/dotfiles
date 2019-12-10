@@ -1,5 +1,6 @@
 alias tree='tree -C'
 alias tb="nc termbin.com 9999"
+alias ls='ls --color=auto' # enable colors automatically
 alias l='ls -lFh'     #size,show type,human readable
 alias la='ls -lAFh'   #long list,show almost all,show type,human readable
 alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable

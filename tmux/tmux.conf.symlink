@@ -5,6 +5,10 @@ setw -g xterm-keys on
 set -q -g status-utf8 on                  # expect UTF-8 (tmux < 2.2)
 setw -q -g utf8 on
 
+set -s escape-time 10
+set -sg repeat-time 600
+set -s focus-events on
+
 set -g history-limit 50000
 
 # remap prefix from 'C-b' to 'C-a'

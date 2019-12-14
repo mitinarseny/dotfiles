@@ -51,10 +51,10 @@ bind - split-window -v -c '#{pane_current_path}'  # split horizontally
 unbind '"'
 unbind '%'
 
-bind -n M-Left select-pane -L   # move left
-bind -n M-Right select-pane -R  # move right
-bind -n M-Up select-pane -U     # move up
-bind -n M-Down select-pane -D   # move down
+# bind -n M-Left select-pane -L   # move left
+# bind -n M-Right select-pane -R  # move right
+# bind -n M-Up select-pane -U     # move up
+# bind -n M-Down select-pane -D   # move down
 bind > swap-pane -D             # swap current pane with the next one
 bind < swap-pane -U             # swap current pane with the previous one
 

@@ -48,6 +48,8 @@ unset config_files
 [ -f ~/.localrc ] && . ~/.localrc
 
 # start tmux if exists and if in interactive mode
-if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then
-  exec tmux
-fi
+#if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then
+#  exec tmux
+#fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

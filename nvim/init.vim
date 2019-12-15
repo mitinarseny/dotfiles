@@ -16,6 +16,9 @@ let g:lightline = {
   \        ['readonly', 'linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
   \      ], 
   \   },
+  \   'component': {
+  \     'lineinfo': '☰ %3l:%-2v',
+  \   },
   \   'component_expand': {
   \     'readonly': 'LightlineReadonly',
   \     'linter_checking': 'lightline#ale#checking',
@@ -31,13 +34,13 @@ let g:lightline = {
   \     'linter_ok': 'left',
   \   },
   \   'component_function': {
-  \     'gitbranch': 'fugitive#head',
+  \     'gitbranch': 'LightlineFugitive',
   \     'filename': 'LightlineFileName',
   \     'fileformat': 'LightlineFileformat',
   \     'filetype': 'LightlineFiletype',
   \   },
-  \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-  \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
+  \   'separator': { 'left': '', 'right': '' },
+  \   'subseparator': { 'left': '|', 'right': '|' }
   \ }
 
 function! LightlineFileName()
@@ -59,6 +62,13 @@ endfunction
 
 function! LightlineFiletype()
   return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFugitive()
+  if &filetype !~? 'vimfiler' && exists('*fugitive#head')
+    return fugitive#head()
+  endif
+  return ''
 endfunction
 
 " function! LightlineLinterWarnings() abort

@@ -16,6 +16,11 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
+" ===== General ===== "
+" Follow symlinks
+Plug 'moll/vim-bbye' " vim-symlink optional dependency
+Plug 'aymericbeaumet/vim-symlink'
+
 " ===== Editing ===== "
 " Language Server Protocol
 Plug 'dense-analysis/ale'
@@ -42,6 +47,8 @@ Plug 'maximbaz/lightline-ale'
 " File explorer
 Plug 'scrooloose/nerdtree'
 
+" Start screen
+Plug 'mhinz/vim-startify'
 " ===== VCS ===== "
 " Git intergation
 Plug 'tpope/vim-fugitive'
@@ -56,6 +63,5 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " === Golang === "
 " Full-featured Golang IDE
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-
 
 call plug#end()

@@ -1,4 +1,6 @@
+set encoding=utf-8
 scriptencoding utf-8
+
 
 source ~/.config/nvim/plugins.vim
 
@@ -112,7 +114,33 @@ endfunction
 
 
 "call deoplete#custom#option('omni_patterns', { 'go': '[^.*\t]\.\w*' })
+set ignorecase
+set noerrorbells
+set novisualbell
+syntax enable
+set updatetime=100
+set scrolloff=7
+set nobackup
+set nowritebackup
+set noswapfile
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+set autoindent
+set smartindent
+set wrap
 
+set wildmenu
+set wildignore=*.o,*~,*.pyc
+if has('win16') || has('win32')
+  set wildignore+=.git\*,.hg\*,.svn\*
+else
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+set whichwrap=<,>
+
+set autoread
 set number
 set cursorline
 set mouse=a

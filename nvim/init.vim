@@ -30,10 +30,10 @@ let g:lightline = {
   \   },
   \   'component_type': {
   \     'readonly': 'error',
-  \     'linter_checking': 'left',
+  \     'linter_checking': 'middle',
   \     'linter_wanrings': 'warning',
   \     'linter_errors': 'error',
-  \     'linter_ok': 'left',
+  \     'linter_ok': 'middle',
   \   },
   \   'component_function': {
   \     'gitbranch': 'LightlineFugitive',
@@ -138,7 +138,7 @@ if has('win16') || has('win32')
 else
   set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
-set whichwrap=<,>
+set whichwrap=<,>,[,]
 
 set autoread
 set number
@@ -182,3 +182,6 @@ set hidden
 set signcolumn=yes
 set completeopt=menu,menuone,preview,noselect,noinsert
 set shortmess+=c
+let g:startify_custom_header = []
+let g:startify_use_env = 1
+

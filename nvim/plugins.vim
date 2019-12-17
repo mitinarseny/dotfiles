@@ -1,20 +1,19 @@
+scriptencoding utf-8
+
 " check if vim-plug is installed and install it if necessary
-let plugpath = expand('<sfile>:p:h') . '/autoload/plug.vim'
-if !filereadable(plugpath)
-  if executable('curl')
-    let plugURL = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    call system('curl -fLo ' . shellescape(plugpath) . ' --create-dirs ' . plugURL)
-    if v:shell_error
-      echom 'Error while downloading vim-plug. Please, install it manually.\n'
-      exit
-    endif
-  else
-    echom 'vim-plug is not installed. Please, install it manually or install curl.\n'
+let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
+if !filereadable(autoload_plug_path)
+  if !executable('curl')
+    echo 'vim-plug is not installed. Please, install it manually or install curl and check if it is in $PATH'
     exit
   endif
+  silent execute '!curl --fail --location --output ' . shellescape(autoload_plug_path) . ' --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
 endif
+unlet autoload_plug_path
 
-call plug#begin('~/.config/nvim/plugged')
+" ======= Load Plugins ======= "
+call plug#begin(stdpath('data') . '/plugged')
 
 " ===== General ===== "
 " Follow symlinks
@@ -34,6 +33,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Comments
 Plug 'tomtom/tcomment_vim'
 
+" Tags
+Plug 'ludovicchabant/vim-gutentags'
+
 " ===== UI ===== "
 " Color scheme
 Plug 'arcticicestudio/nord-vim'
@@ -43,6 +45,9 @@ Plug 'itchyny/lightline.vim'
 
 " Lightline + ALE
 Plug 'maximbaz/lightline-ale'
+
+" Show indent guides
+Plug 'nathanaelkane/vim-indent-guides'
 
 " File explorer
 Plug 'scrooloose/nerdtree'
@@ -65,3 +70,99 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
+
+" ======= Plugins Settings ======= "
+" ===== arcticicestudio/nord-vim =====
+" let g:nord_cursor_line_number_background = 1
+let g:nord_bold_vertical_split_line = 1
+let g:nord_uniform_diff_background = 1
+
+colorscheme nord
+
+" ===== itchyny/lightline.vim =====
+" diable built-in statusline
+set noshowmode
+
+let g:lightline = {
+  \   'colorscheme': 'nord',
+  \   'active': {
+  \     'left': [
+  \       ['mode', 'paste'],
+  \       ['gitbranch', 'filename'],
+  \      ],
+  \      'right': [
+  \        ['lineinfo'],
+  \        ['percent'],
+  \        ['readonly', 'linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
+  \      ],
+  \   },
+  \   'component': {
+  \     'lineinfo': '☰ %3l:%-2v',
+  \   },
+  \   'component_expand': {
+  \     'readonly': 'LightlineReadonly',
+  \     'linter_checking': 'lightline#ale#checking',
+  \     'linter_wanrings': 'lightline#ale#warnings',
+  \     'linter_errors': 'lightline#ale#errors',
+  \     'linter_ok': 'lightline#ale#ok',
+  \   },
+  \   'component_type': {
+  \     'readonly': 'error',
+  \     'linter_checking': 'middle',
+  \     'linter_wanrings': 'warning',
+  \     'linter_errors': 'error',
+  \     'linter_ok': 'middle',
+  \   },
+  \   'component_function': {
+  \     'gitbranch': 'LightlineFugitive',
+  \     'filename': 'LightlineFileName',
+  \     'fileformat': 'LightlineFileformat',
+  \     'filetype': 'LightlineFiletype',
+  \   },
+  \   'separator': { 'left': '', 'right': '' },
+  \   'subseparator': { 'left': '|', 'right': '|' }
+  \ }
+
+function! LightlineFileName()
+  let filename = expand('%:t')
+  if filename ==# ''
+    let filename = '[No Name]'
+  endif
+  let modified = &modified ? ' +' : ''
+  return filename . modified
+endfunction
+
+function! LightlineReadonly()
+  return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
+endfunction
+
+function! LightlineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFugitive()
+  if &filetype !~? 'vimfiler' && exists('*fugitive#head')
+    return fugitive#head()
+  endif
+  return ''
+endfunction
+
+" ===== dense-analysis/ale =====
+let g:ale_lint_on_text_changed='always'
+
+" ===== mhinz/vim-startify =====
+let g:startify_custom_header = []
+let g:startify_use_env = 1
+
+" ===== nathanaelkane/vim-indent-guides =====
+let g:indent_guides_enable_on_vim_startup = 1
+" set background=dark
+" let g:indent_guides_auto_colors = 0
+" let g:indent_guides_color_name_guibg_pattern = "guibg='?\zs[0-9A-Za-z]+\ze'?"
+" let g:indent_guides_auto_colors = 0
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4

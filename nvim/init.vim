@@ -1,106 +1,102 @@
 set encoding=utf-8
 scriptencoding utf-8
-
-
-source ~/.config/nvim/plugins.vim
-
-set noshowmode
-let g:lightline = {
-  \   'colorscheme': 'nord',
-  \   'active': {
-  \     'left': [
-  \       ['mode', 'paste'],
-  \       ['gitbranch', 'filename'],
-  \      ],
-  \      'right': [
-  \        ['lineinfo'],
-  \        ['percent'],
-  \        ['readonly', 'linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
-  \      ], 
-  \   },
-  \   'component': {
-  \     'lineinfo': '☰ %3l:%-2v',
-  \   },
-  \   'component_expand': {
-  \     'readonly': 'LightlineReadonly',
-  \     'linter_checking': 'lightline#ale#checking',
-  \     'linter_wanrings': 'lightline#ale#warnings',
-  \     'linter_errors': 'lightline#ale#errors',
-  \     'linter_ok': 'lightline#ale#ok',
-  \   },
-  \   'component_type': {
-  \     'readonly': 'error',
-  \     'linter_checking': 'middle',
-  \     'linter_wanrings': 'warning',
-  \     'linter_errors': 'error',
-  \     'linter_ok': 'middle',
-  \   },
-  \   'component_function': {
-  \     'gitbranch': 'LightlineFugitive',
-  \     'filename': 'LightlineFileName',
-  \     'fileformat': 'LightlineFileformat',
-  \     'filetype': 'LightlineFiletype',
-  \   },
-  \   'separator': { 'left': '', 'right': '' },
-  \   'subseparator': { 'left': '|', 'right': '|' }
-  \ }
-
-function! LightlineFileName()
-  let filename = expand('%:t')
-  if filename ==# ''
-    let filename = '[No Name]'
-  endif
-  let modified = &modified ? ' +' : ''
-  return filename . modified
-endfunction
-
-function! LightlineReadonly()
-  return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
-endfunction
-
-function! LightlineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightlineFugitive()
-  if &filetype !~? 'vimfiler' && exists('*fugitive#head')
-    return fugitive#head()
-  endif
-  return ''
-endfunction
-
-" function! LightlineLinterWarnings() abort
-"   let l:counts = ale#statusline#Count(bufnr(''))
-"   let l:all_errors = l:counts.error + l:counts.style_error
-"   let l:all_non_errors = l:counts.total - l:all_errors
-"   return l:counts.total == 0 ? '' : printf('%d ◆', all_non_errors)
-" endfunction
+" TODO: alt + left/right move by word left/right
+" TODO: highlight usages of object under cursor
+" TODO: split vimrc into multiple files
+" TODO: disable line numbers in terminal
+" TODO: autodetect (or set?) project root for autocompletion and go to
+" definition
+" TODO: show indent guides and coupled operators (like for, else, end)
+" https://github.com/thaerkh/vim-indentguides
+" https://github.com/nathanaelkane/vim-indent-guides
 "
-" function! LightlineLinterErrors() abort
-"   let l:counts = ale#statusline#Count(bufnr(''))
-"   let l:all_errors = l:counts.error + l:counts.style_error
-"   let l:all_non_errors = l:counts.total - l:all_errors
-"   return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
-" endfunction
+" TODO: select first item when use autocompletion to use only Enter
+" TODO: bind Ctrl+[ to go back from where went to definition
+" TODO: show time in statusline
+" TODO: do not move cursor when scrolling file
+" TODO: do not use autocompletion when writing comments
+" TODO: spellcheck
+" TODO: ajust copy mode settings and mappings
+" TODO: custom indent guides for different languages
 "
-" function! LightlineLinterOK() abort
-"   let l:counts = ale#statusline#Count(bufnr(''))
-"   let l:all_errors = l:counts.error + l:counts.style_error
-"   let l:all_non_errors = l:counts.total - l:all_errors
-"   return l:counts.total == 0 ? '✓ ' : ''
-" endfunction
-"
-" augroup LightLineOnALE
-"   autocmd!
-"   autocmd User ALEFixPre   call lightline#update()
-"   autocmd User ALEFixPost  call lightline#update()
-"   autocmd User ALELintPre  call lightline#update()
-"   autocmd User ALELintPost call lightline#update()
-" augroup end
+runtime plugins.vim
+
+" ======= General ======= "
+" do not unload buffer when it is abandoned
+set hidden
+
+" enable mouse everywhene
+set mouse=a
+
+" enable syntax highlighting
+syntax enable
+
+" disable bells 
+set noerrorbells
+set novisualbell
+
+" ignore case in search patterns
+set ignorecase
+
+" write more frequently
+set updatetime=100
+
+" read changes outside of vim
+set autoread
+
+" keep more lines above and below cursor when scrolling
+set scrolloff=7
+
+" wrap long lines 
+set wrap
+
+" allow <Left> and <Right> move to next/previous line 
+set whichwrap=<,>,[,]
+
+" enable command-line completion
+set wildmenu
+set wildignore=*.o,*~,*.pyc
+if has('win16') || has('win32')
+  set wildignore+=.git\*,.hg\*,.svn\*
+else
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+" ======= Editing ======= "
+" tabs
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+set autoindent
+set smartindent
+
+" enable arrows to select text
+set keymodel=startsel,stopsel
+
+" do not make backups before writing to file
+set nobackup
+set nowritebackup
+set noswapfile
+
+" set complete options
+set completeopt=menu,menuone,preview,noselect,noinsert
+
+" do not show insert completion popups 
+set shortmess+=c
+
+" ======= UI ======= "
+" set terminal title
+set title
+
+" show line numbers
+set number
+
+" highlight cursor line
+set cursorline
+
+" always show sign columns
+set signcolumn=yes
 
 "if has('win32')
 "  "function Comment
@@ -110,55 +106,13 @@ endfunction
 "  imap <C-_> <esc>\c<space><CR>i
 "  vmap <C-_> \c<space>gv
 "endif
-"let g:NERDDefaultAlign = 'left'
+"
+"
 
-
-"call deoplete#custom#option('omni_patterns', { 'go': '[^.*\t]\.\w*' })
-set ignorecase
-set noerrorbells
-set novisualbell
-syntax enable
-set updatetime=100
-set scrolloff=7
-set nobackup
-set nowritebackup
-set noswapfile
-set expandtab
-set smarttab
-set shiftwidth=4
-set tabstop=4
-set autoindent
-set smartindent
-set wrap
-
-set wildmenu
-set wildignore=*.o,*~,*.pyc
-if has('win16') || has('win32')
-  set wildignore+=.git\*,.hg\*,.svn\*
-else
-  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-endif
-set whichwrap=<,>,[,]
-
-set autoread
-set number
-set cursorline
-set mouse=a
-
-set keymodel=startsel,stopsel
-
-let g:nord_cursor_line_number_background = 1
-let g:nord_bold_vertical_split_line = 1
-let g:nord_uniform_diff_background = 1
-
-colorscheme nord
-
-let g:ale_lint_on_text_changed='always'
-
-"augroup TerminalStuff
-   "au!
-  "autocmd TermOpen * setlocal nonumber norelativenumber | startinsert
-"augroup END
+augroup TerminalStuff
+   au!
+  autocmd TermOpen * setlocal nonumber norelativenumber | startinsert
+augroup END
 
 "set hidden
 "set nobackup
@@ -177,11 +131,3 @@ let g:ale_lint_on_text_changed='always'
   "return !col || getline('.')[col - 1]  =~# '\s'
 "endfunction
 "inoremap <silent><expr> <c-space> coc#refresh()
-set hidden
-
-set signcolumn=yes
-set completeopt=menu,menuone,preview,noselect,noinsert
-set shortmess+=c
-let g:startify_custom_header = []
-let g:startify_use_env = 1
-

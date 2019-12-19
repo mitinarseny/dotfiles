@@ -8,10 +8,7 @@ scriptencoding utf-8
 " TODO: select first item when use autocompletion to use only Enter
 " TODO: bind Ctrl+[ to go back from where went to definition
 " TODO: do not move cursor when scrolling file
-" TODO: do not use autocompletion when writing comments
 " TODO: spellcheck
-" TODO: custom indent guides for different languages
-" TODO: forward mouse scroll to terminal buffer (man, less)
 runtime plugins.vim
 
 " ======= General ======= "
@@ -78,12 +75,10 @@ set nowritebackup
 set noswapfile
 
 " set complete options
-set completeopt=menu,menuone,preview,noselect,noinsert
+set completeopt=menu,menuone,preview,noinsert
 
 " do not show insert completion popups 
 set shortmess+=c
-
-" nmap
 
 " ======= UI ======= "
 " set terminal title
@@ -98,36 +93,22 @@ set cursorline
 " always show sign columns
 set signcolumn=yes
 
-"if has('win32')
-"  "function Comment
-"  imap <C-/> <esc>\c<space><CR>i
-"  vmap <C-/> \c<space>gv
-"else
-"  imap <C-_> <esc>\c<space><CR>i
-"  vmap <C-_> \c<space>gv
-"endif
-"
-"
-
 augroup TerminalStuff
    au!
   autocmd TermOpen * setlocal nonumber norelativenumber | startinsert
 augroup END
 
-"set hidden
-"set nobackup
-"set nowritebackup
-"set cmdheight=2
-"set updatetime=300
-"set shortmess
-"set signcolumn=yes
-"inoremap <silent><expr> <TAB>
-      "\ pumvisible() ? "\<C-n>" :
-      "\ <SID>check_back_space() ? "\<TAB>" :
-      "\ coc#refresh()
-"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-"function! s:check_back_space() abort
-  "let col = col('.') - 1
-  "return !col || getline('.')[col - 1]  =~# '\s'
-"endfunction
-"inoremap <silent><expr> <c-space> coc#refresh()
+" ======= Languages ======= "
+" set custom tab sizes
+augroup Languages
+  au!
+  for [ftype, tabw] in [
+    \   ['vim', 2],
+    \   ['sh', 2],
+    \   ['zsh', 2],
+    \   ['json', 2],
+    \ ]
+    execute 'autocmd FileType ' . ftype . ' setlocal tabstop=' . tabw . ' shiftwidth=' . tabw . ' softtabstop=' . tabw
+  endfor
+augroup END
+

@@ -24,5 +24,6 @@ if command -v nvim @>/dev/null; then
   mkdir -p ~/.config/nvim
   link_file "${HOME}/.dotfiles/nvim/init.vim" "${HOME}/.config/nvim/init.vim"
   link_file "${HOME}/.dotfiles/nvim/plugins.vim" "${HOME}/.config/nvim/plugins.vim"
+  link_file "${HOME}/.dotfiles/nvim/coc-settings.json" "${HOME}/.config/nvim/coc-settings.json"
 fi
 

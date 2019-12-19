@@ -7,19 +7,18 @@ scriptencoding utf-8
 " definition
 " TODO: select first item when use autocompletion to use only Enter
 " TODO: bind Ctrl+[ to go back from where went to definition
-" TODO: show time in statusline
 " TODO: do not move cursor when scrolling file
 " TODO: do not use autocompletion when writing comments
 " TODO: spellcheck
-" TODO: ajust copy mode settings and mappings
 " TODO: custom indent guides for different languages
 " TODO: forward mouse scroll to terminal buffer (man, less)
-" TODO: select + backspace -> detele selected text + enter insert mode
-" TODO: fzf
 runtime plugins.vim
 
 " ======= General ======= "
-" do not unload buffer when it is abandoned
+" use system clipboard
+set clipboard+=unnamedplus
+
+"do not unload buffer when it is abandoned
 set hidden
 
 " enable mouse everywhene

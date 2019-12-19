@@ -3,13 +3,8 @@ scriptencoding utf-8
 " TODO: alt + left/right move by word left/right
 " TODO: highlight usages of object under cursor
 " TODO: split vimrc into multiple files
-" TODO: disable line numbers in terminal
 " TODO: autodetect (or set?) project root for autocompletion and go to
 " definition
-" TODO: show indent guides and coupled operators (like for, else, end)
-" https://github.com/thaerkh/vim-indentguides
-" https://github.com/nathanaelkane/vim-indent-guides
-"
 " TODO: select first item when use autocompletion to use only Enter
 " TODO: bind Ctrl+[ to go back from where went to definition
 " TODO: show time in statusline
@@ -19,6 +14,8 @@ scriptencoding utf-8
 " TODO: ajust copy mode settings and mappings
 " TODO: custom indent guides for different languages
 " TODO: forward mouse scroll to terminal buffer (man, less)
+" TODO: select + backspace -> detele selected text + enter insert mode
+" TODO: fzf
 runtime plugins.vim
 
 " ======= General ======= "
@@ -65,7 +62,7 @@ else
 endif
 
 " ======= Editing ======= "
-" tabs
+" tabulation
 set expandtab
 set smarttab
 set shiftwidth=4
@@ -86,6 +83,8 @@ set completeopt=menu,menuone,preview,noselect,noinsert
 
 " do not show insert completion popups 
 set shortmess+=c
+
+" nmap
 
 " ======= UI ======= "
 " set terminal title

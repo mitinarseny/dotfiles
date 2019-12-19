@@ -182,7 +182,21 @@ let g:fzf_layout = {
 
 noremap <silent> <C-f> :FZF<CR>
 
-" Using floating windows of Neovim to start fzf
+
+" ===neoclide/coc.nvim =====
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+
+"Using floating windows of Neovim to start fzf
 " if has('nvim')
 "   let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
 "

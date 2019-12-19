@@ -47,7 +47,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'maximbaz/lightline-ale'
 
 " Show indent guides
-Plug 'nathanaelkane/vim-indent-guides'
+Plug 'Yggdroot/indentLine'
 
 " File explorer
 Plug 'scrooloose/nerdtree'
@@ -73,10 +73,8 @@ call plug#end()
 
 " ======= Plugins Settings ======= "
 " ===== arcticicestudio/nord-vim =====
-" let g:nord_cursor_line_number_background = 1
 let g:nord_bold_vertical_split_line = 1
 let g:nord_uniform_diff_background = 1
-
 colorscheme nord
 
 " ===== itchyny/lightline.vim =====
@@ -158,11 +156,9 @@ let g:ale_lint_on_text_changed='always'
 let g:startify_custom_header = []
 let g:startify_use_env = 1
 
-" ===== nathanaelkane/vim-indent-guides =====
-let g:indent_guides_enable_on_vim_startup = 1
-" set background=dark
-" let g:indent_guides_auto_colors = 0
-" let g:indent_guides_color_name_guibg_pattern = "guibg='?\zs[0-9A-Za-z]+\ze'?"
-" let g:indent_guides_auto_colors = 0
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+" ===== Yggdroot/indentLine =====
+let g:indentLine_color_term = 0
+let g:indentLine_bgcolor_term = 'NONE'
+let g:indentLine_color_gui = '#3b4252'
+let g:indentLine_bgcolor_gui = 'NONE'
+let g:indentLine_concealcursor = 0

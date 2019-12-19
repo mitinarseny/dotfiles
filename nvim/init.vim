@@ -18,7 +18,7 @@ scriptencoding utf-8
 " TODO: spellcheck
 " TODO: ajust copy mode settings and mappings
 " TODO: custom indent guides for different languages
-"
+" TODO: forward mouse scroll to terminal buffer (man, less)
 runtime plugins.vim
 
 " ======= General ======= "
@@ -28,8 +28,10 @@ set hidden
 " enable mouse everywhene
 set mouse=a
 
-" enable syntax highlighting
-syntax enable
+" enable syntax highlighting if terminal supports colors
+if &t_Co > 1
+  syntax enable
+endif
 
 " disable bells 
 set noerrorbells

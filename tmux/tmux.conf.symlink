@@ -24,7 +24,7 @@ bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced'
 
 
 # ===== display =====
-set -g status_position top
+set -g status-position top
 set -g base-index 1           # start windows numbering at 1
 setw -g pane-base-index 1     # make pane numbering consistent with windows
 
@@ -92,10 +92,7 @@ set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}'
 run -b '~/.tmux/plugins/tpm/tpm'
 
 # ===== theme =====
-set -g window-status-format "#[fg=white,bg=brightblack] #I #[fg=white,bg=brightblack]#W #F "
-set -g window-status-current-format "#[fg=black,bg=cyan] #I#[fg=black,bg=cyan,nobold,noitalics,nounderscore] #[fg=black,bg=cyan]#W #F "
-set -g window-status-separator ""
-
+set status-style "bg=black,fg=white"
 set -g pane-border-style "fg=brightblack,bg=default"
 set -g pane-active-border-style "fg=brightblack,bg=default"
 
@@ -104,7 +101,11 @@ set -g mode-style "fg=black,bg=cyan"
 set -g message-command-style "fg=cyan,bg=brightblack"
 set -g message-style "fg=cyan,bg=brightblack"
 
-
 set -g status-left "#[fg=black,bg=blue,bold] #S "
 set -g status-right '#{prefix_highlight} #{sysstat_cpu} | #{sysstat_mem} #[fg=white,bg=brightblack] %Y-%m-%d #[fg=white,bg=brightblack,nobold,noitalics,nounderscore]|#[fg=white,bg=brightblack] %H:%M'
+
+set -g window-status-format "#[fg=white,bg=brightblack] #I #[fg=white,bg=brightblack]#W #F "
+set -g window-status-current-format "#[fg=black,bg=cyan] #I#[fg=black,bg=cyan,nobold,noitalics,nounderscore] #[fg=black,bg=cyan]#W #F "
+set -g window-status-separator ""
+
 

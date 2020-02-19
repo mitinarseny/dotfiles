@@ -71,6 +71,9 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " Full-featured Golang IDE
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
+" === Rust === "
+Plug 'rust-lang/rust.vim'
+
 call plug#end()
 
 " ======= Plugins Settings ======= "

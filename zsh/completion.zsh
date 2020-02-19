@@ -5,10 +5,6 @@ setopt AUTO_PARAM_KEYS
 setopt FLOW_CONTROL
 unsetopt MENU_COMPLETE
 
-# bind UP and DOWN arrow keys
-bindkey '^[OA' history-substring-search-up
-bindkey '^[OB' history-substring-search-down
-
 # Case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list '' \
        'm:{a-z\-}={A-Z\_}' \

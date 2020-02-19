@@ -93,18 +93,24 @@ bind S command-prompt -I "ssh " "new-window -n '%1' '%%'"
 ###### Plugins ######
 #####################
 
-# Battery
-#set -g @batt_charged_icon "●●●●"
-#set -g @batt_charging_icon "◌◌◌◌"
-#set -g @batt_attached_icon "◍◍◍◍"
-#set -g @batt_full_charge_icon "●●●●"
-#set -g @batt_high_charge_icon "●●●◯"
-#set -g @batt_medium_charge_icon "●●◯◯"
-#set -g @batt_low_charge_icon "●◯◯◯"
+set -g @plugin 'tmux-plugins/tpm'
 
+set -g @nord_tmux_no_patched_font "1"
+set -g @nord_tmux_show_status_content "0"
+#+--- Bars ---+
+set -g status-left "#[fg=black,bg=blue,bold] #S "
+set -g status-right "#{prefix_highlight}#[fg=white,bg=brightblack] %Y-%m-%d #[fg=white,bg=brightblack,nobold,noitalics,nounderscore]|#[fg=white,bg=brightblack] %H:%M #[fg=cyan,bg=brightblack,nobold,noitalics,nounderscore]"
+#+--- Windows ---+
+set -g window-status-format "#[fg=white,bg=brightblack] #I #[fg=white,bg=brightblack]#W #F "
+set -g window-status-current-format "#[fg=black,bg=cyan] #I#[fg=black,bg=cyan,nobold,noitalics,nounderscore] #[fg=black,bg=cyan]#W #F "
+set -g window-status-separator ""
+set -g @plugin "arcticicestudio/nord-tmux"
 
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
 # System Stats
 #set -g @sysstat_mem_view_tmpl '#[fg=#{mem.color}]#{mem.used}#[default]'
 #set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}#[default]'
 
-set -g status-right '#{battery_status_fg} #{battery_icon} #{battery_percentage}#[default] | #{sysstat_cpu} #{sysstat_mem} | %H:%M'
+set -g status-right '#{prefix_highlight}#[fg=white,bg=brightblack] %Y-%m-%d #[fg=white,bg=brightblack,nobold,noitalics,nounderscore]|#[fg=white,bg=brightblack] %H:%M'
+
+run -b '~/.tmux/plugins/tpm/tpm'

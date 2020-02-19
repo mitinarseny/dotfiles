@@ -74,6 +74,9 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " === Rust === "
 Plug 'rust-lang/rust.vim'
 
+" === .tmux.conf === "
+Plug 'tmux-plugins/vim-tmux'
+
 call plug#end()
 
 " ======= Plugins Settings ======= "

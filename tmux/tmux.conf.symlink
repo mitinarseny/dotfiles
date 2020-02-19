@@ -89,6 +89,7 @@ set -g @plugin 'samoshkin/tmux-plugin-sysstat'
 set -g @sysstat_mem_view_tmpl '#[fg=#{mem.color}]#{mem.used}'
 set -g @sysstat_cpu_view_tmpl '#[fg=#{cpu.color}]#{cpu.pused}'
 
+
 run -b '~/.tmux/plugins/tpm/tpm'
 
 # ===== theme =====
@@ -102,7 +103,7 @@ set -g message-command-style "fg=cyan,bg=brightblack"
 set -g message-style "fg=cyan,bg=brightblack"
 
 set -g status-left "#[fg=black,bg=blue,bold] #S "
-set -g status-right '#{prefix_highlight} #{sysstat_cpu} | #{sysstat_mem} #[fg=white,bg=brightblack] %Y-%m-%d #[fg=white,bg=brightblack,nobold,noitalics,nounderscore]|#[fg=white,bg=brightblack] %H:%M'
+set -g status-right '#{prefix_highlight} #{sysstat_cpu}#[default] | #{sysstat_mem} #[fg=white,bg=brightblack] %Y-%m-%d | %H:%M '
 
 set -g window-status-format "#[fg=white,bg=brightblack] #I #[fg=white,bg=brightblack]#W #F "
 set -g window-status-current-format "#[fg=black,bg=cyan] #I#[fg=black,bg=cyan,nobold,noitalics,nounderscore] #[fg=black,bg=cyan]#W #F "

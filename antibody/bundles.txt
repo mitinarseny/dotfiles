@@ -1,12 +1,12 @@
 mafredri/zsh-async
 sindresorhus/pure path:pure.zsh
 wfxr/forgit
-zsh-users/zsh-history-substring-search
 Homebrew/brew path:completions/zsh kind:fpath
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions
 hlissner/zsh-autopair path:autopair.zsh
 zdharma/fast-syntax-highlighting
+zsh-users/zsh-history-substring-search
 denysdovhan/gitio-zsh
 # marzocchi/zsh-notify
 kwhrtsk/docker-fzf-completion

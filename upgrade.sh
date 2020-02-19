@@ -1,12 +1,18 @@
 #!/bin/sh
-#
-# Run all dotfiles installers.
-set -e
 
-cd "$(dirname "$0")"
+DOTFILES=$(cd "$(dirname "$0")" && pwd)
 
-# find the installers and run them iteratively
-git ls-tree --name-only -r HEAD | grep upgrade.sh | while read -r upgrader; do
-	echo "› ${upgrader}..."
-	sh -c "${upgrader}"
-done
+prompt() {
+  while true; do
+    read -p "$1 [Y/n]: " yn
+    case $yn in
+      [Yy]* ) return;;
+      [Nn]* ) return 1;;
+      * ) echo "Please answer yes or no.";;
+    esac
+  done
+}
+
+prompt "> tmux" && ${DOTFILES}/tmux/update.sh
+prompt "> antibody" && ${DOTFILES}/antibody/update.sh
+

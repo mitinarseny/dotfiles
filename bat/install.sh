@@ -1,3 +1,3 @@
 #!/bin/sh
 
-bat cache --build --source "${DOTFILES}/bat"
+bat cache --build --source "$(dirname "$0")"

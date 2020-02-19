@@ -1,1 +1,1 @@
-export HTOPRC="${DOTFILES}/htop/htoprc"
+export HTOPRC="$(dirname "$0")/htoprc"

@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-export DOTFILES="${HOME}/.dotfiles"
-
 unsetopt MAIL_WARNING       # Don't print a warning message if a mail file has been accessed.
 setopt NOTIFY               # Report status of background jobs immediately.
 
@@ -11,12 +9,18 @@ setopt AUTO_CD              # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt AUTO_NAME_DIRS
 
+setopt MENU_COMPLETE        # preselect first item even if ambiguous (man zshoptions)
+
 export LANG=${LANG:-en_US.UTF-8}
 export WORDCHARS='*?_-[]~;!#%^(){}<>'
 
-export EDITOR='nvim'
-export VEDITOR='code'
-export PAGER="less"
+command -v nvim &> /dev/null \
+  && export EDITOR='nvim' \
+  || export EDITOR='vim'
+command -v code &> /dev/null \
+  && export VEDITOR='code'
+command -v less &> /dev/null \
+  && export PAGER='less'
 
 # Hitory
 export HISTSIZE=10000
@@ -31,8 +35,6 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=true
 
 export CASE_SENSITIVE=0
 export CLICOLOR=1
-
-export PURE_PROMPT_SYMBOL='λ'
 
 _zcompinit_custom() {
   autoload -Uz compinit
@@ -49,8 +51,12 @@ _zcompinit_custom() {
   fi
 }
 
+# borrowed from:
+# https://www.reddit.com/r/zsh/comments/alkq5a/how_can_i_change_the_default_location_of_zshrc/egaw8q9
+export DOTFILES="${${(%):-%x}:P:h:h}"
+
 typeset -U config_files
-config_files=(${DOTFILES}/*/*.zsh)
+config_files=(${DOTFILES}/**/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do
@@ -58,10 +64,7 @@ for file in ${(M)config_files:#*/path.zsh}; do
 done
 
 # load antibody plugins
-source ~/.zsh_plugins.sh
-
-# https://github.com/zdharma/fast-syntax-highlighting/issues/135#issuecomment-497452498
-export FAST_HIGHLIGHT[whatis_chroma_type]=0
+[ -f "${HOME}/.zsh_plugins.sh" ] && source "${HOME}/.zsh_plugins.sh"
 
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
@@ -80,11 +83,12 @@ unset config_files
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
-[ -f ~/.localrc ] && . ~/.localrc
+[ -f "${HOME}/.localrc" ] && source "${HOME}/.localrc"
 
 # start tmux if exists and if in interactive mode
-#if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then
+# if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then
 #  exec tmux
-#fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# fi
+if [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then
+  tmux has-session 2> /dev/null && tmux attach-session\; display-message 'attached: #{session_name}' || exec tmux new-session\; display-message 'created: #{session_name}'
+fi

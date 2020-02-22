@@ -89,6 +89,6 @@ unset config_files
 # if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then
 #  exec tmux
 # fi
-if [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then
-  tmux has-session 2> /dev/null && tmux attach-session\; display-message 'attached: #{session_name}' || exec tmux new-session\; display-message 'created: #{session_name}'
+if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then
+  tmux new-session -A -s main 
 fi

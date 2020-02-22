@@ -1,1 +1,1 @@
-alias tmux='tmux -2'
+alias t='tmux attach-session || tmux new-session\; split-window -h'

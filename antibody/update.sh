@@ -1,3 +1,0 @@
-#!/bin/sh
-
-antibody update

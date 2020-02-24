@@ -83,7 +83,7 @@ unset config_files
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
-[ -f "${HOME}/.localrc" ] && source "${HOME}/.localrc"
+[ -r "${HOME}/.localrc" ] && source "${HOME}/.localrc"
 
 # start tmux if exists and if in interactive mode
 # if command -v tmux &> /dev/null && [ -n "${PS1}" ] && [[ ! "${TERM}" =~ screen ]] && [[ ! "${TERM}" =~ tmux ]] && [ -z "${TMUX}" ]; then

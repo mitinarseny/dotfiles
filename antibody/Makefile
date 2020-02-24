@@ -1,2 +1,2 @@
-~/.zsh_plugins.sh: bundlex.txt
+~/.zsh_plugins.sh: bundles.txt
 	antibody bundle < $< > $@

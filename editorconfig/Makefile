@@ -1,2 +1,2 @@
 ~/.editorconfig: editorconfig
-	ln -si $(realpath $<) $@
+	@ln -svf $(realpath $<) $@

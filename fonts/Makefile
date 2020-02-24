@@ -1,13 +1,11 @@
-UNAME := $(shell uname -s)
-ifeq ($(UNAME),Darwin)
+ifeq ($(shell uname -s),Darwin)
 INSTALL_DIR := ~/Library/Fonts
 else
 INSTALL_DIR := ~/.fonts
 endif
 
 .PHONY: fira_code
-fira_code: $(INSTALL_DIR) \
-	$(patsubst %,$(INSTALL_DIR)/FiraCode-%.ttf,\
+fira_code: $(patsubst %,$(INSTALL_DIR)/FiraCode-%.ttf,\
 	Bold \
 	Light \
 	Medium \
@@ -19,8 +17,9 @@ ifneq ($(UNAME),Darwin)
 endif
 
 $(INSTALL_DIR):
-	mkdir -p $@
+	@mkdir -p $@
 
-$(INSTALL_DIR)/FiraCode-%.ttf:
-	wget -O $@ "https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-$*.ttf?raw=true"
+$(INSTALL_DIR)/FiraCode-%.ttf: | $(INSTALL_DIR)
+	curl --silent --location --output $@ \
+	  "https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-$*.ttf?raw=true"
 

@@ -1,6 +1,3 @@
-.PHONY: all
-all: dotfiles git
-
 .PHONY: dotfiles
 dotfiles: \
 	config \
@@ -18,8 +15,8 @@ excludes: ~/.gitexcludes
 ~/.%: %
 	ln -si $(realpath $<) $@
 
-.PHONY: git
-git:
+.PHONY: all
+all: dotfiles
 ifeq ($(shell git config --global --get user.email),)
 	read -r -p "GitHub author name: " user_name; \
 	read -r -p "GitHyb author email: " user_email; \

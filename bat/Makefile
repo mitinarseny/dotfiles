@@ -1,4 +1,9 @@
+ifneq (,$(shell command -v bat))
 CONFIG_DIR := $(shell bat --config-dir)
+else
+CONFIG_DIR := ~/.config/bat
+$(warning bat was not found in PATH, assuming config dir is $(CONFIG_DIR))
+endif
 
 .PHONY: dotfiles
 dotfiles: $(CONFIG_DIR)/config

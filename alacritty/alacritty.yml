@@ -1,3 +1,11 @@
+env:
+  TERM: xterm-256color
+
+window:
+  startup_mode: Fullscreen
+
+tabspaces: 4
+
 font:
   size: 12.0
   # The normal (roman) font face to use.
@@ -18,6 +26,9 @@ font:
     # Style can be specified to pick a specific face.
     style: Italic
 
+cursor:
+  style: Beam
+
 # Nord color scheme
 # https://github.com/arcticicestudio/nord-alacritty
 colors:
@@ -27,6 +38,8 @@ colors:
   cursor:
     text: '0x2E3440'
     cursor: '0xD8DEE9'
+  selection:
+    background: '0x3B4252'
   normal:
     black: '0x3B4252'
     red: '0xBF616A'

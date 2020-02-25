@@ -13,27 +13,28 @@ excludes: ~/.gitexcludes
 	git config --global core.excludesfile $<
 
 ~/.%: %
-	ln -si $(realpath $<) $@
+	ln -svf $(realpath $<) $@
 
 .PHONY: all
 all: dotfiles
+ifneq (true,$(shell git config --global --get dotfiles.managed))
 ifeq ($(shell git config --global --get user.email),)
 	read -r -p "GitHub author name: " user_name; \
 	read -r -p "GitHyb author email: " user_email; \
 	git config --global user.name "${user_name}"; \
 	git config --global user.email "${user_email}"
-else ifneq ($(shell git config --global --get dotfiles.managed),true)
+else
 	user_name="$$(git config --global --get user.name)"; \
 	user_email="$$(git config --global --get user.email)"; \
 	mv ${HOME}/.gitconfig ${HOME}/.gitconfig.backup; \
 	git config --global user.name "${user_name}"; \
 	git config --global user.email "${user_email}"; \
 endif
-endif
 	git config --global dotfiles.managed "true"
 ifeq ($(shell uname -s),Darwin)
 	git config --global credential.helper osxkeychain
 else
 	git config --global credential.helper cache
+endif
 endif
 

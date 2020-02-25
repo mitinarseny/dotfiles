@@ -12,3 +12,7 @@ $(SUBS):
 	$(info > $@)
 	@$(MAKE) -C $(@D) -f $(@F)
 
+.PHONY: update
+update:
+	git pull origin
+	$(MAKE)

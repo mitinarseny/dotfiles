@@ -85,6 +85,9 @@ unset config_files
 # want in your public, versioned repo.
 [ -r "${HOME}/.localrc" ] && . "${HOME}/.localrc"
 
+# remove duplicated from PATH
+typeset -U PATH
+
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then
   tmux new-session -A -s main 

@@ -1,4 +1,4 @@
---theme="ayu-mirage"
+--theme="nord"
 --style="full"
 --italic-text=always
 --map-syntax py:py3

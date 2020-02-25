@@ -1,7 +1,7 @@
-SUBS := $(dir $(wildcard */Makefile))
+SUBS := $(wildcard */Makefile)
 
 ifeq ($(shell uname -s),Darwin)
-SUBS += macos
+SUBS += $(wildcard */Makefile.macos)
 endif
 
 .PHONY: all
@@ -10,5 +10,5 @@ all: $(SUBS)
 .PHONY: $(SUBS)
 $(SUBS):
 	$(info > $@)
-	@$(MAKE) -C $@
+	@$(MAKE) -C $(@D) -f $(@F)
 

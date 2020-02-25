@@ -9,6 +9,6 @@ all: $(SUBS)
 
 .PHONY: $(SUBS)
 $(SUBS):
-	$(info make: $@)
+	$(info > $@)
 	@$(MAKE) -C $@
 

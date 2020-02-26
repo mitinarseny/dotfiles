@@ -1,6 +1,7 @@
 mafredri/zsh-async
 sindresorhus/pure path:pure.zsh
 wfxr/forgit
+paulirish/git-open kind:path
 Homebrew/brew path:completions/zsh kind:fpath
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions

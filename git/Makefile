@@ -37,4 +37,5 @@ else
 	git config --global credential.helper cache
 endif
 endif
+endif
 

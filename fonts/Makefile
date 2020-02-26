@@ -13,7 +13,7 @@ fira_code: $(patsubst %,$(INSTALL_DIR)/FiraCode-%.ttf,\
 	Retina \
 	)
 ifneq ($(UNAME),Darwin)
-	fc-cache --force --verbose --error-on-no-fonts $(INSTALL_DIR)
+	fc-cache --force --verbose $(INSTALL_DIR)
 endif
 
 $(INSTALL_DIR):

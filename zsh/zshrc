@@ -11,6 +11,10 @@ setopt AUTO_NAME_DIRS
 
 setopt MENU_COMPLETE        # preselect first item even if ambiguous (man zshoptions)
 
+setopt MAGIC_EQUAL_SUBST    # support completion after =
+
+setopt INTERACTIVE_COMMENTS # support for comments in command line mode
+
 export LANG=${LANG:-en_US.UTF-8}
 export WORDCHARS='*?_-[]~;!#%^(){}<>'
 

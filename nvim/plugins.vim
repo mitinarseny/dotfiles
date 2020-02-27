@@ -37,6 +37,7 @@ Plug 'jiangmiao/auto-pairs'
 
 " Tags
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'majutsushi/tagbar'
 
 " ===== UI ===== "
 " Color scheme

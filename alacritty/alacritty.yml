@@ -7,7 +7,7 @@ window:
 tabspaces: 4
 
 font:
-  size: 12.0
+  size: 11.0
   # The normal (roman) font face to use.
   normal:
     family: Fira Code
@@ -58,3 +58,7 @@ colors:
     magenta: '0xB48EAD'
     cyan: '0x8FBCBB'
     white: '0xECEFF4'
+
+key_bindings:
+  - { key: C, mods: Command, action: Copy }
+  - { key: V, mods: Command, action: Paste }

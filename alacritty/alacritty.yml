@@ -62,3 +62,4 @@ colors:
 key_bindings:
   - { key: C, mods: Command, action: Copy }
   - { key: V, mods: Command, action: Paste }
+

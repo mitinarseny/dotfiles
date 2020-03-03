@@ -59,7 +59,3 @@ colors:
     cyan: '0x8FBCBB'
     white: '0xECEFF4'
 
-key_bindings:
-  - { key: C, mods: Command, action: Copy }
-  - { key: V, mods: Command, action: Paste }
-

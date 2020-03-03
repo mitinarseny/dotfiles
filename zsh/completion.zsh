@@ -3,7 +3,8 @@ setopt AUTO_LIST
 setopt AUTO_PARAM_SLASH
 setopt AUTO_PARAM_KEYS
 setopt FLOW_CONTROL
-unsetopt MENU_COMPLETE
+setopt MENU_COMPLETE        # preselect first item even if ambiguous (man zshoptions)
+setopt MAGIC_EQUAL_SUBST    # support completion after =
 
 # Case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list '' \

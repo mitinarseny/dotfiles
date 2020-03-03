@@ -7,7 +7,7 @@ zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions
 hlissner/zsh-autopair path:autopair.zsh
 zdharma/fast-syntax-highlighting
-zsh-users/zsh-history-substring-search
+zsh-users/zsh-history-substring-search path:zsh-history-substring-search.zsh
 denysdovhan/gitio-zsh
 # marzocchi/zsh-notify
 kwhrtsk/docker-fzf-completion

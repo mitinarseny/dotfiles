@@ -4,14 +4,11 @@ unsetopt MAIL_WARNING       # Don't print a warning message if a mail file has b
 setopt NOTIFY               # Report status of background jobs immediately.
 
 setopt HIST_BEEP            # Beep when accessing non-existent history.
+setopt HIST_FIND_NO_DUPS    # skip duplicate adjacent search results
 
 setopt AUTO_CD              # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt AUTO_NAME_DIRS
-
-setopt MENU_COMPLETE        # preselect first item even if ambiguous (man zshoptions)
-
-setopt MAGIC_EQUAL_SUBST    # support completion after =
 
 setopt INTERACTIVE_COMMENTS # support for comments in command line mode
 
@@ -91,6 +88,10 @@ unset config_files
 
 # remove duplicated from PATH
 typeset -U PATH
+
+autoload -Uz zkbd
+[[ ! -r ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE} ]] && zkbd
+. ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE}
 
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then

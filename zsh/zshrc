@@ -93,6 +93,9 @@ autoload -Uz zkbd
 [[ ! -r ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE} ]] && zkbd
 . ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE}
 
+# unbind vi mode
+bindkey -r '^['
+
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux &> /dev/null; then
   tmux new-session -A -s main 

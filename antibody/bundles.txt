@@ -1,5 +1,5 @@
 mafredri/zsh-async
-sindresorhus/pure path:pure.zsh
+sindresorhus/pure kind:fpath
 wfxr/forgit
 paulirish/git-open kind:path
 Homebrew/brew path:completions/zsh kind:fpath

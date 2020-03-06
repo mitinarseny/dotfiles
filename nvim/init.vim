@@ -2,12 +2,8 @@ set encoding=utf-8
 scriptencoding utf-8
 " TODO: alt + left/right move by word left/right
 " TODO: highlight usages of object under cursor
-" TODO: split vimrc into multiple files
-" TODO: autodetect (or set?) project root for autocompletion and go to
-" definition
 " TODO: select first item when use autocompletion to use only Enter
 " TODO: bind Ctrl+[ to go back from where went to definition
-" TODO: do not move cursor when scrolling file
 " TODO: spellcheck
 runtime plugins.vim
 
@@ -40,7 +36,7 @@ set updatetime=100
 set autoread
 
 " keep more lines above and below cursor when scrolling
-set scrolloff=7
+set scrolloff=5
 
 " wrap long lines 
 set wrap

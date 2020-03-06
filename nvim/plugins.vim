@@ -68,6 +68,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " ===== Languages ===== "
+Plug 'sheerun/vim-polyglot'
+
 " === Golang === "
 " Full-featured Golang IDE
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -83,7 +85,7 @@ call plug#end()
 " ======= Plugins Settings ======= "
 " ===== arcticicestudio/nord-vim =====
 let g:nord_bold_vertical_split_line = 1
-let g:nord_uniform_diff_background = 1
+let g:nord_uniform_diff_background  = 1
 colorscheme nord
 
 " ===== itchyny/lightline.vim =====
@@ -112,29 +114,29 @@ let g:lightline = {
   \     ],
   \   },
   \   'component': {
-  \     'lineinfo': '☰ %3l:%-2v',
+  \     'lineinfo': '%3l:%-2v',
   \   },
   \   'component_expand': {
-  \     'readonly': 'LightlineReadonly',
+  \     'readonly':        'LightlineReadonly',
   \     'linter_checking': 'lightline#ale#checking',
   \     'linter_wanrings': 'lightline#ale#warnings',
-  \     'linter_errors': 'lightline#ale#errors',
-  \     'linter_ok': 'lightline#ale#ok',
+  \     'linter_errors':   'lightline#ale#errors',
+  \     'linter_ok':       'lightline#ale#ok',
   \   },
   \   'component_type': {
-  \     'readonly': 'error',
+  \     'readonly':        'error',
   \     'linter_checking': 'middle',
   \     'linter_wanrings': 'warning',
-  \     'linter_errors': 'error',
-  \     'linter_ok': 'middle',
+  \     'linter_errors':   'error',
+  \     'linter_ok':       'middle',
   \   },
   \   'component_function': {
-  \     'gitbranch': 'LightlineFugitive',
-  \     'filename': 'LightlineFileName',
+  \     'gitbranch':  'LightlineFugitive',
+  \     'filename':   'LightlineFileName',
   \     'fileformat': 'LightlineFileformat',
-  \     'filetype': 'LightlineFiletype',
+  \     'filetype':   'LightlineFiletype',
   \   },
-  \   'separator': { 'left': '', 'right': '' },
+  \   'separator':    { 'left': '',  'right': ''  },
   \   'subseparator': { 'left': '|', 'right': '|' }
   \ }
 
@@ -168,19 +170,19 @@ endfunction
 
 " ===== junegunn/fzf =====
 let g:fzf_colors = { 
-  \ 'fg':      ['fg', 'Normal',],
-  \ 'bg':      ['bg', 'Normal',],
-  \ 'hl':      ['fg', 'SpellCap',],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal',],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn',],
-  \ 'hl+':     ['fg', 'SpellCap',],
-  \ 'info':    ['fg', 'Comment',],
-  \ 'border':  ['fg', 'Ignore',],
-  \ 'prompt':  ['fg', 'SpecialComment',],
-  \ 'pointer': ['fg', 'Exception',],
-  \ 'marker':  ['fg', 'SpellBad',],
-  \ 'spinner': ['fg', 'Comment',],
-  \ 'header':  ['fg', 'Comment',],
+  \ 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'SpellCap'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'SpellCap'],
+  \ 'info':    ['fg', 'Comment'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'SpecialComment'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'SpellBad'],
+  \ 'spinner': ['fg', 'Comment'],
+  \ 'header':  ['fg', 'Comment'],
   \ }
 
 let g:fzf_layout = {
@@ -188,7 +190,6 @@ let g:fzf_layout = {
   \ }
 
 noremap <silent> <C-f> :FZF<CR>
-
 
 " ===== ludovicchabant/vim-gutentags =====
 let g:gutentags_ctags_tagfile = ".tags"
@@ -237,17 +238,17 @@ endif
 
 
 " ===== dense-analysis/ale =====
-let g:ale_lint_on_text_changed='always'
+let g:ale_lint_on_text_changed = 'always'
 
 " ===== mhinz/vim-startify =====
 let g:startify_custom_header = []
-let g:startify_use_env = 1
+let g:startify_use_env       = 1
 
 " ===== Yggdroot/indentLine =====
-let g:indentLine_color_term = 0
-let g:indentLine_bgcolor_term = 'NONE'
-let g:indentLine_color_gui = '#3b4252'
-let g:indentLine_bgcolor_gui = 'NONE'
+let g:indentLine_color_term    = 0
+let g:indentLine_bgcolor_term  = 'NONE'
+let g:indentLine_color_gui     = '#3b4252'
+let g:indentLine_bgcolor_gui   = 'NONE'
 let g:indentLine_concealcursor = 0
 
 " ===== fatih/vim-go =====

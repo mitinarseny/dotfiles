@@ -1,9 +1,6 @@
 env:
   TERM: xterm-256color
 
-window:
-  startup_mode: Fullscreen
-
 tabspaces: 4
 
 font:

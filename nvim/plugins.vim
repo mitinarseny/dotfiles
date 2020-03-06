@@ -11,6 +11,12 @@ if !filereadable(autoload_plug_path)
 endif
 unlet autoload_plug_path
 
+" === dense-analysis/ale ===
+let g:ale_completion_enabled = 1
+let g:ale_linters = {
+\   'go': ['gopls'],
+\}
+
 " ======= Load Plugins ======= "
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -21,10 +27,11 @@ Plug 'aymericbeaumet/vim-symlink'
 
 " ===== Editing ===== "
 " Language Server Protocol
+" TODO: map Ctrl+] ALEGoToDefinition, Ctrl+[ go back
 Plug 'dense-analysis/ale'
 
 " Intellij Sense engine
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " Fuzzy search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
@@ -192,7 +199,7 @@ let g:fzf_layout = {
 noremap <silent> <C-f> :FZF<CR>
 
 " ===== ludovicchabant/vim-gutentags =====
-let g:gutentags_ctags_tagfile = ".tags"
+let g:gutentags_ctags_tagfile = "tags"
 
 " ===== neoclide/coc.nvim =====
 " use <tab> for trigger completion and navigate to the next complete item
@@ -201,10 +208,10 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+" inoremap <silent><expr> <Tab>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<Tab>" :
+"       \ coc#refresh()
 
 
 "Using floating windows of Neovim to start fzf
@@ -239,6 +246,8 @@ endif
 
 " ===== dense-analysis/ale =====
 let g:ale_lint_on_text_changed = 'always'
+set omnifunc=ale#completion#OmniFunc
+noremap <C-LeftMouse> <LeftMouse><Cmd>ALEGoToDefinition<CR>
 
 " ===== mhinz/vim-startify =====
 let g:startify_custom_header = []

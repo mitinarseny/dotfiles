@@ -54,7 +54,9 @@ _zcompinit_custom() {
 
 # borrowed from:
 # https://www.reddit.com/r/zsh/comments/alkq5a/how_can_i_change_the_default_location_of_zshrc/egaw8q9
-export DOTFILES="${${(%):-%x}:P:h:h}"
+DOTFILES="${${(%):-%x}:P:h:h}"
+fpath+=("${DOTFILES}/zsh/functions")
+autoload -Uz ${DOTFILES}/zsh/functions/*(.:t)
 
 typeset -U config_files
 config_files=(${DOTFILES}/**/*.zsh)
@@ -65,7 +67,7 @@ for file in ${(M)config_files:#*/path.zsh}; do
 done
 
 # load antibody plugins
-[ -f "${HOME}/.zsh_plugins.sh" ] && source "${HOME}/.zsh_plugins.sh"
+[ -f "${HOME}/.zsh_plugins.sh" ] && . "${HOME}/.zsh_plugins.sh"
 
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
@@ -88,10 +90,6 @@ unset config_files
 
 # remove duplicated from PATH
 typeset -U PATH
-
-autoload -Uz zkbd
-[[ ! -r ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE} ]] && zkbd
-. ~/.zkbd/$TERM-${${DISPLAY:t}:-$VENDOR-$OSTYPE}
 
 # unbind vi mode
 bindkey -r '^['

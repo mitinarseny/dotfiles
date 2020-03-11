@@ -1,16 +1,14 @@
-mafredri/zsh-async
+mafredri/zsh-async kind:fpath path:async.zsh
 sindresorhus/pure kind:fpath
-wfxr/forgit
 paulirish/git-open kind:path
-Homebrew/brew path:completions/zsh kind:fpath
-zsh-users/zsh-autosuggestions
-zsh-users/zsh-completions
-hlissner/zsh-autopair path:autopair.zsh
-zdharma/fast-syntax-highlighting
-zsh-users/zsh-history-substring-search path:zsh-history-substring-search.zsh
-denysdovhan/gitio-zsh
+Homebrew/brew kind:fpath path:completions/zsh
+zsh-users/zsh-autosuggestions kind:zsh path:zsh-autosuggestions.zsh
+zsh-users/zsh-completions kind:fpath path:src
+hlissner/zsh-autopair kind:zsh path:autopair.zsh
+zdharma/fast-syntax-highlighting kind:zsh path:fast-syntax-highlighting.plugin.zsh
+zsh-users/zsh-history-substring-search kind:zsh path:zsh-history-substring-search.zsh
 # marzocchi/zsh-notify
-kwhrtsk/docker-fzf-completion
-docker/cli path:contrib/completion/zsh/ kind:fpath
-docker/compose path:contrib/completion/zsh/ kind:fpath
-jupyter/jupyter_core path:examples/completions-zsh kind:fpath
+mnowotnik/extra-fzf-completions kind:zsh path:zsh/docker-fzf-completion.zsh
+docker/cli kind:fpath path:contrib/completion/zsh
+docker/compose kind:fpath path:contrib/completion/zsh
+jupyter/jupyter_core kind:fpath path:examples/completions-zsh

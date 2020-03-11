@@ -12,11 +12,15 @@ endif
 unlet autoload_plug_path
 
 " === dense-analysis/ale ===
+" let g:go_code_completion_enabled = 0
 let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \   'go': ['gopls'],
 \}
-
+let g:go_auto_type_info = 1
+let g:go_auto_sameids=1
+let g:go_updatetime=50
+let g:go_gopls_deep_completion=1
 " ======= Load Plugins ======= "
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -246,7 +250,7 @@ endif
 
 " ===== dense-analysis/ale =====
 let g:ale_lint_on_text_changed = 'always'
-set omnifunc=ale#completion#OmniFunc
+" set omnifunc=ale#completion#OmniFunc
 noremap <C-LeftMouse> <LeftMouse><Cmd>ALEGoToDefinition<CR>
 
 " ===== mhinz/vim-startify =====
@@ -260,7 +264,7 @@ let g:indentLine_color_gui     = '#3b4252'
 let g:indentLine_bgcolor_gui   = 'NONE'
 let g:indentLine_concealcursor = 0
 
-" ===== fatih/vim-go =====a
+" ===== fatih/vim-go ======
 let g:go_fmt_command = "goimports"
 let g:go_highlight_array_whitespace_error    = 1
 let g:go_highlight_chan_whitespace_error     = 1
@@ -274,4 +278,8 @@ let g:go_highlight_fields                    = 1
 let g:go_highlight_build_constraints         = 1
 let g:go_highlight_generate_tags             = 1
 let g:go_highlight_variable_declarations     = 1
-let g:go_highlight_variable_assignments      = 1 
+let g:go_highlight_variable_assignments      = 1
+let g:go_highlight_string_spellcheck         = 1
+let g:go_highlight_diagnostic_errors         = 1
+let g:go_highlight_diagnostic_warnings       = 1
+

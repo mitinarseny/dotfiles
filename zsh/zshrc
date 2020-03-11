@@ -54,12 +54,14 @@ _zcompinit_custom() {
 
 # borrowed from:
 # https://www.reddit.com/r/zsh/comments/alkq5a/how_can_i_change_the_default_location_of_zshrc/egaw8q9
-DOTFILES="${${(%):-%x}:P:h:h}"
-fpath+=("${DOTFILES}/zsh/functions")
-autoload -Uz ${DOTFILES}/zsh/functions/*(.:t)
+dotfiles="${${(%):-%x}:P:h:h}"
+fpath+=("${dotfiles}/zsh/functions")
+autoload -Uz ${dotfiles}/zsh/functions/*(.:t)
 
 typeset -U config_files
-config_files=(${DOTFILES}/**/*.zsh)
+config_files=(${dotfiles}/**/*.zsh)
+
+unset dotfiles
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do

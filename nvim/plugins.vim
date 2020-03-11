@@ -260,7 +260,8 @@ let g:indentLine_color_gui     = '#3b4252'
 let g:indentLine_bgcolor_gui   = 'NONE'
 let g:indentLine_concealcursor = 0
 
-" ===== fatih/vim-go =====
+" ===== fatih/vim-go =====a
+let g:go_fmt_command = "goimports"
 let g:go_highlight_array_whitespace_error    = 1
 let g:go_highlight_chan_whitespace_error     = 1
 let g:go_highlight_extra_types               = 1

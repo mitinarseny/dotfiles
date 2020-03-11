@@ -1,4 +1,4 @@
-export LESS='-iwMRj4a#4z-4'
+export LESS='-FSXiwMRj4a#4z-4'
 
 # Less Colors for Man Pages
 # Source: https://boredzo.org/blog/archives/2016-08-15/colorized-man-pages-understood-and-customized

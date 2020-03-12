@@ -72,9 +72,6 @@ Plug 'tpope/vim-fugitive'
 " Git diff gutter
 Plug 'airblade/vim-gitgutter'
 
-" Git integration for NERDTree
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
 " ===== Languages ===== "
 Plug 'sheerun/vim-polyglot'
 

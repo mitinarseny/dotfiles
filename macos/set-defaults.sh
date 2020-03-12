@@ -1,7 +1,7 @@
 #!/bun/sh
 
 if [ "$(uname -s)" != "Darwin" ]; then
-	exit 0
+  exit 0
 fi
 
 # print all commands to stderr

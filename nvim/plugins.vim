@@ -63,9 +63,6 @@ Plug 'maximbaz/lightline-ale'
 " Show indent guides
 Plug 'Yggdroot/indentLine'
 
-" File explorer
-Plug 'scrooloose/nerdtree'
-
 " Start screen
 Plug 'mhinz/vim-startify'
 " ===== VCS ===== "
@@ -142,7 +139,7 @@ let g:lightline = {
   \     'linter_ok':       'middle',
   \   },
   \   'component_function': {
-  \     'gitbranch':  'LightlineFugitive',
+  \     'gitbranch':  'fugitive#head',
   \     'filename':   'LightlineFileName',
   \     'fileformat': 'LightlineFileformat',
   \     'filetype':   'LightlineFiletype',
@@ -170,13 +167,6 @@ endfunction
 
 function! LightlineFiletype()
   return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightlineFugitive()
-  if &filetype !~? 'vimfiler' && exists('*fugitive#head')
-    return fugitive#head()
-  endif
-  return ''
 endfunction
 
 " ===== junegunn/fzf =====

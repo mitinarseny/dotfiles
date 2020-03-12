@@ -87,24 +87,14 @@ set number
 set cursorline
 
 " always show sign columns
-set signcolumn=yes
+set signcolumn=auto
 
 augroup TerminalStuff
    au!
-  autocmd TermOpen * setlocal nonumber norelativenumber | startinsert
-augroup END
-
-" ======= Languages ======= "
-" set custom tab sizes
-augroup Languages
-  au!
-  for [ftype, tabw] in [
-    \   ['vim', 2],
-    \   ['sh', 2],
-    \   ['zsh', 2],
-    \   ['json', 2],
-    \ ]
-    execute 'autocmd FileType ' . ftype . ' setlocal tabstop=' . tabw . ' shiftwidth=' . tabw . ' softtabstop=' . tabw
-  endfor
+  autocmd TermOpen * setlocal
+    \ signcolumn=no
+    \ nonumber
+    \ norelativenumber 
+    \ | startinsert
 augroup END
 

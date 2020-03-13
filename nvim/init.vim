@@ -87,7 +87,7 @@ set number
 set cursorline
 
 " always show sign columns
-set signcolumn=auto
+set signcolumn=yes
 
 " directory view
 let g:netrw_banner = 0

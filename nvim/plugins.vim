@@ -21,6 +21,7 @@ let g:go_auto_type_info = 1
 let g:go_auto_sameids=1
 let g:go_updatetime=50
 let g:go_gopls_deep_completion=1
+
 " ======= Load Plugins ======= "
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -243,6 +244,12 @@ noremap <C-LeftMouse> <LeftMouse><Cmd>ALEGoToDefinition<CR>
 " ===== mhinz/vim-startify =====
 let g:startify_custom_header = []
 let g:startify_use_env       = 1
+
+" ===== airblade/vim-gitgutter =====
+" let g:gitgutter_signs = 0
+" let g:gitgutter_highlight_linenrs = 1
+" highlight link GitGutterAddLineNr    GitGutterAdd
+" highlight link GitGutterChangeLineNr GitGutterChange
 
 " ===== Yggdroot/indentLine =====
 let g:indentLine_color_term    = 0

@@ -226,6 +226,10 @@ endfunction
 "   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 " endif
 
+" ===== tomtom/tcomment_vim =====
+autocmd FileType * setlocal formatoptions-=ro
+
+
 if has('nvim')
   augroup fzf
     au!

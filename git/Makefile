@@ -1,8 +1,8 @@
 .PHONY: dotfiles
-dotfiles: \
-	~/.gitconfig.local \
-	~/.gitexcludes
+dotfiles:
 ifneq (true,$(shell git config --global --get dotfiles.managed))
+	git config --global include.path $(realpath config.local)
+	git config --global core.excludesfile $(realpath excludes)
 ifeq (,$(shell git config --global --get user.email))
 	read -r -p "GitHub author name: " user_name; \
 	read -r -p "GitHyb author email: " user_email; \
@@ -23,12 +23,4 @@ else
 	git config --global credential.helper cache
 endif
 endif
-
-~/.gitconfig.local: config.local
-	@ln -svf $(realpath $<) $@
-	git config --global include.path $@
-
-~/.gitexcludes: excludes
-	@ln -svf $(realpath $<) $@
-	git config --global core.excludesfile $@
 

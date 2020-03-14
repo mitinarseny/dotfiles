@@ -191,7 +191,7 @@ let g:fzf_layout = {
 noremap <silent> <C-f> :FZF<CR>
 
 " ===== ludovicchabant/vim-gutentags =====
-let g:gutentags_ctags_tagfile = "tags"
+let g:gutentags_ctags_tagfile = ".tags"
 
 " ===== neoclide/coc.nvim =====
 " use <tab> for trigger completion and navigate to the next complete item

@@ -20,4 +20,4 @@ node_modules/
 .idea/
 
 # ctags
-tags
+.tags

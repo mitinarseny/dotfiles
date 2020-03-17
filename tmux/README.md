@@ -18,16 +18,17 @@ make
 
 ### Panes
 
-| `<Prefix> +`                                  | Description                         |
-|:---------------------------------------------:|-------------------------------------|
-| `<Up>`<br>`<Down>`<br>`<Left>`<br>`<Right>`   | go to pane in due order             |
-| `<Enter>`                                     | maximize/minimize current pane      |
-| `\|`                                          | split vertically                    |
-| `\`                                           | split vertically full-height        |
-| `-`                                           | split horizontally                  |
-| `_`                                           | split horizontally full-width       |
-| `>`                                           | swap current pane with the next one |
-| `<`                                           | swap current pane with the next one |
+| `<Prefix> +`                                | Description                         |
+|:-------------------------------------------:|-------------------------------------|
+| `<Up>`<br>`<Down>`<br>`<Left>`<br>`<Right>` | go to pane in due order             |
+| `<Enter>`                                   | maximize/minimize current pane      |
+| `\|`                                        | split vertically                    |
+| `\`                                         | split vertically full-height        |
+| `-`                                         | split horizontally                  |
+| `_`                                         | split horizontally full-width       |
+| `>`                                         | swap current pane with the next one |
+| `<`                                         | swap current pane with the next one |
+| `x`                                         | kill current pane                   |
 
 ### Tabs
 
@@ -37,6 +38,7 @@ make
 | `<Tab>`      | forward circle through tabs           |
 | `<S-Tab>`    | backward circle through tabs          |
 | `l`          | go to previously opened tab           |
+| `&`          | kill current tab                      |
 
 ### Config
 

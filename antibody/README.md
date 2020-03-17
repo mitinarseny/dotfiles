@@ -11,7 +11,7 @@
 * [hlissner/zsh-autopair](https://github.com/hlissner/zsh-autopair): auto-close and delete matching delimiters in ZSH
 * [zdharma/fast-syntax-highlighting](https://github.com/zdharma/fast-syntax-highlighting): feature rich syntax highlighting for ZSH
 * [zsh-users/zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search): ZSH port of fish history search (up arrow)
-* [mnowotnik/extra-fzf-completions](https://github.com/mnowotnik/extra-fzf-completions/blob/master/zsh/docker-fzf-completion.zsh): docker `FZF` completions
+* [mnowotnik/extra-fzf-completions](https://github.com/mnowotnik/extra-fzf-completions/blob/master/zsh/docker-fzf-completion.zsh): docker [`FZF`](https://github.com/junegunn/fzf) completions
 * [docker/cli](https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker): [`docker`](https://docker.com) ZSH completions
 * [docker/compose](https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose): [`docker-compose`](https://docs.docker.com/compose) ZSH completions
 * [jupyter/jupyter-core](https://github.com/jupyter/jupyter_core/blob/master/examples/completions-zsh): [`jupyter`](https://jupyter.org) ZSH completions

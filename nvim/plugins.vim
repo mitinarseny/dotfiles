@@ -55,6 +55,9 @@ Plug 'majutsushi/tagbar'
 " Color scheme
 Plug 'arcticicestudio/nord-vim'
 
+" highlight color names and codes
+Plug 'chrisbra/Colorizer'
+
 " Enchanced statusline
 Plug 'itchyny/lightline.vim'
 

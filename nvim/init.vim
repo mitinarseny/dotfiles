@@ -54,6 +54,10 @@ else
 endif
 
 " ======= Editing ======= "
+" move around wrapped lines
+noremap  <buffer> <silent> <Up>   gk
+noremap  <buffer> <silent> <Down> gj
+
 " tabulation
 set expandtab
 set smarttab

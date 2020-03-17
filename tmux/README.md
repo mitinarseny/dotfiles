@@ -25,7 +25,8 @@ make
 | `<Up>`                                      | go to pane on the top               |
 | `<Down>`                                    | go to pane on the bottom            |
 | `<Right>`                                   | go to pane on the right             |
-| `<Left>`                                    | go to pane on the left              |
+| `<Left>`                                    | go to pane on the left              |   
+| `;`                                         | go to previous pane                 |
 | `<Left \| Right>`<br>(with `<Preifx>` hold) | resize pane horizontally            |
 | `<Up \| Down>`<br>(with `<Preifx>` hold)    | resize pane vertically              |
 | `<Enter>`                                   | maximize/minimize current pane      |

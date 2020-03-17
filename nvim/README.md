@@ -2,6 +2,11 @@
 
 ![](.assets/screenshot.png)
 
+## Install
+```sh
+make
+```
+
 ## Plugins
 
 * [aymericbeaumet/vim-symlink](https://github.com/aymericbeaumet/vim-symlink): automatically follow symlinks

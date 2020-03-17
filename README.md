@@ -1,5 +1,5 @@
 # @mitinarseny dotfiles
-> Clean and robust dotfiles for development on macOS and Linux with ❤️
+> Clean and robust dotfiles for development on macOS and Linux.
 
 ## Install
 ```sh

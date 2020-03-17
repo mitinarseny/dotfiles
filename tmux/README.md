@@ -36,6 +36,7 @@ make
 | `>`                                         | swap current pane with the next one |
 | `<`                                         | swap current pane with the next one |
 | `x`                                         | kill current pane                   |
+| `!`                                         | move current pane to new tab        |
 
 ### Tabs
 

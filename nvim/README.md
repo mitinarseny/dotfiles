@@ -1,5 +1,7 @@
 # NeoVim
 
+![](.assets/screenshot.png)
+
 ## Plugins
 
 * [aymericbeaumet/vim-symlink](https://github.com/aymericbeaumet/vim-symlink): automatically follow symlinks

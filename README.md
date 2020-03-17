@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://github.com/mitinarseny/dots">
+    <a href="https://github.com/mitinarseny/dotfiles">
         <img src=".assets/logo.png" alt="logo" width="30%" />
     </a>
     <h1 align="center"><a href="https://github.com/mitinarseny">@mitinarseny</a> dotfiles</h1>

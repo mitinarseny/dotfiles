@@ -3,7 +3,6 @@ CONFIG_DIR := ~/.config/git
 .PHONY: dotfiles
 dotfiles: | $(CONFIG_DIR)/config
 ifneq (true,$(shell git config --global --get dotfiles.managed))
-	touch ~/.config/git/config
 	git config --global include.path $(realpath config.local)
 	git config --global core.excludesfile $(realpath excludes)
 ifeq (,$(shell git config --global --get user.email))
@@ -29,4 +28,4 @@ endif
 
 $(CONFIG_DIR)/config:
 	@mkdir -p $(@D)
-	@touch $@
+	[ -e ~/.gitconfig ] && mv ~/.gitconfig $@ || touch $@

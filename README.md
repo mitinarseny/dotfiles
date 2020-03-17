@@ -12,7 +12,7 @@
 ## Features
 
 * [Alacritty](/alacritty)
-* [antibody](/antibody)
+* [Antibody](/antibody)
 * [bat](/bat)
 * [dircolors](/dircolors)
 * [editorconfig](/editorconfig)

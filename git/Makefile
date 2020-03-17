@@ -1,10 +1,13 @@
+CONFIG_DIR := ~/.config/git
+
 .PHONY: dotfiles
-dotfiles:
+dotfiles: | $(CONFIG_DIR)/config
 ifneq (true,$(shell git config --global --get dotfiles.managed))
+	touch ~/.config/git/config
 	git config --global include.path $(realpath config.local)
 	git config --global core.excludesfile $(realpath excludes)
 ifeq (,$(shell git config --global --get user.email))
-	read -r -p "GitHub author name: " user_name; \
+	@read -r -p "GitHub author name: " user_name; \
 	read -r -p "GitHyb author email: " user_email; \
 	git config --global user.name "$${user_name}"; \
 	git config --global user.email "$${user_email}"
@@ -24,3 +27,6 @@ else
 endif
 endif
 
+$(CONFIG_DIR)/config:
+	@mkdir -p $(@D)
+	@touch $@

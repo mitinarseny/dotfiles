@@ -20,7 +20,12 @@ make
 
 | `<Prefix> +`                                | Description                         |
 |:-------------------------------------------:|-------------------------------------|
-| `<Up>`<br>`<Down>`<br>`<Left>`<br>`<Right>` | go to pane in due order             |
+| `<Up>`                                      | go to pane on the top               |
+| `<Down>`                                    | go to pane on the bottom            |
+| `<Right>`                                   | go to pane on the right             |
+| `<Left>`                                    | go to pane on the left              |
+| `<Left \| Right>`<br>(with `<Preifx>` hold) | resize pane horizontally            |
+| `<Up \| Down>`<br>(with `<Preifx>` hold)    | resize pane vertically              |
 | `<Enter>`                                   | maximize/minimize current pane      |
 | `\|`                                        | split vertically                    |
 | `\`                                         | split vertically full-height        |

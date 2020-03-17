@@ -1,5 +1,7 @@
 # tmux
 
+![](.assets/screenshot.png)
+
 ## Install
 
 ```sh

@@ -6,6 +6,12 @@
 make
 ```
 
+## Aliases
+
+| Alias | Description                                          |
+|:-----:|------------------------------------------------------|
+|`tm`   | attach to `main` session, or create it if not exists |
+
 ## Key bindings
 
 > `<Prefix>` is set to `<C-a>`
@@ -39,9 +45,10 @@ make
 | `e`          | edit `~/.tmux.conf` |
 | `r`          | reload config       |
 
-### Additional
+### Common
 
-| `<Prefix> +` | Description          |
-|:------------:|----------------------|
-| `/`          | prompt for man pages |
-| `S`          | prompt for ssh       |
+| `<Prefix> +` | Description           |
+|:------------:|-----------------------|
+| `?`          | list all key bindings |
+| `/`          | prompt for man pages  |
+| `S`          | prompt for ssh        |

@@ -81,10 +81,13 @@ Plug 'sheerun/vim-polyglot'
 
 " === Golang === "
 " Full-featured Golang IDE
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
 
 " === Rust === "
-Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+
+" === Markdown === "
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 
 " === .tmux.conf === "
 Plug 'tmux-plugins/vim-tmux'

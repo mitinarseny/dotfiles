@@ -5,8 +5,8 @@
 ## Features
 
 * [defaults](set-defaults.sh)
-  * [russian](set-defaults-ru.sh).
-* [brew](Brewfile).
+  * [russian](set-defaults-ru.sh)
+* [brew](Brewfile)
 
 ## Install
 

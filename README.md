@@ -28,8 +28,8 @@
 * [ZSH](/zsh)
 
 ## Install
+
 ```sh
-git clone https://github.com/mitinarseny/dotfiles ~/.dotfiles
-cd ~/.dotfiles
-make
+curl https://raw.githubusercontent.com/mitinarseny/dotfiles/install | sh
 ```
+

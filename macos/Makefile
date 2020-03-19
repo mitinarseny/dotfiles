@@ -13,10 +13,6 @@ all: brew defaults default_apps
 brew: Brewfile
 	brew bundle -f $<
 
-.PHONY: default_apps
-default_apps: set-default-apps.sh default_apps.txt
-	. set-default-apps.sh < default_apps.txt
-
 .PHONY: ru_defaults
 ru_defaults: set-defaults-ru.sh
 	. set-defaults-ru.sh

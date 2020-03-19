@@ -1,7 +1,19 @@
-SUBS := $(wildcard */Makefile)
+SUBS := \
+  alacritty \
+  antibody \
+  bat \
+  dircolors \
+  editorconfig \
+  fonts \
+  fzf \
+  git \
+  inputrc \
+  nvim \
+  tmux \
+  zsh
 
-ifeq ($(shell uname -s),Darwin)
-SUBS += $(wildcard */Makefile.macos)
+ifeq (Darwin,$(shell uname -s))
+SUBS += macos
 endif
 
 .PHONY: all
@@ -10,7 +22,7 @@ all: $(SUBS)
 .PHONY: $(SUBS)
 $(SUBS):
 	$(info > $@)
-	@$(MAKE) -C $(@D) -f $(@F)
+	-@$(MAKE) -C $@
 
 .PHONY: update
 update:

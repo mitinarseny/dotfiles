@@ -4,23 +4,20 @@
 
 ## Features
 
-### [`defaults`](set-defaults.sh)
+* [defaults](set-defaults.sh)
+  * [russian](set-defaults-ru.sh).
+* [brew](Brewfile).
+
+## Install
 
 ```sh
-make defaults
-```
+# defaults only
+make
 
-#### [Russian defaults](set-defaults-ru.sh)
-
-```sh
+# russian defaults
 make ru_defaults
-```
 
-### [`brew`](Brewfile)
-
-```sh
+# brew formulas and casks
 make brew
 ```
-
-* [BeardedSpice](https://github.com/beardedspice/beardedspice): control web browser media players with media keys
 

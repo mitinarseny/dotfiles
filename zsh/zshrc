@@ -95,6 +95,8 @@ typeset -U PATH
 
 # unbind vi mode
 bindkey -r '^['
+bindkey '\e[1;3D' backward-word
+bindkey '\e[1;3C' forward-word
 
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux 2>&1 > /dev/null; then

@@ -11,7 +11,7 @@ all: brew defaults default_apps
 
 .PHONY: brew
 brew: Brewfile
-	brew bundle -f $<
+	brew bundle install --file $<
 
 .PHONY: ru_defaults
 ru_defaults: set-defaults-ru.sh

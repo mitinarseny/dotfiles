@@ -173,8 +173,6 @@ brew "pv"
 # python version management
 brew "pyenv"
 
-brew "python@2"
-
 # cross-platform application and UI framework
 brew "qt"
 

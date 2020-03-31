@@ -25,6 +25,8 @@ $(SUBS):
 	-@$(MAKE) -C $@
 
 .PHONY: update
-update:
-	git pull origin
-	$(MAKE)
+update: pull $(SUBS)
+
+.PHONY: pull
+pull:
+	git pull origion

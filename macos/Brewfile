@@ -308,9 +308,6 @@ cask "mactex-no-gui"
 # penetration testing framework
 cask "metasploit"
 
-# minimal installer for 'conda'
-cask "miniconda"
-
 # run kubernetes cluster locally
 cask "minikube"
 

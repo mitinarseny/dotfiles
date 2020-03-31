@@ -1,4 +1,4 @@
-#!/bun/sh
+#!/bin/sh
 
 if [ "$(uname -s)" != "Darwin" ]; then
 	exit 0

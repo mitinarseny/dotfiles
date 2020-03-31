@@ -33,6 +33,6 @@
 ## Install
 
 ```sh
-curl https://raw.githubusercontent.com/mitinarseny/dotfiles/install | sh
+curl https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
 ```
 

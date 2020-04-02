@@ -270,6 +270,7 @@ let g:indentLine_concealcursor = 0
 
 " ===== plasticboy/vim-markdown =====
 " disable concealing of links, code blocks, etc...
+let g:vim_markdown_folding_disabled    = 1
 let g:vim_markdown_conceal             = 0
 let g:vim_markdown_conceal_code_blocks = 0
 " set conceallevel=0

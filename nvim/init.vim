@@ -3,7 +3,6 @@ scriptencoding utf-8
 " TODO: alt + left/right move by word left/right
 " TODO: highlight usages of object under cursor
 " TODO: select first item when use autocompletion to use only Enter
-" TODO: bind Ctrl+[ to go back from where went to definition
 " TODO: spellcheck
 runtime plugins.vim
 
@@ -55,8 +54,8 @@ endif
 
 " ======= Editing ======= "
 " move around wrapped lines
-noremap  <buffer> <silent> <Up>   gk
-noremap  <buffer> <silent> <Down> gj
+noremap <silent> <Up>   gk
+noremap <silent> <Down> gj
 
 " tabulation
 set expandtab

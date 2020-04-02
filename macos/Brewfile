@@ -329,9 +329,6 @@ cask "qlmarkdown"
 # QuickLook generator for patch files
 cask "qlprettypatch"
 
-# quicklook for files without extension
-cask "qlstephen"
-
 # quicklook for videos
 cask "qlvideo"
 

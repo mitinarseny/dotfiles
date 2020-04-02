@@ -58,8 +58,9 @@ make
 
 ### Common
 
-| `<Prefix> +` | Description           |
-|:------------:|-----------------------|
-| `?`          | list all key bindings |
-| `/`          | prompt for man pages  |
-| `S`          | prompt for ssh        |
+| `<Prefix> +` | Description                                                         |
+|:------------:|---------------------------------------------------------------------|
+| `?`          | list all key bindings                                               |
+| `/`          | prompt for man pages                                                |
+| `S`          | prompt for ssh                                                      |
+| `%`          | split vertically and run [`htop`](https://github.com/hishamhm/htop) |

@@ -81,7 +81,7 @@ Plug 'sheerun/vim-polyglot'
 
 " === Golang === "
 " Full-featured Golang IDE
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
 
 " === Rust === "
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }

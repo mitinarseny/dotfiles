@@ -68,6 +68,9 @@ brew "duti"
 # simple, fast and user-friendly alternative to 'find'
 brew "fd"
 
+# fc-cache
+brew "fontconfig"
+
 # asynchronous event library
 brew "libevent"
 

@@ -102,6 +102,7 @@ defaults write com.apple.menuextra.clock IsAnalog -bool false
 defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  HH:mm" && killall SystemUIServer
 
 # Save screenshots to ~/screenshots
+mkdir -p "${HOME}/screenshots"
 defaults write com.apple.screencapture location -string "${HOME}/screenshots"
 
 # other options: BMP, GIF, JPG, PDF, TIFF

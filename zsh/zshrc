@@ -130,8 +130,8 @@ for key     seq        mode      widget (
     shome   $'\e[1;2H' select    beginning-of-line
     shome2  $'\e[1;2~' select    beginning-of-line
 
-    left    $'\E[D'    deselect  backward-char
-    right   $'\E[C'    deselect  forward-char
+    left    $'\e[D'    deselect  backward-char
+    right   $'\e[C'    deselect  forward-char
 
     end     $'\EOF'    deselect  end-of-line
     end2    $'\e[4~'   deselect  end-of-line

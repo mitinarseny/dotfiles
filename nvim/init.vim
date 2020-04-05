@@ -1,12 +1,12 @@
 set encoding=utf-8
 scriptencoding utf-8
-" TODO: alt + left/right move by word left/right
-" TODO: highlight usages of object under cursor
-" TODO: select first item when use autocompletion to use only Enter
 " TODO: spellcheck
 runtime plugins.vim
 
 " ======= General ======= "
+" automatically change PWD to directory of file being edited
+set autochdir
+
 " use system clipboard
 set clipboard+=unnamedplus
 
@@ -49,8 +49,13 @@ set wildignore=*.o,*~,*.pyc
 if has('win16') || has('win32')
   set wildignore+=.git\*,.hg\*,.svn\*
 else
-  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
+
+" do not make backups before writing to file
+set nobackup
+set nowritebackup
+set noswapfile
 
 " ======= Editing ======= "
 " move around wrapped lines
@@ -58,7 +63,6 @@ noremap <silent> <Up>   gk
 noremap <silent> <Down> gj
 
 " tabulation
-set expandtab
 set smarttab
 set shiftwidth=4
 set tabstop=4
@@ -68,13 +72,8 @@ set smartindent
 " enable arrows to select text
 set keymodel=startsel,stopsel
 
-" do not make backups before writing to file
-set nobackup
-set nowritebackup
-set noswapfile
-
 " set complete options
-set completeopt=menu,menuone,preview,noinsert
+set completeopt=menu,menuone,noinsert
 
 " do not show insert completion popups 
 set shortmess+=c
@@ -100,7 +99,7 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
 augroup TerminalStuff
-   au!
+  autocmd!
   autocmd TermOpen * setlocal
     \ signcolumn=no
     \ nonumber

@@ -1,296 +1,281 @@
 scriptencoding utf-8
+
 " check if vim-plug is installed and install it if necessary
-let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
-if !filereadable(autoload_plug_path)
+let s:autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
+if !filereadable(s:autoload_plug_path)
   if !executable('curl')
     echo 'vim-plug is not installed. Please, install it manually or install curl and check if it is in $PATH'
     exit
   endif
-  silent execute '!curl --fail --location --output ' . shellescape(autoload_plug_path) . ' --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
+  silent execute '!curl --fail --location --output ' . shellescape(s:autoload_plug_path) . ' --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
 endif
-unlet autoload_plug_path
 
-" === dense-analysis/ale ===
-" let g:go_code_completion_enabled = 0
-let g:ale_completion_enabled = 1
-let g:ale_linters = {
-\   'go': ['gopls'],
-\}
-let g:go_auto_type_info = 1
-let g:go_auto_sameids=1
-let g:go_updatetime=50
-let g:go_gopls_deep_completion=1
-
-" ======= Load Plugins ======= "
 call plug#begin(stdpath('data') . '/plugged')
+	Plug 'moll/vim-bbye' " vim-symlink optional dependency
+	Plug 'aymericbeaumet/vim-symlink'
 
-" ===== General ===== "
-" Follow symlinks
-Plug 'moll/vim-bbye' " vim-symlink optional dependency
-Plug 'aymericbeaumet/vim-symlink'
+	Plug 'dense-analysis/ale'
+		let g:ale_completion_enabled   = 0
+		let g:ale_lint_on_text_changed = 'always'
 
-" ===== Editing ===== "
-" Language Server Protocol
-" TODO: map Ctrl+] ALEGoToDefinition, Ctrl+[ go back
-Plug 'dense-analysis/ale'
+	Plug 'prabirshrestha/async.vim'
+	Plug 'prabirshrestha/vim-lsp'		
+		let g:lsp_diagnostics_enabled = v:false
+		let g:lsp_highlight_references_enabled = v:true
+		let g:lsp_signature_help_enabled = v:true
+		let g:lsp_async_completion = v:true
 
-" Intellij Sense engine
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+		if executable('gopls')
+			augroup LspGo
+				autocmd!
+				autocmd User lsp_setup call lsp#register_server({
+					\ 'name': 'gopls',
+					\ 'cmd': {server_info->['gopls']},
+					\ 'whitelist': ['go'],
+					\ 'config': { 'refresh_pattern': 'abc' },
+					\ })
+				autocmd BufWritePre *.go LspDocumentFormatSync
+			augroup END
+		endif
+		if executable('vim-language-server')
+			augroup LspVim
+				autocmd!
+				autocmd User lsp_setup call lsp#register_server({
+					\ 'name': 'vim-language-server',
+					\ 'cmd': {server_info->['vim-language-server', '--stdio']},
+					\ 'whitelist': ['vim'],
+					\ 'initialization_options': {
+					\   'vimruntime': $VIMRUNTIME,
+					\   'runtimepath': &rtp,
+					\ }})
+			augroup END
+		endif
 
-" Fuzzy search
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+	Plug 'prabirshrestha/asyncomplete.vim'
+	Plug 'prabirshrestha/asyncomplete-lsp.vim'
+		let g:asyncomplete_auto_popup       = v:true
+		let g:asyncomplete_auto_completeopt = v:false
 
-" Comments
-Plug 'tomtom/tcomment_vim'
+		set completeopt=menuone,noinsert,noselect
 
-" Auto-pairs
-Plug 'jiangmiao/auto-pairs'
+		function! s:on_lsp_buffer_enabled() abort
+			setlocal omnifunc=lsp#complete
+			setlocal signcolumn=yes
 
-" Tags
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'majutsushi/tagbar'
+			highlight lspReference term=underline ctermbg=8
 
-" ===== UI ===== "
-" Color scheme
-Plug 'arcticicestudio/nord-vim'
+			noremap  <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
+			inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
+			noremap  <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+			inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+		endfunction
 
-" highlight color names and codes
-Plug 'chrisbra/Colorizer'
+		augroup lsp_install
+			autocmd!
+			autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+			autocmd User lsp_complete_done  call asyncomplete#close_popup()
+		augroup END
 
-" Enchanced statusline
-Plug 'itchyny/lightline.vim'
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+		let g:fzf_colors = { 
+			\ 'fg':      ['fg', 'Normal'],
+			\ 'bg':      ['bg', 'Normal'],
+		  \ 'hl':      ['fg', 'SpellCap'],
+			\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+			\ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+			\ 'hl+':     ['fg', 'SpellCap'],
+			\ 'info':    ['fg', 'Comment'],
+			\ 'border':  ['fg', 'Ignore'],
+			\ 'prompt':  ['fg', 'SpecialComment'],
+			\ 'pointer': ['fg', 'Exception'],
+			\ 'marker':  ['fg', 'SpellBad'],
+			\	'spinner': ['fg', 'Comment'],
+			\ 'header':  ['fg', 'Comment'],
+			\ }
 
-" Lightline + ALE
-Plug 'maximbaz/lightline-ale'
+		let g:fzf_layout = {
+			\ 'down': '~30%',
+			\ }
 
-" Show indent guides
-Plug 'Yggdroot/indentLine'
+		noremap <silent> <C-f> :FZF<CR>
 
-" Start screen
-Plug 'mhinz/vim-startify'
-" ===== VCS ===== "
-" Git intergation
-Plug 'tpope/vim-fugitive'
+		" Using floating windows of Neovim to start fzf
+		if has('nvim')
+			let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
 
-" Git diff gutter
-Plug 'airblade/vim-gitgutter'
+		function! FloatingFZF()
+				let width = float2nr(&columns * 0.9)
+				let height = float2nr(&lines * 0.6)
+				let opts = { 'relative': 'editor',    
+					\ 'row': (&lines - height) / 2,
+					\ 'col': (&columns - width) / 2,
+					\ 'width': width,
+					\ 'height': height,
+					\ }
+				let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+				call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+			endfunction
 
-" ===== Languages ===== "
-Plug 'sheerun/vim-polyglot'
+			let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
-" === Golang === "
-" Full-featured Golang IDE
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
+			augroup fzf
+				autocmd!
+				autocmd  FileType fzf set laststatus=0 noshowmode noruler notitle
+					\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler title
+			augroup END
+		endif
 
-" === Rust === "
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+	Plug 'tomtom/tcomment_vim'
+		autocmd FileType * setlocal formatoptions-=ro
 
-" === Markdown === "
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+	Plug 'junegunn/vim-easy-align'
 
-" === .tmux.conf === "
-Plug 'tmux-plugins/vim-tmux'
+	Plug 'jiangmiao/auto-pairs'
+
+	Plug 'ludovicchabant/vim-gutentags'
+		let g:gutentags_ctags_tagfile = ".tags"
+
+	Plug 'majutsushi/tagbar'
+
+	Plug 'arcticicestudio/nord-vim'
+		let g:nord_bold_vertical_split_line = v:true
+		let g:nord_uniform_diff_background  = v:true
+
+	Plug 'chrisbra/Colorizer'
+
+	Plug 'itchyny/lightline.vim'
+	Plug 'maximbaz/lightline-ale'
+		set noshowmode
+
+	let g:lightline = {
+		\   'colorscheme': 'nord',
+		\   'active': {
+		\     'left': [
+		\       ['mode', 'paste'],
+		\       ['gitbranch', 'filename'],
+		\      ],
+		\      'right': [
+		\        ['readonly'],
+		\        ['fileformat', 'fileencoding', 'lineinfo'],
+		\        ['linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
+		\      ],
+		\   },
+		\   'inactive': {
+		\     'left': [
+		\       ['filename'],
+		\     ],
+		\     'right': [
+		\       ['lineinfo'],
+		\     ],
+		\   },
+		\   'component': {
+		\     'lineinfo': '%3l:%-2v',
+		\   },
+		\   'component_expand': {
+		\     'readonly':        'LightlineReadonly',
+		\     'linter_checking': 'lightline#ale#checking',
+		\     'linter_wanrings': 'lightline#ale#warnings',
+		\     'linter_errors':   'lightline#ale#errors',
+		\     'linter_ok':       'lightline#ale#ok',
+		\   },
+		\   'component_type': {
+		\     'readonly':        'error',
+		\     'linter_checking': 'middle',
+		\     'linter_wanrings': 'warning',
+		\     'linter_errors':   'error',
+		\     'linter_ok':       'middle',
+		\   },
+		\   'component_function': {
+		\     'gitbranch':  'fugitive#head',
+		\     'filename':   'LightlineFileName',
+		\     'fileformat': 'LightlineFileformat',
+		\     'filetype':   'LightlineFiletype',
+		\   },
+		\   'separator':    { 'left': '',  'right': ''  },
+		\   'subseparator': { 'left': '|', 'right': '|' },
+		\   'mode_map': {
+		\			'n':      'N',
+		\			'i':      'I',
+		\     'R':      'R',
+		\     'v':      'V',
+		\     'V':      'VL',
+		\     "\<C-v>": 'VB',
+		\     'c':      'C',
+		\     's':      'S',
+		\     'S':      'SL',
+		\     "\<C-s>": 'SB',
+		\     't':      'T',
+		\   },
+		\ }
+
+		function! LightlineFileName()
+			let filename = expand('%:t')
+			if filename ==# ''
+				let filename = '[No Name]'
+			endif
+			let modified = &modified ? ' +' : ''
+		  return filename . modified
+		endfunction
+
+		function! LightlineReadonly()
+			return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
+		endfunction
+
+		function! LightlineFileformat()
+			return winwidth(0) > 70 ? &fileformat : ''
+		endfunction
+
+		function! LightlineFiletype()
+			return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+		endfunction
+
+	Plug 'Yggdroot/indentLine'
+		let g:indentLine_color_term    = 0
+		let g:indentLine_bgcolor_term  = 'NONE'
+		let g:indentLine_color_gui     = '#3b4252'
+		let g:indentLine_bgcolor_gui   = 'NONE'
+		let g:indentLine_concealcursor = 0
+
+	Plug 'mhinz/vim-startify'
+		let g:startify_custom_header = []
+		let g:startify_use_env       = v:true
+
+	Plug 'tpope/vim-fugitive'
+
+	Plug 'airblade/vim-gitgutter'
+
+	Plug 'sheerun/vim-polyglot'
+
+"	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
+		let g:go_fmt_command                         = "goimports"
+		let g:go_highlight_array_whitespace_error    = v:true
+		let g:go_highlight_chan_whitespace_error     = v:true
+		let g:go_highlight_extra_types               = v:true
+		let g:go_highlight_trailing_whitespace_error = v:true
+		let g:go_highlight_operators                 = v:true
+		let g:go_highlight_functions                 = v:true
+		let g:go_highlight_function_parameters       = v:true
+		let g:go_highlight_function_calls            = v:true
+		let g:go_highlight_fields                    = v:true
+		let g:go_highlight_build_constraints         = v:true
+		let g:go_highlight_generate_tags             = v:true
+		let g:go_highlight_variable_declarations     = v:true
+		let g:go_highlight_variable_assignments      = v:true
+		let g:go_highlight_string_spellcheck         = v:true
+		let g:go_highlight_diagnostic_errors         = v:true
+		let g:go_highlight_diagnostic_warnings       = v:true
+		let g:go_def_mode                            ='gopls'
+		let g:go_info_mode                           ='gopls'
+
+	Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+	Plug 'tmux-plugins/vim-tmux'
+		let g:vim_markdown_folding_disabled    = v:true
+		let g:vim_markdown_conceal             = v:false
+		let g:vim_markdown_conceal_code_blocks = v:false
 
 call plug#end()
 
-" ======= Plugins Settings ======= "
-" ===== arcticicestudio/nord-vim =====
-let g:nord_bold_vertical_split_line = 1
-let g:nord_uniform_diff_background  = 1
 colorscheme nord
-
-" ===== itchyny/lightline.vim =====
-" diable built-in statusline
-set noshowmode
-
-let g:lightline = {
-  \   'colorscheme': 'nord',
-  \   'active': {
-  \     'left': [
-  \       ['mode', 'paste'],
-  \       ['gitbranch', 'filename'],
-  \      ],
-  \      'right': [
-  \        ['readonly'],
-  \        ['fileformat', 'fileencoding', 'lineinfo'],
-  \        ['linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
-  \      ],
-  \   },
-  \   'inactive': {
-  \     'left': [
-  \       ['filename'],
-  \     ],
-  \     'right': [
-  \       ['lineinfo'],
-  \     ],
-  \   },
-  \   'component': {
-  \     'lineinfo': '%3l:%-2v',
-  \   },
-  \   'component_expand': {
-  \     'readonly':        'LightlineReadonly',
-  \     'linter_checking': 'lightline#ale#checking',
-  \     'linter_wanrings': 'lightline#ale#warnings',
-  \     'linter_errors':   'lightline#ale#errors',
-  \     'linter_ok':       'lightline#ale#ok',
-  \   },
-  \   'component_type': {
-  \     'readonly':        'error',
-  \     'linter_checking': 'middle',
-  \     'linter_wanrings': 'warning',
-  \     'linter_errors':   'error',
-  \     'linter_ok':       'middle',
-  \   },
-  \   'component_function': {
-  \     'gitbranch':  'fugitive#head',
-  \     'filename':   'LightlineFileName',
-  \     'fileformat': 'LightlineFileformat',
-  \     'filetype':   'LightlineFiletype',
-  \   },
-  \   'separator':    { 'left': '',  'right': ''  },
-  \   'subseparator': { 'left': '|', 'right': '|' }
-  \ }
-
-function! LightlineFileName()
-  let filename = expand('%:t')
-  if filename ==# ''
-    let filename = '[No Name]'
-  endif
-  let modified = &modified ? ' +' : ''
-  return filename . modified
-endfunction
-
-function! LightlineReadonly()
-  return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
-endfunction
-
-function! LightlineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-" ===== junegunn/fzf =====
-let g:fzf_colors = { 
-  \ 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'SpellCap'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'SpellCap'],
-  \ 'info':    ['fg', 'Comment'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'SpecialComment'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'SpellBad'],
-  \ 'spinner': ['fg', 'Comment'],
-  \ 'header':  ['fg', 'Comment'],
-  \ }
-
-let g:fzf_layout = {
-  \ 'down': '~30%',
-  \ }
-
-noremap <silent> <C-f> :FZF<CR>
-
-" ===== ludovicchabant/vim-gutentags =====
-let g:gutentags_ctags_tagfile = ".tags"
-
-" ===== neoclide/coc.nvim =====
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-" inoremap <silent><expr> <Tab>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<Tab>" :
-"       \ coc#refresh()
-
-
-"Using floating windows of Neovim to start fzf
-" if has('nvim')
-"   let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
-"
-"   function! FloatingFZF()
-"     let width = float2nr(&columns * 0.9)
-"     let height = float2nr(&lines * 0.6)
-"     let opts = { 'relative': 'editor',
-"                \ 'row': (&lines - height) / 2,
-"                \ 'col': (&columns - width) / 2,
-"                \ 'width': width,
-"                \ 'height': height }
-"
-"     let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-"     call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
-"   endfunction
-"
-"   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-" endif
-
-" ===== tomtom/tcomment_vim =====
-autocmd FileType * setlocal formatoptions-=ro
-
-
-if has('nvim')
-  augroup fzf
-    au!
-    autocmd! FileType fzf
-    autocmd  FileType fzf set laststatus=0 noshowmode noruler notitle
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler title
-  augroup END
-endif
-
-
-" ===== dense-analysis/ale =====
-let g:ale_lint_on_text_changed = 'always'
-" set omnifunc=ale#completion#OmniFunc
-noremap <C-LeftMouse> <LeftMouse><Cmd>ALEGoToDefinition<CR>
-
-" ===== mhinz/vim-startify =====
-let g:startify_custom_header = []
-let g:startify_use_env       = 1
-
-" ===== airblade/vim-gitgutter =====
-" let g:gitgutter_signs = 0
-" let g:gitgutter_highlight_linenrs = 1
-" highlight link GitGutterAddLineNr    GitGutterAdd
-" highlight link GitGutterChangeLineNr GitGutterChange
-
-" ===== Yggdroot/indentLine =====
-let g:indentLine_color_term    = 0
-let g:indentLine_bgcolor_term  = 'NONE'
-let g:indentLine_color_gui     = '#3b4252'
-let g:indentLine_bgcolor_gui   = 'NONE'
-let g:indentLine_concealcursor = 0
-
-" ===== plasticboy/vim-markdown =====
-" disable concealing of links, code blocks, etc...
-let g:vim_markdown_folding_disabled    = 1
-let g:vim_markdown_conceal             = 0
-let g:vim_markdown_conceal_code_blocks = 0
-" set conceallevel=0
-
-" ===== fatih/vim-go ======
-let g:go_fmt_command = "goimports"
-let g:go_highlight_array_whitespace_error    = 1
-let g:go_highlight_chan_whitespace_error     = 1
-let g:go_highlight_extra_types               = 1
-let g:go_highlight_trailing_whitespace_error = 1
-let g:go_highlight_operators                 = 1
-let g:go_highlight_functions                 = 1
-let g:go_highlight_function_parameters       = 1
-let g:go_highlight_function_calls            = 1
-let g:go_highlight_fields                    = 1
-let g:go_highlight_build_constraints         = 1
-let g:go_highlight_generate_tags             = 1
-let g:go_highlight_variable_declarations     = 1
-let g:go_highlight_variable_assignments      = 1
-let g:go_highlight_string_spellcheck         = 1
-let g:go_highlight_diagnostic_errors         = 1
-let g:go_highlight_diagnostic_warnings       = 1
 

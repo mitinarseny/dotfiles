@@ -33,7 +33,6 @@ make
 ## TODO
 
 * move + arrows
-* delete one word backwards (nvim + zsh)
 * home jump to the firstnon-space char of the line
 * shift + home selects until the first char, next shit+home til the real beginning
 * golang auto-fill struct fields

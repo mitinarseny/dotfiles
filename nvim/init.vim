@@ -49,7 +49,7 @@ set wildignore=*.o,*~,*.pyc
 if has('win16') || has('win32')
   set wildignore+=.git\*,.hg\*,.svn\*
 else
-	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
 " do not make backups before writing to file

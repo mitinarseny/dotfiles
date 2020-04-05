@@ -248,7 +248,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'sheerun/vim-polyglot'
 
 "  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
-    let g:go_fmt_command                         = "goimports"
+    let g:go_fmt_command                         = 'goimports'
     let g:go_highlight_array_whitespace_error    = v:true
     let g:go_highlight_chan_whitespace_error     = v:true
     let g:go_highlight_extra_types               = v:true
@@ -265,8 +265,8 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:go_highlight_string_spellcheck         = v:true
     let g:go_highlight_diagnostic_errors         = v:true
     let g:go_highlight_diagnostic_warnings       = v:true
-    let g:go_def_mode                            ='gopls'
-    let g:go_info_mode                           ='gopls'
+    let g:go_def_mode                            = 'gopls'
+    let g:go_info_mode                           = 'gopls'
 
   Plug 'rust-lang/rust.vim', { 'for': 'rust' }
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }

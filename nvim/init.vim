@@ -88,6 +88,9 @@ set number
 " highlight cursor line
 set cursorline
 
+" indentation guides for tabs
+set list listchars=tab:\|\ 
+
 " always show sign columns
 set signcolumn=yes
 

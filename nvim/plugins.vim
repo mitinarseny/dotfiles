@@ -21,37 +21,11 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'    
-    let g:lsp_diagnostics_enabled = v:false
+    let g:lsp_diagnostics_enabled          = v:false
     let g:lsp_highlight_references_enabled = v:true
-    let g:lsp_signature_help_enabled = v:true
-    let g:lsp_async_completion = v:true
-
-    if executable('gopls')
-      augroup LspGo
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'gopls',
-          \ 'cmd': {server_info->['gopls']},
-          \ 'whitelist': ['go'],
-          \ 'config': { 'refresh_pattern': 'abc' },
-          \ })
-        autocmd BufWritePre *.go LspDocumentFormatSync
-      augroup END
-    endif
-    if executable('vim-language-server')
-      augroup LspVim
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'vim-language-server',
-          \ 'cmd': {server_info->['vim-language-server', '--stdio']},
-          \ 'whitelist': ['vim'],
-          \ 'initialization_options': {
-          \   'vimruntime': $VIMRUNTIME,
-          \   'runtimepath': &rtp,
-          \ }})
-      augroup END
-    endif
-
+    let g:lsp_signature_help_enabled       = v:true
+    let g:lsp_async_completion             = v:true
+ 
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
     let g:asyncomplete_auto_popup       = v:true

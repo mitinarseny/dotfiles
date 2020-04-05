@@ -22,6 +22,13 @@ make
 | `<C-f>`      | -            | -            | open fzf                        |
 
 
+### Spell
+
+
+| Normal       | Insert       | Visual       | Description                             |
+|:------------:|:------------:|:------------:|-----------------------------------------|
+| `zg`         | -            | -            | add word under cursor to the dictionary |
+
 ## TODO
 
 * move by word forward/backwards with alt + arrows

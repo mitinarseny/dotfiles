@@ -6,6 +6,7 @@ dotfiles: $(addprefix $(CONFIG_DIR)/,\
 		plugins.vim \
 		coc-settings.json \
 		$(wildcard ftplugin/*) \
+		$(wildcard spell/*.*.add) \
 	)
 
 $(CONFIG_DIR)/%: %

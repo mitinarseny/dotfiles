@@ -14,6 +14,7 @@ make
 | Normal       | Insert       | Visual       | Description                     |
 |:------------:|:------------:|:------------:|---------------------------------|
 | `<C-_><C-_>` | `<C-_><C-_>` | `<C-_><C-_>` | comment current line            |
+| `<A-BS>`     | `<A-BS>`     |              | delete word backwards           |
 
 ### Navigation
 
@@ -31,8 +32,7 @@ make
 
 ## TODO
 
-* move by word forward/backwards with alt + arrows
-* spellcheck
+* move + arrows
 * delete one word backwards (nvim + zsh)
 * home jump to the firstnon-space char of the line
 * shift + home selects until the first char, next shit+home til the real beginning

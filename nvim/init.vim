@@ -78,6 +78,9 @@ set completeopt=menu,menuone,noinsert
 " do not show insert completion popups 
 set shortmess+=c
 
+" Alt+Backspace to delete word
+noremap <A-BS> db
+inoremap <A-BS> <C-o>db
 " ======= UI ======= "
 " set terminal title
 set title

@@ -13,7 +13,7 @@ setopt AUTO_NAME_DIRS
 setopt INTERACTIVE_COMMENTS # support for comments in command line mode
 
 export LANG=${LANG:-en_US.UTF-8}
-export WORDCHARS='*?_-[]~;!#%^(){}<>'
+export WORDCHARS='*?_-[]~;!#%^(){}<>$'
 
 command -v nvim &> /dev/null \
   && export EDITOR='nvim' \
@@ -30,9 +30,6 @@ export HISTFILE=$HOME/.zsh_history
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY
-
-# Async ZSH
-export ZSH_AUTOSUGGEST_USE_ASYNC=true
 
 export CASE_SENSITIVE=0
 export CLICOLOR=1
@@ -94,9 +91,76 @@ unset config_files
 typeset -U PATH
 
 # unbind vi mode
-bindkey -r '^['
-bindkey '\e[1;3D' backward-word
-bindkey '\e[1;3C' forward-word
+bindkey -r '\e'
+
+# https://stackoverflow.com/a/30899296
+_r-delregion() {
+  if ((REGION_ACTIVE)) then
+     zle kill-region
+  else 
+    local widget_name=$1
+    shift
+    zle $widget_name -- $@
+  fi
+}
+
+_r-deselect() {
+  ((REGION_ACTIVE = 0))
+  local widget_name=$1
+  shift
+  zle $widget_name -- $@
+}
+
+_r-select() {
+  ((REGION_ACTIVE)) || zle set-mark-command
+  local widget_name=$1
+  shift
+  zle $widget_name -- $@
+}
+
+for key     seq        mode      widget (
+    sleft   $'\e[1;2D' select    backward-char
+    sright  $'\e[1;2C' select    forward-char
+    sup     $'\e[1;2A' select    up-line-or-history
+    sdown   $'\e[1;2B' select    down-line-or-history
+    
+    send    $'\e[1;2F' select    end-of-line
+    send2   $'\e[4;2~' select    end-of-line
+
+    shome   $'\e[1;2H' select    beginning-of-line
+    shome2  $'\e[1;2~' select    beginning-of-line
+
+    left    $'\E[D'    deselect  backward-char
+    right   $'\E[C'    deselect  forward-char
+
+    end     $'\EOF'    deselect  end-of-line
+    end2    $'\e[4~'   deselect  end-of-line
+
+    home    $'\EOH'    deselect  beginning-of-line
+    home2   $'\e[1~'   deselect  beginning-of-line
+
+    csleft  $'\e[1;6D' select    backward-word
+    csright $'\e[1;6C' select    forward-word
+    csend   $'\e[1;6F' select    end-of-line
+    cshome  $'\e[1;6H' select    beginning-of-line
+
+    cleft   $'\e[1;5D' deselect  backward-word
+    aleft   $'\e[1;3D' deselect  backward-word
+    cright  $'\e[1;5C' deselect  forward-word
+    aright  $'\e[1;3C' deselect  forward-word
+
+    del     $'\e[3~'   delregion delete-char
+    bs      $'^?'      delregion backward-delete-char
+  ) {
+  functions[key-$key]="_r-$mode $widget"
+  zle -N key-$key
+  bindkey "${seq}" key-$key
+}
+
+#bindkey '\e[1;3D' backward-word
+#bindkey '\e[1;3C' forward-word
+# bindkey '\e^?'    backward-kill-word
+# bindkey '\e'
 
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux 2>&1 > /dev/null; then

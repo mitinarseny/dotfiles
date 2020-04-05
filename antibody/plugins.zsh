@@ -5,7 +5,16 @@ export PURE_PROMPT_SYMBOL='λ'
 
 ####### zsh-users/zsh-autosuggest #######
 # https://github.com/zsh-users/zsh-autosuggestions#enable-asynchronous-mode
-ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS} \
+  key-right \
+  key-end \
+  key-end2 \
+"
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS} \
+  key-cright
+  key-aright
+"
 
 ####### zdharma/fast-syntax-highlighting #######
 # https://github.com/zdharma/fast-syntax-highlighting/issues/135#issuecomment-497452498

@@ -79,11 +79,11 @@ call plug#begin(stdpath('data') . '/plugged')
       let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
 
     function! FloatingFZF()
-        let width = float2nr(&columns * 0.9)
-        let height = float2nr(&lines * 0.6)
-        let opts = { 'relative': 'editor',    
-          \ 'row': (&lines - height) / 2,
-          \ 'col': (&columns - width) / 2,
+        let width = float2nr(winwidth(0) * 0.9)
+        let height = float2nr(winheight(0) * 0.6)
+        let opts = { 'relative': 'win',
+          \ 'row': (winheight(0) - height) / 2,
+          \ 'col': (winwidth(0) - width) / 2,
           \ 'width': width,
           \ 'height': height,
           \ }

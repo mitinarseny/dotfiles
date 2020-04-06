@@ -78,9 +78,31 @@ set completeopt=menu,menuone,noinsert
 " do not show insert completion popups 
 set shortmess+=c
 
+" jump by words with Alt/Ctrl + arrows
+noremap <A-Left>       b
+imap    <A-Left>  <C-o><A-Left>
+noremap <C-Left>       b
+imap    <C-Left>  <C-o><C-Left>
+noremap <A-Right>      e
+imap    <A-Right> <C-o><A-Right>
+noremap <C-Right>      e
+imap    <C-Right> <C-o><C-Right>
+
+" <Home> gets you to the first not-blank character on the line
+noremap <silent> <expr> <Home> indent('.')+1 == col('.') ? '0' : '^'
+imap <silent> <Home>   <C-o><Home>
+
+vnoremap <silent> <expr> <S-Home> indent('.')+1 == col('.') ? '0' : '^'
+nmap <silent> <S-Home> v<S-Home>
+imap <silent> <S-Home> <C-o><S-Home>
+
 " Alt+Backspace to delete word
 noremap <A-BS> db
-inoremap <A-BS> <C-o>db
+imap <A-BS> <C-o><A-BS>
+
+" delete selection with backspace
+vnoremap <BS> "_d
+
 " ======= UI ======= "
 " set terminal title
 set title

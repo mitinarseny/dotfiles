@@ -32,12 +32,9 @@ make
 
 ## TODO
 
-* move + arrows
-* home jump to the firstnon-space char of the line
 * shift + home selects until the first char, next shit+home til the real beginning
 * golang auto-fill struct fields
 * do not complete empty line
 * fugitive less check frequency
 * selection + tab indent, shift + tab unindent
-* delete selection with backspace
 

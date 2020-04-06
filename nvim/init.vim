@@ -97,7 +97,7 @@ nmap <silent> <S-Home> v<S-Home>
 imap <silent> <S-Home> <C-o><S-Home>
 
 " Alt+Backspace to delete word
-noremap <A-BS> db
+noremap <A-BS> "_db
 imap <A-BS> <C-o><A-BS>
 
 " delete selection with backspace

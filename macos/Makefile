@@ -11,6 +11,9 @@ all: brew defaults default_apps
 
 .PHONY: brew
 brew: Brewfile
+ifeq (,$(shell command -v brew))
+	curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash
+endif
 	brew bundle install --file $<
 
 .PHONY: ru_defaults

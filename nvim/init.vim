@@ -81,23 +81,32 @@ set shortmess+=c
 " jump by words with Alt/Ctrl + arrows
 noremap <A-Left>       b
 imap    <A-Left>  <C-o><A-Left>
-noremap <C-Left>       b
+nmap    <C-Left>       <A-Left>
 imap    <C-Left>  <C-o><C-Left>
 noremap <A-Right>      e
-imap    <A-Right> <C-o><A-Right>
-noremap <C-Right>      e
-imap    <C-Right> <C-o><C-Right>
+imap    <A-Right> <ESC><A-Right>a
+nmap    <C-Right>      <A-Right>
+imap    <C-Right> <ESC><C-Right>a
+
+nmap <S-A-Left>  <S-C-Left>
+nmap <S-A-Right> <S-C-Right>
+imap <S-A-Left>  <C-o><S-C-Left>
+imap <S-A-Right> <C-o><S-C-Right>
+vmap <S-A-Left>  <S-C-Left>
+vmap <S-A-Right> <S-C-Right>
 
 " <Home> gets you to the first not-blank character on the line
 noremap <silent> <expr> <Home> indent('.')+1 == col('.') ? '0' : '^'
 imap <silent> <Home>   <C-o><Home>
 
 vnoremap <silent> <expr> <S-Home> indent('.')+1 == col('.') ? '0' : '^'
+vmap <>
 nmap <silent> <S-Home> v<S-Home>
 imap <silent> <S-Home> <C-o><S-Home>
 
 " Alt+Backspace to delete word
 noremap <A-BS> "_db
+noremap <C-BS> <A-BS>
 imap <A-BS> <C-o><A-BS>
 
 " delete selection with backspace

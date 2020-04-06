@@ -113,6 +113,24 @@ defaults write com.apple.screencapture type -string "png"
 defaults write com.apple.screencapture disable-shadow -bool true
 
 
+######### Keyboard #########
+
+######### TrackPad #########
+# tap to click trackpad
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.MultitouchTrackpad TrackpadRotate -bool true
+defaults write com.apple.MultitouchTrackpad TrackpadRightClick -bool 1
+defaults write com.apple.MultitouchTrackpad FirstClickThreshold -int 1
+defaults write com.apple.MultitouchTrackpad TrackpadPinch -bool true
+
+defaults write com.apple.MultitouchTrackpad TrackpadTwoFingerDoubleTapGesture -bool true
+defaults write com.apple.MultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 3
+defaults write com.apple.MultitouchTrackpad TrackpadThreeFingerVertSwipeGesture -int 2
+defaults write com.apple.MultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2
+
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write 'Apple Global Domain' com.apple.mouse.tapBehavior 1
+
 ########## Finder ##########
 # Set ~ as the default location for new Finder windows
 defaults write com.apple.finder NewWindowTarget -string "PfHm"

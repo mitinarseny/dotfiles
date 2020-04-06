@@ -30,8 +30,8 @@ make
 | `<Left \| Right>`<br>(with `<Preifx>` hold) | resize pane horizontally            |
 | `<Up \| Down>`<br>(with `<Preifx>` hold)    | resize pane vertically              |
 | `<Enter>`                                   | maximize/minimize current pane      |
-| `\|`                                        | split vertically                    |
-| `\`                                         | split vertically full-height        |
+| `\`                                        | split vertically                    |
+| `\|`                                         | split vertically full-height        |
 | `-`                                         | split horizontally                  |
 | `_`                                         | split horizontally full-width       |
 | `>`                                         | swap current pane with the next one |

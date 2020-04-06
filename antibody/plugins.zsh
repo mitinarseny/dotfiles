@@ -12,8 +12,8 @@ ZSH_AUTOSUGGEST_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS} \
   key-end2 \
 "
 ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS} \
-  key-cright
-  key-aright
+  key-cright \
+  key-aright \
 "
 
 ####### zdharma/fast-syntax-highlighting #######

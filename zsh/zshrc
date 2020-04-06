@@ -133,10 +133,10 @@ for key     seq        mode      widget (
     left    $'\e[D'    deselect  backward-char
     right   $'\e[C'    deselect  forward-char
 
-    end     $'\EOF'    deselect  end-of-line
+    end     $'\E[F'    deselect  end-of-line
     end2    $'\e[4~'   deselect  end-of-line
 
-    home    $'\EOH'    deselect  beginning-of-line
+    home    $'\E[H'    deselect  beginning-of-line
     home2   $'\e[1~'   deselect  beginning-of-line
 
     csleft  $'\e[1;6D' select    backward-word
@@ -157,10 +157,7 @@ for key     seq        mode      widget (
   bindkey "${seq}" key-$key
 }
 
-#bindkey '\e[1;3D' backward-word
-#bindkey '\e[1;3C' forward-word
-# bindkey '\e^?'    backward-kill-word
-# bindkey '\e'
+bindkey '\e^?'    backward-kill-word
 
 # start tmux if interactive
 if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux 2>&1 > /dev/null; then

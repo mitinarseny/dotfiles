@@ -396,5 +396,5 @@ defaults write org.m0k.transmission WarningLegal -bool false
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
 	"Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
 	"Terminal" "Transmission" "Photos"; do
-  pkill "$app"
+  pkill "$app" || true
 done

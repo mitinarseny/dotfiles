@@ -4,9 +4,6 @@ scriptencoding utf-8
 runtime plugins.vim
 
 " ======= General ======= "
-" automatically change PWD to directory of file being edited
-set autochdir
-
 " use system clipboard
 set clipboard+=unnamedplus
 

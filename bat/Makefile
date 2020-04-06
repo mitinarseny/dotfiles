@@ -1,5 +1,6 @@
 ifneq (,$(shell command -v bat))
 CONFIG_DIR := $(shell bat --config-dir)
+CACHE_DIR := $(shell bat --cache-dir)
 else
 CONFIG_DIR := ~/.config/bat
 $(warning bat was not found in PATH, assuming config dir is $(CONFIG_DIR))
@@ -11,7 +12,10 @@ $(CONFIG_DIR)/config: config | $(CONFIG_DIR)
 $(CONFIG_DIR):
 	@mkdir -p $@
 
+ifneq (,$(CURDIR))
 .PHONY: cache
-cache: $(CURDIR)
-	bat cache --build --source $(CURDIR)
+cache: $(CACHE_DIR)/themes.bin
 
+$(CACHE_DIR)/themes.bin: $(CURDIR)
+	bat cache --build --source $(CURDIR)
+endif

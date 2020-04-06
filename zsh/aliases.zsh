@@ -12,3 +12,4 @@ alias lart='ls -1Fcart'
 alias lrt='ls -1Fcrt'
 alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
 alias grep='grep --color'
+alias groot='cd $(git rev-parse --show-toplevel)' # go to nearest directory containing .git/

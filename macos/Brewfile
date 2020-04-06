@@ -240,6 +240,9 @@ brew "mongodb/brew/mongodb-community"
 #####      Casks      #####
 ###########################
 
+# cross-platform, GPU-accelerated terminal emulator
+cask "alacritty"
+
 # transfer files from/to android devices
 cask "android-file-transfer"
 
@@ -305,15 +308,6 @@ cask "jupyter-notebook-ql"
 # do not sleep toogle
 cask "keepingyouawake"
 
-# TeX
-cask "mactex-no-gui"
-
-# penetration testing framework
-cask "metasploit"
-
-# run kubernetes cluster locally
-cask "minikube"
-
 # instant, secure URL to your localhost server through any NAT or firewall
 cask "ngrok"
 
@@ -364,9 +358,6 @@ cask "transmission"
 # VPN utility
 cask "tunnelblick"
 
-# open source visual editor
-cask "visual-studio-code"
-
 # media player
 cask "vlc"
 
@@ -378,12 +369,6 @@ cask "wireshark"
 
 # PDF converting tool
 cask "wkhtmltopdf"
-
-# stats in menu bar
-cask "yujitach-menumeters"
-
-# record GIF from screen
-mas "GIPHY CAPTURE", id: 668208984
 
 # vidoe editor
 mas "iMovie", id: 408981434

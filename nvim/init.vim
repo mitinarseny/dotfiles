@@ -100,7 +100,6 @@ noremap <silent> <expr> <Home> indent('.')+1 == col('.') ? '0' : '^'
 imap <silent> <Home>   <C-o><Home>
 
 vnoremap <silent> <expr> <S-Home> indent('.')+1 == col('.') ? '0' : '^'
-vmap <>
 nmap <silent> <S-Home> v<S-Home>
 imap <silent> <S-Home> <C-o><S-Home>
 

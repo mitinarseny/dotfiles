@@ -7,7 +7,6 @@ if executable('gopls')
       \ 'name': 'gopls',
       \ 'cmd': {server_info->['gopls']},
       \ 'whitelist': ['go'],
-      \ 'config': { 'refresh_pattern': 'abc' },
       \ })
     autocmd BufWritePre *.go LspDocumentFormatSync
   augroup END

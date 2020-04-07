@@ -222,7 +222,7 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'airblade/vim-gitgutter'
     let g:gitgutter_sign_priority      = 0
-    let g:gitgutter_sign_allow_clobber = v:true
+    let g:gitgutter_sign_allow_clobber = v:false
 
   Plug 'sheerun/vim-polyglot'
 

@@ -15,17 +15,20 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'moll/vim-bbye' " vim-symlink optional dependency
   Plug 'aymericbeaumet/vim-symlink'
 
-  Plug 'dense-analysis/ale'
-    let g:ale_completion_enabled   = 0
-    let g:ale_lint_on_text_changed = 'always'
-
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'    
-    let g:lsp_diagnostics_enabled          = v:false
+    let g:lsp_diagnostics_enabled          = v:true
+    let g:lsp_diagnostics_echo_cursor      = v:true
+    let g:lsp_diagnostics_echo_delay       = 200
+    let g:lsp_signs_enabled                = v:true
+    let g:lsp_signs_error                  = { 'text': '>>' }
+    let g:lsp_signs_warning                = { 'text': '--' }
+    let g:lsp_signs_hint                   = { 'text': '..' }
+    let g:lsp_virtual_text_enabled         = v:false
     let g:lsp_highlight_references_enabled = v:true
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
- 
+
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
     let g:asyncomplete_auto_popup       = v:true
@@ -218,6 +221,8 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'tpope/vim-fugitive'
 
   Plug 'airblade/vim-gitgutter'
+    let g:gitgutter_sign_priority      = 0
+    let g:gitgutter_sign_allow_clobber = v:true
 
   Plug 'sheerun/vim-polyglot'
 

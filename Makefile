@@ -1,23 +1,11 @@
-SUBS := \
-  alacritty \
-  antibody \
-  bat \
-  dircolors \
-  editorconfig \
-  fd \
-  fonts \
-  fzf \
-  git \
-  inputrc \
-  nvim \
-  ripgrep \
-  tmux \
-  zsh
+UNAME := $(shell uname -s)
 
-ifeq (Darwin,$(shell uname -s))
-SUBS += \
-	brew \
-	macos
+SUBS := $(dir $(wildcard */Makefile))
+
+MACOS_SPECIFIC := macos
+
+ifeq (Darwin,$(UNAME))
+SUBS := $(filter-out $(addsuffix /,$(MACOS_SPECIFIC)),$(SUBS))
 endif
 
 .PHONY: all

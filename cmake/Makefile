@@ -26,6 +26,3 @@ ifeq (Darwin,$(UNAME))
 	brew uninstall $(BREW_FORMULAE)
 endif
 
-.PHONY: clean
-clean:
-	$(RM) $(DOTFILES)

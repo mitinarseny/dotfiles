@@ -12,27 +12,9 @@
     </a>
 </p>
 
-## Features
-
-* [Alacritty](/alacritty)
-* [Antibody](/antibody)
-* [bat](/bat)
-* [dircolors](/dircolors)
-* [editorconfig](/editorconfig)
-* [fonts](/fonts)
-* [FZF](/fzf)
-* [Git](/git)
-* [GoLang](/golang)
-* [inputrc](/inputrc)
-* [less](/less)
-* [macOS](/macos)
-* [NeoVim](/nvim)
-* [tmux](/tmux)
-* [ZSH](/zsh)
-
 ## Install
 
 ```sh
-curl https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
+curl -fsSL https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
 ```
 

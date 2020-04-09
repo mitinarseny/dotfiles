@@ -20,4 +20,4 @@ alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
 
 alias grep='grep --color'
 
-alias groot='cd $(git rev-parse --show-toplevel)' # go to nearest directory containing .git/
+alias groot='git rev-parse --is-inside-work-tree > /dev/null 2>&1 && cd "$(git rev-parse --show-toplevel)"'

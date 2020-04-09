@@ -41,6 +41,12 @@ ifeq (,$(shell command -v brew))
 	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
 endif
 
+.PHONY: uninstall
+uninstall:
+ifeq (Darwin,$(UNAME))
+	brew uninstall $(BREW_FORMULAE)
+endif
+
 .PHONY: clean
 clean:
 	$(RM) $(DOTFILES)

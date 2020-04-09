@@ -24,7 +24,7 @@ $(CONFIG_DIR):
 .PHONY: install
 ifeq (Darwin,$(UNAME))
 install: | .brew
-ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew cask list --versions $(BREW_CASK)),,B)))
+ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew cask list --versions $(BREW_CASK) 2> /dev/null),,B)))
 	brew cask install $(BREW_CASK)
 endif
 else

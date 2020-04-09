@@ -10,4 +10,5 @@ export FZF_DEFAULT_OPTS="\
   --color pointer:6,info:8,spinner:8,header:8,prompt:1,marker:1 \
   --cycle \
   --info=inline \
-  -0"
+  -0 \
+  --bind 'bspace:backward-delete-char/eof'"

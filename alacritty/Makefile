@@ -39,7 +39,6 @@ ifeq (,$(shell command -v brew))
 endif
 
 .PHONY: uninstall
-
 uninstall:
 ifeq (Darwin,$(UNAME))
 	brew cask uninstall $(BREW_CASK)

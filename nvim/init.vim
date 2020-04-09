@@ -55,10 +55,6 @@ set nowritebackup
 set noswapfile
 
 " ======= Editing ======= "
-" move around wrapped lines
-noremap <silent> <Up>   gk
-noremap <silent> <Down> gj
-
 " tabulation
 set smarttab
 set shiftwidth=4
@@ -93,10 +89,10 @@ vmap <S-A-Left>  <S-C-Left>
 vmap <S-A-Right> <S-C-Right>
 
 " <Home> gets you to the first not-blank character on the line
-noremap <silent> <expr> <Home> indent('.')+1 == col('.') ? '0' : '^'
+noremap <silent> <expr> <Home> indent('.')+1 == virtcol('.') ? '0' : '^'
 imap <silent> <Home>   <C-o><Home>
 
-vnoremap <silent> <expr> <S-Home> indent('.')+1 == col('.') ? '0' : '^'
+vnoremap <silent> <expr> <S-Home> indent('.')+1 == virtcol('.') ? '0' : '^'
 nmap <silent> <S-Home> v<S-Home>
 imap <silent> <S-Home> <C-o><S-Home>
 

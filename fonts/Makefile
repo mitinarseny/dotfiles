@@ -1,25 +1,50 @@
-ifeq ($(shell uname -s),Darwin)
-INSTALL_DIR := ~/Library/Fonts
-else
-INSTALL_DIR := ~/.fonts
-endif
+UNAME         := $(shell uname -s)
+DOTFILES_ROOT := $(realpath $(CURDIR)/..)
 
-.PHONY: fira_code
-fira_code: $(patsubst %,$(INSTALL_DIR)/FiraCode-%.ttf,\
+FIRA_CODE_FONTS := \
 	Bold \
 	Light \
 	Medium \
 	Regular \
-	Retina \
-	)
-ifneq ($(UNAME),Darwin)
-	fc-cache --force --verbose $(INSTALL_DIR)
+	Retina
+FIRA_CODE_FONT_FILES = $(patsubst %,$(INSTALL_DIR)/FiraCode-%.ttf,$(FIRA_CODE_FONTS))
+
+FONT_FILES = $(FIRA_CODE_FONT_FILES)
+
+.PHONY: install
+ifeq (Darwin,$(UNAME))
+INSTALL_DIR := $(HOME)/Library/Fonts
+install: | font-files .fc-cache
+else
+INSTALL_DIR := $(HOME)/.fonts
+install: | font-files
 endif
+	fc-cache --force --verbose $(INSTALL_DIR)
+
+.PHONY: font-files
+font-files: $(FONT_FILES)
+
+$(FONT_FILES): $(INSTALL_DIR)/FiraCode-%.ttf: | $(INSTALL_DIR)
+	curl --silent --location --output $@ \
+	  "https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-$*.ttf?raw=true"
 
 $(INSTALL_DIR):
 	@mkdir -p $@
 
-$(INSTALL_DIR)/FiraCode-%.ttf: | $(INSTALL_DIR)
-	curl --silent --location --output $@ \
-	  "https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-$*.ttf?raw=true"
+.PHONY: .fc-cache
+ifeq (Darwin,$(UNAME))
+.fc-cache: | .brew
+ifeq (,$(shell brew list --versions fontconfig))
+	brew install fontconfig
+endif
+endif
 
+.PHONY: .brew
+.brew:
+ifeq (,$(shell command -v brew))
+	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+endif
+
+.PHONY: clean
+clean:
+	$(RM) $(FONT_FILES)

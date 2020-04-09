@@ -71,6 +71,9 @@ set completeopt=menu,menuone,noinsert
 " do not show insert completion popups 
 set shortmess+=c
 
+" redo last undone change with U
+noremap U <C-r>
+
 " jump by words with Alt/Ctrl + arrows
 noremap <A-Left>       b
 imap    <A-Left>  <C-o><A-Left>
@@ -95,6 +98,11 @@ imap <silent> <Home>   <C-o><Home>
 vnoremap <silent> <expr> <S-Home> indent('.')+1 == virtcol('.') ? '0' : '^'
 nmap <silent> <S-Home> v<S-Home>
 imap <silent> <S-Home> <C-o><S-Home>
+
+" select until the end of line without newline character
+vnoremap <S-End> g_
+nmap     <S-End> v<S-End>
+imap     <S-End> <C-o><S-End>
 
 " Alt+Backspace to delete word
 noremap <A-BS> "_db

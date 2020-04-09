@@ -1,7 +1,7 @@
 CONFIG_DIR := $(HOME)/.config/alacritty
 BREW_CASK  := alacritty
 
-UNAME    := $(shell uname -s)
+UNAME         := $(shell uname -s)
 DOTFILES_ROOT := $(realpath $(CURDIR)/..)
 
 
@@ -36,6 +36,13 @@ endif
 .brew:
 ifeq (,$(shell command -v brew))
 	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+endif
+
+.PHONY: uninstall
+
+uninstall:
+ifeq (Darwin,$(UNAME))
+	brew cask uninstall $(BREW_CASK)
 endif
 
 .PHONY: clean

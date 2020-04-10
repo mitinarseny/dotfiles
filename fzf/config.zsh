@@ -11,4 +11,6 @@ export FZF_DEFAULT_OPTS="\
   --cycle \
   --info=inline \
   -0 \
-  --bind 'bspace:backward-delete-char/eof'"
+  --bind bspace:backward-delete-char/eof \
+  --height=30% \
+"

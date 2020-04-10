@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+zmodload zsh/zprof
+
 unsetopt MAIL_WARNING       # Don't print a warning message if a mail file has been accessed.
 setopt NOTIFY               # Report status of background jobs immediately.
 
@@ -29,6 +31,7 @@ SAVEHIST=10000
 HISTFILE=$HOME/.zsh_history
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
+setopt HIST_SAVE_NO_DUPS
 setopt EXTENDED_HISTORY
 
 CASE_SENSITIVE=0
@@ -55,6 +58,8 @@ autoload -Uz ${${(%):-%x}:P:h}/functions/*(.:t)
 typeset -U config_files
 # https://www.reddit.com/r/zsh/comments/alkq5a/how_can_i_change_the_default_location_of_zshrc/egaw8q9
 config_files=(${${(%):-%x}:P:h:h}/**/*.zsh)
+# ignore all *.zsh files starting with underscore
+config_files=(${config_files:#**/_*.zsh})
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do
@@ -62,10 +67,11 @@ for file in ${(M)config_files:#*/path.zsh}; do
 done
 
 # load plugins
-[ -f "${HOME}/.zsh_plugins.sh" ] \
-  && . "${${(%):-%x}:P:h}/pre_plugins.zsh" \
-  && . "${HOME}/.zsh_plugins.sh" \
-  && . "${${(%):-%x}:P:h}/post_plugins.zsh"
+if [ -r "${HOME}/.zsh_plugins.sh" ]; then
+  . "${${(%):-%x}:P:h}/_pre_plugins.zsh"
+  . "${HOME}/.zsh_plugins.sh"
+  . "${${(%):-%x}:P:h}/_post_plugins.zsh"
+fi
 
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
@@ -164,8 +170,8 @@ for key     seq        mode      widget (
 
 bindkey '\e^?'    backward-kill-word
 
-# start tmux if interactive
-if [[ $- == *i* ]] && [ -z "${TMUX}" ] && command -v tmux 2>&1 > /dev/null; then
+# start tmux if interactive and not ssh session
+if [[ $- == *i* ]] && [ -z "${TMUX}" ] && [ -z "${SSH_CONNECTION}" ] && command -v tmux 2>&1 > /dev/null; then
   tmux new-session -A -s main 
 fi
 

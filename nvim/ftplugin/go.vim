@@ -1,6 +1,4 @@
 if executable('gopls')
-  let b:ale_linters = ['gopls']
-
   augroup LspGo
     autocmd!
     autocmd User lsp_setup call lsp#register_server({

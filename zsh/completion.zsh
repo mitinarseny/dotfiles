@@ -15,36 +15,42 @@ zstyle ':completion:*' rehash true
 zstyle ':completion:*(all-|)files' ignore-patterns '(|*/)CVS'
 zstyle ':completion:*:cd:*' ignore-patterns '(*/)#CVS'
 
-# Case-insensitive (all), partial-word, and then substring completion.
+# case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list '' \
        'm:{a-z\-}={A-Z\_}' \
        'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
        'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
 
-# ignore completion functions
-zstyle ':completion:*:functions' ignore-patterns '_*'
-
-
-
-# Group matches and describe.
-zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
-zstyle ':completion:*:descriptions' format ' -- %d --'
-# zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
-# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-# zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-# zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' verbose yes
-
-# Don't complete unavailable commands.
+# don't complete unavailable commands or complete functions.
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 
-# Directories
+zstyle ':completion:*:*:*:*:*' menu select
+
+# groups
+zstyle ':completion:*:matches' group 'yes'
+
+#default group name
+zstyle ':completion:*' group-name ''
+
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+
+
+if [[ -v functions[fzf-tab-complete] ]]; then
+  zstyle ':completion:*:descriptions' format '-- %d --'
+else
+  zstyle ':completion:*'              format ' %F{yellow}-- %d --%f'
+  zstyle ':completion:*:corrections'  format ' %F{green}-- %d (errors: %e) --%f'
+  zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+  zstyle ':completion:*:messages'     format ' %F{purple} -- %d --%f'
+  zstyle ':completion:*:warnings'     format ' %F{red}-- no matches found --%f'
+
+  zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+fi
+
+zstyle ':completion:*' verbose yes
+
+# directories
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
@@ -56,10 +62,13 @@ zstyle ':completion:*' special-dirs true
 # Environmental Variables
 zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
 
-# Populate hostname completion.
-# zstyle -e ':completion:*:hosts' hosts 'reply=(
-#   ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
-#   ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
-# )'
+# separate sections for man pages
+zstyle ':completion:*:manuals'    separate-sections true
+zstyle ':completion:*:manuals.*'  insert-sections   true
 
-zstyle ':notify:*' command-complete-timeout 5
+# populate hostname completion.
+zstyle -e ':completion:*:hosts' hosts 'reply=(
+  ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+  ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+)'
+

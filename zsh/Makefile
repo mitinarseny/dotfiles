@@ -12,7 +12,7 @@ DOTFILES := ~/.zshrc
 .PHONY: dotfiles
 dotfiles: $(DOTFILES)
 
-$(HOME)/.zshrc: zshrc
+~/.zshrc: zshrc
 	@ln -svf $(realpath $<) $@
 
 .PHONY: install

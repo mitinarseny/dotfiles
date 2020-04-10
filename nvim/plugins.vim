@@ -8,15 +8,21 @@ if !filereadable(s:autoload_plug_path)
     exit
   endif
   silent execute '!curl --fail --location --output ' . shellescape(s:autoload_plug_path) . ' --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin(stdpath('data') . '/plugged')
   Plug 'moll/vim-bbye' " vim-symlink optional dependency
   Plug 'aymericbeaumet/vim-symlink'
 
+  Plug 'airblade/vim-rooter'
+    let g:rooter_targets       = '*'
+    let g:rooter_silent_chdir  = 1
+    let g:rooter_patterns      = ['.git', '.git/', 'go.mod']
+    let g:rooter_resolve_links = 1
+
   Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/vim-lsp'    
+  Plug 'prabirshrestha/vim-lsp'
     let g:lsp_diagnostics_enabled          = v:true
     let g:lsp_diagnostics_echo_cursor      = v:true
     let g:lsp_diagnostics_echo_delay       = 200
@@ -50,12 +56,20 @@ call plug#begin(stdpath('data') . '/plugged')
 
     augroup lsp_install
       autocmd!
-      autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+      autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
       autocmd User lsp_complete_done  call asyncomplete#close_popup()
     augroup END
 
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-    let g:fzf_colors = { 
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+    let g:fzf_buffers_jump = v:true
+
+    " let g:fzf_action = {
+    "   \ 'ctrl-t': 'tab split',
+    "   \ 'ctrl-_': 'split',
+    "   \ 'ctrl-\': 'vsplit',
+    "   \ }
+    let g:fzf_colors = {
       \ 'fg':      ['fg', 'Normal'],
       \ 'bg':      ['bg', 'Normal'],
       \ 'hl':      ['fg', 'SpellCap'],
@@ -75,31 +89,53 @@ call plug#begin(stdpath('data') . '/plugged')
       \ 'down': '~30%',
       \ }
 
-    noremap <silent> <C-f> :FZF<CR>
+    let g:fzf_history_dir = '~/.local/share/fzf-history'
 
+    command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+    noremap <silent> <C-f> <Cmd>Files<CR>
+
+    function! s:fzf_ripgrep(query, fullscreen)
+      let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+      let initial_command = printf(command_fmt, shellescape(a:query))
+      let reload_command = printf(command_fmt, '{q}')
+      let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+      call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    endfunction
+
+    command! -nargs=* -bang RG call <SID>fzf_ripgrep(<q-args>, <bang>0) 
+"     function! s:fzf_statusline()
+"   " Override statusline as you like
+"   highlight fzf1 ctermfg=161 ctermbg=251
+"   highlight fzf2 ctermfg=23 ctermbg=251
+"   highlight fzf3 ctermfg=237 ctermbg=251
+"   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+" endfunction
+"
+" autocmd! User FzfStatusLine call <SID>fzf_statusline()
     " Using floating windows of Neovim to start fzf
     if has('nvim')
-      let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
+      " let $FZF_DEFAULT_OPTS .= ' --border --margin=0,1'
 
-    function! FloatingFZF()
-        let width = float2nr(winwidth(0) * 0.9)
-        let height = float2nr(winheight(0) * 0.6)
-        let opts = { 'relative': 'win',
-          \ 'row': (winheight(0) - height) / 2,
-          \ 'col': (winwidth(0) - width) / 2,
-          \ 'width': width,
-          \ 'height': height,
-          \ }
-        let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-        call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
-      endfunction
-
-      let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+      " function! FloatingFZF()
+      "   let width = float2nr(winwidth(0) * 0.9)
+      "   let height = float2nr(winheight(0) * 0.6)
+      "   let opts = { 'relati:qve': 'win',
+      "     \ 'row': (winheight(0) - height) / 2,
+      "     \ 'col': (winwidth(0) - width) / 2,
+      "     \ 'width': width,
+      "     \ 'height': height,
+      "     \ }
+      "   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+      "   call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+      " endfunction
+      "
+      " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
       augroup fzf
         autocmd!
-        autocmd  FileType fzf set laststatus=0 noshowmode noruler notitle
-          \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler title
+        autocmd  FileType fzf set noruler notitle
+          \| autocmd BufLeave <buffer> set ruler title
       augroup END
     endif
 
@@ -122,7 +158,6 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'chrisbra/Colorizer'
 
   Plug 'itchyny/lightline.vim'
-  Plug 'maximbaz/lightline-ale'
     set noshowmode
 
     let g:lightline = {
@@ -135,7 +170,7 @@ call plug#begin(stdpath('data') . '/plugged')
       \      'right': [
       \        ['readonly'],
       \        ['fileformat', 'fileencoding', 'lineinfo'],
-      \        ['linter_checking', 'linter_errors', 'linter_wanrings', 'linter_ok'],
+      \        ['lsp_errors', 'lsp_warnings', 'lsp_ok'],
       \      ],
       \   },
       \   'inactive': {
@@ -150,18 +185,16 @@ call plug#begin(stdpath('data') . '/plugged')
       \     'lineinfo': '%3l:%-2v',
       \   },
       \   'component_expand': {
-      \     'readonly':        'LightlineReadonly',
-      \     'linter_checking': 'lightline#ale#checking',
-      \     'linter_wanrings': 'lightline#ale#warnings',
-      \     'linter_errors':   'lightline#ale#errors',
-      \     'linter_ok':       'lightline#ale#ok',
+      \     'readonly':     'LightlineReadonly',
+      \     'lsp_warnings': 'LightlineLSPWarnings',
+      \     'lsp_errors':   'LightlineLSPErrors',
+      \     'lsp_ok':       'LightlineLSPOk',
       \   },
       \   'component_type': {
-      \     'readonly':        'error',
-      \     'linter_checking': 'middle',
-      \     'linter_wanrings': 'warning',
-      \     'linter_errors':   'error',
-      \     'linter_ok':       'middle',
+      \     'readonly':     'error',
+      \     'lsp_warnings': 'warning',
+      \     'lsp_errors':   'error',
+      \     'lsp_ok':       'middle',
       \   },
       \   'component_function': {
       \     'gitbranch':  'fugitive#head',
@@ -186,13 +219,30 @@ call plug#begin(stdpath('data') . '/plugged')
       \   },
       \ }
 
+    function! LightlineLSPWarnings() abort
+      let l:counts = lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      return l:counts.warning == 0 ? '' : printf('W:%d', l:counts.warning)
+    endfunction
+
+    function! LightlineLSPErrors() abort
+      let l:counts = lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      return l:counts.error == 0 ? '' : printf('E:%d', l:counts.error)
+    endfunction
+
+    function! LightlineLSPOk() abort
+      let l:counts =  lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      let l:total = l:counts.error + l:counts.warning
+      return l:total == 0 ? 'OK' : ''
+    endfunction
+
+    augroup LightLineOnLSP
+      autocmd!
+      autocmd User lsp_diagnostics_updated call lightline#update()
+    augroup END
+
     function! LightlineFileName()
       let filename = expand('%:t')
-      if filename ==# ''
-        let filename = '[No Name]'
-      endif
-      let modified = &modified ? ' +' : ''
-      return filename . modified
+      return (filename ==# '' ? '[No Name]' : filename) . (&modified ? ' +' : '')
     endfunction
 
     function! LightlineReadonly()
@@ -213,6 +263,12 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:indentLine_color_gui     = '#3b4252'
     let g:indentLine_bgcolor_gui   = 'NONE'
     let g:indentLine_concealcursor = 0
+
+    augroup IndentLineOnFZF
+      autocmd!
+      autocmd FileType fzf IndentLinesDisable
+    augroup END
+
 
   Plug 'mhinz/vim-startify'
     let g:startify_custom_header = []
@@ -246,7 +302,7 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:go_fmt_command                         = 'goimports'
     let g:go_def_mode                            = 'gopls'
     let g:go_info_mode                           = 'gopls'
-    
+
   Plug 'rust-lang/rust.vim', { 'for': 'rust' }
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
   Plug 'tmux-plugins/vim-tmux'

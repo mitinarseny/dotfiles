@@ -32,7 +32,7 @@ set updatetime=100
 set autoread
 
 " keep more lines above and below cursor when scrolling
-set scrolloff=5
+set scrolloff=3
 
 " wrap long lines 
 set wrap

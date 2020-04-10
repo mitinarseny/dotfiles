@@ -12,8 +12,8 @@ setopt AUTO_NAME_DIRS
 
 setopt INTERACTIVE_COMMENTS # support for comments in command line mode
 
-export LANG=${LANG:-en_US.UTF-8}
-export WORDCHARS='*?_-[]~;!#%^(){}<>$.'
+LANG=${LANG:-en_US.UTF-8}
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 command -v nvim &> /dev/null \
   && export EDITOR='nvim' \
@@ -24,14 +24,14 @@ command -v less &> /dev/null \
   && export PAGER='less'
 
 # Hitory
-export HISTSIZE=10000
-export SAVEHIST=10000
-export HISTFILE=$HOME/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=$HOME/.zsh_history
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY
 
-export CASE_SENSITIVE=0
+CASE_SENSITIVE=0
 export CLICOLOR=1
 
 _zcompinit_custom() {
@@ -61,7 +61,7 @@ for file in ${(M)config_files:#*/path.zsh}; do
   . "${file}"
 done
 
-# load antibody plugins
+# load plugins
 [ -f "${HOME}/.zsh_plugins.sh" ] \
   && . "${${(%):-%x}:P:h}/pre_plugins.zsh" \
   && . "${HOME}/.zsh_plugins.sh" \

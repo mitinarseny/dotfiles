@@ -1,7 +1,10 @@
 ####### sindresorhus/pure #######
 autoload -U promptinit; promptinit
 prompt pure
-export PURE_PROMPT_SYMBOL='λ'
+PURE_PROMPT_SYMBOL='λ'
+
+####### Aloxaf/fzf-tab#fzf-tab #######
+command -v fzf > /dev/null || disable-fzf-tab
 
 ####### zsh-users/zsh-autosuggest #######
 # https://github.com/zsh-users/zsh-autosuggestions#enable-asynchronous-mode
@@ -18,7 +21,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS
 
 ####### zdharma/fast-syntax-highlighting #######
 # https://github.com/zdharma/fast-syntax-highlighting/issues/135#issuecomment-497452498
-export FAST_HIGHLIGHT[whatis_chroma_type]=0
+FAST_HIGHLIGHT[whatis_chroma_type]=0
 
 ####### zsh-users/zsh-history-substring-search #######
 bindkey '\e[A'   history-substring-search-up

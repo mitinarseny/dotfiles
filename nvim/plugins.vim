@@ -18,7 +18,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'airblade/vim-rooter'
     let g:rooter_targets       = '*'
     let g:rooter_silent_chdir  = 1
-    let g:rooter_patterns      = ['.git', '.git/', 'go.mod']
+    let g:rooter_patterns      = ['.git', '.git/']
     let g:rooter_resolve_links = 1
 
   Plug 'prabirshrestha/async.vim'
@@ -34,6 +34,32 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_highlight_references_enabled = v:true
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
+
+    if executable('gopls')
+      augroup LspGo
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'gopls',
+          \ 'cmd': {server_info->['gopls']},
+          \ 'whitelist': ['go'],
+          \ })
+        autocmd BufWritePre *.go LspDocumentFormatSync
+      augroup END
+    endif
+
+    if executable('vim-language-server')
+      augroup LspVim
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'vim-language-server',
+          \ 'cmd': {server_info->['vim-language-server', '--stdio']},
+          \ 'whitelist': ['vim'],
+          \ 'initialization_options': {
+          \   'vimruntime': $VIMRUNTIME,
+          \   'runtimepath': &rtp,
+          \ }})
+      augroup END
+    endif
 
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'

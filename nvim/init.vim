@@ -105,9 +105,7 @@ nmap     <S-End> v<S-End>
 imap     <S-End> <C-o><S-End>
 
 " Alt+Backspace to delete word
-noremap <A-BS> "_db
-noremap <C-BS> <A-BS>
-imap <A-BS> <C-o><A-BS>
+inoremap <A-BS> <C-w>
 
 " delete selection with backspace
 vnoremap <BS> "_d
@@ -128,12 +126,20 @@ set list listchars=tab:\|\
 " always show sign columns
 set signcolumn=yes
 
+" prefer split to the right
+set splitright
+" prefer split below
+set splitbelow
+
+" limit completion menu size
+set pumheight=10
+
 " directory view
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 2
 let g:netrw_altv = 1
-let g:netrw_winsize = 25
+let g:netrw_winsize = 75
 
 augroup TerminalStuff
   autocmd!

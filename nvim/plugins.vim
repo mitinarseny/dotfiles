@@ -35,6 +35,12 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
 
+    " Close preview window with <esc>
+    autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
+      \ <Plug>(lsp-preview-close)
+    autocmd User lsp_float_closed call lsp#ui#vim#references#highlight(v:false)
+      \ | nunmap <buffer> <Esc>
+
     if executable('gopls')
       augroup LspGo
         autocmd!
@@ -74,10 +80,14 @@ call plug#begin(stdpath('data') . '/plugged')
 
       highlight lspReference cterm=underline
 
-      noremap  <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
+      nnoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
       inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
-      noremap  <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+      nnoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
       inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+
+      nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
+      nnoremap <buffer> <Leader>lr <Cmd>LspRename<CR>
+      nnoremap <buffer> <Leader>lh <Cmd>LspHover<CR>
     endfunction
 
     augroup lsp_install
@@ -121,7 +131,6 @@ call plug#begin(stdpath('data') . '/plugged')
 
     command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
-    noremap <silent> <C-f> <Cmd>Files<CR>
 
     function! s:fzf_ripgrep(query, fullscreen)
       let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
@@ -131,6 +140,9 @@ call plug#begin(stdpath('data') . '/plugged')
       call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
     endfunction
     command! -nargs=* -bang RG call <SID>fzf_ripgrep(<q-args>, <bang>0)
+
+    nnoremap <Leader>ff <Cmd>Files<CR>
+    nnoremap <Leader>fr <Cmd>RG<CR>
 
     autocmd! FileType fzf setlocal laststatus=0 noshowmode noruler
       \ | autocmd BufWinLeave <buffer> setlocal laststatus=2 ruler

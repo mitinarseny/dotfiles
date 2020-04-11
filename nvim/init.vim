@@ -1,9 +1,10 @@
 set encoding=utf-8
 scriptencoding utf-8
 
-runtime plugins.vim
-
 " ======= General ======= "
+" change <Leader> to comma
+let mapleader = ","
+
 " use system clipboard
 set clipboard+=unnamedplus
 
@@ -149,4 +150,6 @@ augroup TerminalStuff
     \ norelativenumber 
     \ | startinsert
 augroup END
+
+runtime plugins.vim
 

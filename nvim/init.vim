@@ -115,6 +115,8 @@ vnoremap <BS> "_d
 " set terminal title
 set title
 
+set guicursor=n-sm:block,i-ci-v-ve-c:ver25,r-cr-o:hor20
+
 " show line numbers
 set number
 

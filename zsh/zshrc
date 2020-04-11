@@ -100,6 +100,11 @@ zle_highlight=('paste:none')
 # unbind vi mode
 bindkey -r '\e'
 
+# Ctrl+Z to bring back last suspended job
+_zsh_cli_fg() { fg; }
+zle -N _zsh_cli_fg
+bindkey '^Z' _zsh_cli_fg
+
 # https://stackoverflow.com/a/30899296
 _r-delregion() {
   if ((REGION_ACTIVE)) then

@@ -50,3 +50,7 @@ endif
 .PHONY: clean
 clean:
 	$(RM) $(DOTFILES)
+
+.PHONY: test
+test:
+	nvim --headless -c 'exit'

@@ -13,8 +13,7 @@ all: $(SUBDIRS)
 
 .PHONY: $(SUBDIRS)
 $(SUBDIRS):
-	$(info --> make $@ $(MAKECMDGOALS))
-	@$(MAKE) --directory $@ $(MAKECMDGOALS)
+	@$(MAKE) --print-directory --directory $@ $(MAKECMDGOALS)
 
 .PHONY: update
 update: pull all

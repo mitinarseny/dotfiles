@@ -46,7 +46,7 @@ call plug#begin(stdpath('data') . '/plugged')
       setlocal omnifunc=lsp#complete
       setlocal signcolumn=yes
 
-      highlight lspReference term=underline ctermbg=8
+      highlight lspReference cterm=underline
 
       noremap  <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
       inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
@@ -62,7 +62,9 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-    let g:fzf_buffers_jump = v:true
+    let g:fzf_buffers_jump    = v:true
+    let g:fzf_statusline      = v:false
+    let g:fzf_nvim_statusline = v:false
 
     " let g:fzf_action = {
     "   \ 'ctrl-t': 'tab split',
@@ -102,43 +104,11 @@ call plug#begin(stdpath('data') . '/plugged')
       let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
       call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
     endfunction
+    command! -nargs=* -bang RG call <SID>fzf_ripgrep(<q-args>, <bang>0)
 
-    command! -nargs=* -bang RG call <SID>fzf_ripgrep(<q-args>, <bang>0) 
-"     function! s:fzf_statusline()
-"   " Override statusline as you like
-"   highlight fzf1 ctermfg=161 ctermbg=251
-"   highlight fzf2 ctermfg=23 ctermbg=251
-"   highlight fzf3 ctermfg=237 ctermbg=251
-"   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-" endfunction
-"
-" autocmd! User FzfStatusLine call <SID>fzf_statusline()
-    " Using floating windows of Neovim to start fzf
-    if has('nvim')
-      " let $FZF_DEFAULT_OPTS .= ' --border --margin=0,1'
-
-      " function! FloatingFZF()
-      "   let width = float2nr(winwidth(0) * 0.9)
-      "   let height = float2nr(winheight(0) * 0.6)
-      "   let opts = { 'relati:qve': 'win',
-      "     \ 'row': (winheight(0) - height) / 2,
-      "     \ 'col': (winwidth(0) - width) / 2,
-      "     \ 'width': width,
-      "     \ 'height': height,
-      "     \ }
-      "   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-      "   call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
-      " endfunction
-      "
-      " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-
-      augroup fzf
-        autocmd!
-        autocmd  FileType fzf set noruler notitle
-          \| autocmd BufLeave <buffer> set ruler title
-      augroup END
-    endif
-
+    autocmd! FileType fzf setlocal laststatus=0 noshowmode noruler
+      \ | autocmd BufWinLeave <buffer> setlocal laststatus=2 ruler
+  
   Plug 'tomtom/tcomment_vim'
     autocmd FileType * setlocal formatoptions-=ro
 

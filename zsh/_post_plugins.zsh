@@ -21,6 +21,9 @@ FZF_TAB_COMMAND=(
 zstyle ':fzf-tab:*' command $FZF_TAB_COMMAND
 zstyle ':fzf-tab:*' insert-space false
 
+# do not show groups if only one available
+zstyle ':fzf-tab:*' single-group 'color'
+
 ####### zsh-users/zsh-autosuggest #######
 # https://github.com/zsh-users/zsh-autosuggestions#enable-asynchronous-mode
 ZSH_AUTOSUGGEST_USE_ASYNC=true

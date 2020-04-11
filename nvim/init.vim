@@ -106,10 +106,14 @@ nmap     <S-End> v<S-End>
 imap     <S-End> <C-o><S-End>
 
 " Alt+Backspace to delete word
-inoremap <A-BS> <C-w>
+noremap! <A-BS> <C-w>
 
 " delete selection with backspace
 vnoremap <BS> "_d
+
+" move by words with <A-arrows> in command line mode
+cnoremap <A-Right> <S-Right>
+cnoremap <A-Left>  <S-Left>
 
 " ======= UI ======= "
 " set terminal title

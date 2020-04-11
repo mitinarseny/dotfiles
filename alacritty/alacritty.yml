@@ -23,6 +23,7 @@ font:
 
 cursor:
   style: Beam
+  unfocused_hollow: true
 
 # Nord color scheme
 # https://github.com/arcticicestudio/nord-alacritty

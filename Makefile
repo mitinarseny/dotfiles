@@ -1,24 +1,28 @@
 UNAME := $(shell uname -s)
 
-SUBS := $(dir $(wildcard */Makefile))
+SUBDIRS := $(dir $(wildcard */Makefile))
 
 MACOS_SPECIFIC := macos
 
 ifeq (Darwin,$(UNAME))
-SUBS := $(filter-out $(addsuffix /,$(MACOS_SPECIFIC)),$(SUBS))
+SUBDIRS := $(filter-out $(addsuffix /,$(MACOS_SPECIFIC)),$(SUBDIRS))
 endif
 
 .PHONY: all
-all: $(SUBS)
+all: $(SUBDIRS)
 
-.PHONY: $(SUBS)
-$(SUBS):
-	$(info --> make $@)
-	-@$(MAKE) -C $@
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	$(info --> make $@ $(MAKECMDGOALS))
+	@$(MAKE) --directory $@ $(MAKECMDGOALS)
 
 .PHONY: update
-update: pull $(SUBS)
+update: pull all
 
 .PHONY: pull
 pull:
 	git pull origin
+
+.PHONY: test
+test: $(SUBDIRS)
+

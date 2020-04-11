@@ -5,7 +5,7 @@ UNAME         := $(shell uname -s)
 DOTFILES_ROOT := $(realpath $(CURDIR)/..)
 
 .PHONY: all
-all: dotfiles install plugins
+all: dotfiles plugins install add-to-shells-db default-shell
 
 DOTFILES := ~/.zshrc
 
@@ -25,7 +25,15 @@ else
 install:
 	$(error only macOS is supported)
 endif
-	grep "$$(command -v zsh)" /etc/shells > /dev/null || sudo sh -c 'echo $$(command -v zsh) >> /etc/shells'
+
+.PHONY: add-to-shells-db
+add-to-shells-db: | install
+ifeq (,$(shell grep "$$(command -v zsh)" /etc/shells))
+	sudo sh -c 'echo $$(command -v zsh) >> /etc/shells'
+endif
+
+.PHONY: default-shell
+default-shell: | add-to-shells-db
 	chsh -s "$$(command -v zsh)"
 
 PLUGINS := ~/.zsh_plugins.sh
@@ -61,6 +69,10 @@ uninstall:
 ifeq (Darwin,$(UNAME))
 	brew uninstall $(BREW_FORMULAE)
 endif
+
+.PHONY: test
+test: | dotfiles plugins install
+	zsh -ic 'exit'
 
 .PHONY: clean
 clean:

@@ -18,11 +18,9 @@ DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 .PHONY: dotfiles
 dotfiles: $(DOTFILES)
 
-$(DOTFILES): $(CONFIG_DIR)/%: % | $(CONFIG_DIR)
+$(DOTFILES): $(CONFIG_DIR)/%: %
+	@mpdir -p $@
 	@ln -svf $(realpath $<) $@
-
-$(CONFIG_DIR):
-	@mkdir -p $@
 
 .PHONY: install
 ifeq (Darwin,$(UNAME))

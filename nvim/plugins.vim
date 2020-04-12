@@ -290,7 +290,15 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'sheerun/vim-polyglot'
 
-"  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
+    let g:go_def_mapping_enabled                 = v:false
+    let g:go_code_completion_enabled             = v:false
+    let g:go_imports_autosave                    = v:false
+    let g:go_fmt_autosave                        = v:false
+    let g:go_mod_fmt_autosave                    = v:false
+    let go_gopls_enabled                         = v:false
+    let g:go_echo_command_info                   = v:false
+    let g:go_echo_go_info                        = v:false
     let g:go_highlight_array_whitespace_error    = v:true
     let g:go_highlight_chan_whitespace_error     = v:true
     let g:go_highlight_extra_types               = v:true
@@ -307,9 +315,6 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:go_highlight_string_spellcheck         = v:true
     let g:go_highlight_diagnostic_errors         = v:true
     let g:go_highlight_diagnostic_warnings       = v:true
-    let g:go_fmt_command                         = 'goimports'
-    let g:go_def_mode                            = 'gopls'
-    let g:go_info_mode                           = 'gopls'
 
   Plug 'rust-lang/rust.vim', { 'for': 'rust' }
   Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }

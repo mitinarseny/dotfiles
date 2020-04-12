@@ -26,7 +26,7 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 
 zstyle ':completion:*:*:*:*:*' menu select
 
-# groups
+# group mathces
 zstyle ':completion:*:matches' group 'yes'
 
 #default group name

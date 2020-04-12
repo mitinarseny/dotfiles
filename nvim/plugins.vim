@@ -206,7 +206,7 @@ call plug#begin(stdpath('data') . '/plugged')
       \   },
       \   'component_function': {
       \     'gitbranch':  'fugitive#head',
-      \     'filename':   'LightlineFileName',
+      \     'filename':   'LightlineFilename',
       \     'fileformat': 'LightlineFileformat',
       \     'filetype':   'LightlineFiletype',
       \   },
@@ -226,6 +226,23 @@ call plug#begin(stdpath('data') . '/plugged')
       \     't':      'T',
       \   },
       \ }
+
+    function! LightlineFilename()
+      let filename = expand('%:t')
+      return (filename ==# '' ? '[No Name]' : filename) . (&modified ? ' +' : '')
+    endfunction
+
+    function! LightlineReadonly()
+      return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
+    endfunction
+
+    function! LightlineFileformat()
+      return winwidth(0) > 70 ? &fileformat : ''
+    endfunction
+
+    function! LightlineFiletype()
+      return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    endfunction
 
     function! LightlineLSPWarnings() abort
       let l:counts = lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
@@ -247,23 +264,6 @@ call plug#begin(stdpath('data') . '/plugged')
       autocmd!
       autocmd User lsp_diagnostics_updated call lightline#update()
     augroup END
-
-    function! LightlineFileName()
-      let filename = expand('%:t')
-      return (filename ==# '' ? '[No Name]' : filename) . (&modified ? ' +' : '')
-    endfunction
-
-    function! LightlineReadonly()
-      return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
-    endfunction
-
-    function! LightlineFileformat()
-      return winwidth(0) > 70 ? &fileformat : ''
-    endfunction
-
-    function! LightlineFiletype()
-      return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-    endfunction
 
   Plug 'Yggdroot/indentLine'
     let g:indentLine_color_term    = 0

@@ -53,6 +53,37 @@ call plug#begin(stdpath('data') . '/plugged')
       augroup END
     endif
 
+    if executable('pyls')
+      augroup LspPython
+        autocmd!
+        au User lsp_setup call lsp#register_server({
+          \ 'name': 'pyls',
+          \ 'cmd': {server_info->['pyls']},
+          \ 'whitelist': ['python'],
+          \ })
+      augroup END
+    endif
+
+    if executable('yaml-language-server')
+      augroup LspYaml
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'yaml-language-server',
+          \ 'cmd': {server_info->['yaml-language-server', '--stdio']},
+          \ 'whitelist': ['yaml', 'yaml.ansible'],
+          \ 'workspace_config': {
+          \   'yaml': {
+          \     'validate': v:true,
+          \     'hover': v:true,
+          \     'completion': v:true,
+          \     'customTags': [],
+          \     'schemas': {},
+          \     'schemaStore': { 'enable': v:true },
+          \   }
+          \ }})
+      augroup END
+    endif
+
     if executable('vim-language-server')
       augroup LspVim
         autocmd!
@@ -64,6 +95,28 @@ call plug#begin(stdpath('data') . '/plugged')
           \   'vimruntime': $VIMRUNTIME,
           \   'runtimepath': &rtp,
           \ }})
+      augroup END
+    endif
+ 
+    if executable('bash-language-server')
+      augroup LspSh
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'bash-language-server',
+          \ 'cmd': {server_info->['bash-language-server', 'start']},
+          \ 'whitelist': ['sh'],
+          \ })
+      augroup END
+    endif
+
+    if executable('docker-langserver')
+      augroup LspDocker
+        autocmd!
+        au User lsp_setup call lsp#register_server({
+          \ 'name': 'docker-langserver',
+          \ 'cmd': {server_info->['docker-langserver', '--stdio']},
+          \ 'whitelist': ['dockerfile'],
+          \ })
       augroup END
     endif
 

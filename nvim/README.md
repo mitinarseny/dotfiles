@@ -1,6 +1,4 @@
-# NeoVim
-
-![](.assets/screenshot.png)
+# [NeoVim](https://neovim.io)
 
 ## Install
 ```sh
@@ -17,6 +15,8 @@ make
 | `RG`    | Search for regex patterns in project root |
 
 ## Key Bindings
+
+> **NOTE**: `<Leader>` is set to `,`
 
 ### Editing
 
@@ -46,7 +46,7 @@ make
 | `<C-o>`      | `<C-o><C-o>` | -            | go to previous location                       |
 | `<C-i>`      | -            | -            | go to next location                           |
 
-#### [FZF](https://github.com/junegunn/fzf.vim#status-line-neovim)
+#### [FZF](https://github.com/junegunn/fzf.vim)
 
 | Normal       | Insert       | Visual       | Description                     |
 |--------------|--------------|--------------|---------------------------------|
@@ -55,9 +55,12 @@ make
 
 ### [LSP](https://github.com/prabirshrestha/vim-lsp)
 
-| Normal       | Insert       | Visual       | Description                     |
-|--------------|--------------|--------------|---------------------------------|
-| `<C-]>`      | `<C-]>`      | -            | go to definition under cursor   |
+| Normal       | Insert       | Visual       | Description        |
+|--------------|--------------|--------------|--------------------|
+| `<C-]>`      | `<C-]>`      | -            | go to definition   |
+| `<Leader>lu` | -            | -            | show usages        |
+| `<Leader>lr` | -            | -            | rename             |
+| `<Leader>lh` | -            | -            | hover              |
 
 
 ### Spell

@@ -35,15 +35,33 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
 
-    " Close preview window with <esc>
-    autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
-      \ <Plug>(lsp-preview-close)
-    autocmd User lsp_float_closed call lsp#ui#vim#references#highlight(v:false)
-      \ | nunmap <buffer> <Esc>
+    augroup lsp_setup | autocmd!
+      " Close preview window with <esc>
+      autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
+        \ <Plug>(lsp-preview-close)
+      autocmd User lsp_float_closed call lsp#ui#vim#references#highlight(v:false)
+        \ | nunmap <buffer> <Esc>
 
+      function! s:on_lsp_buffer_enabled() abort
+        setlocal omnifunc=lsp#complete
+        setlocal signcolumn=yes
+
+        highlight lspReference cterm=underline
+
+        nnoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
+        inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
+        nnoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+        inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+
+        nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
+        nnoremap <buffer> <Leader>lr <Cmd>LspRename<CR>
+        nnoremap <buffer> <Leader>lh <Cmd>LspHover<CR>
+      endfunction
+      autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
+    augroup END
+ 
     if executable('gopls')
-      augroup LspGo
-        autocmd!
+      augroup LspGo | autocmd!
         autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'gopls',
           \ 'cmd': {server_info->['gopls']},
@@ -54,9 +72,8 @@ call plug#begin(stdpath('data') . '/plugged')
     endif
 
     if executable('pyls')
-      augroup LspPython
-        autocmd!
-        au User lsp_setup call lsp#register_server({
+      augroup LspPython | autocmd!
+        augroup User lsp_setup call lsp#register_server({
           \ 'name': 'pyls',
           \ 'cmd': {server_info->['pyls']},
           \ 'whitelist': ['python'],
@@ -65,8 +82,7 @@ call plug#begin(stdpath('data') . '/plugged')
     endif
 
     if executable('yaml-language-server')
-      augroup LspYaml
-        autocmd!
+      augroup LspYaml | autocmd!
         autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'yaml-language-server',
           \ 'cmd': {server_info->['yaml-language-server', '--stdio']},
@@ -85,8 +101,7 @@ call plug#begin(stdpath('data') . '/plugged')
     endif
 
     if executable('vim-language-server')
-      augroup LspVim
-        autocmd!
+      augroup LspVim | autocmd!
         autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'vim-language-server',
           \ 'cmd': {server_info->['vim-language-server', '--stdio']},
@@ -99,8 +114,7 @@ call plug#begin(stdpath('data') . '/plugged')
     endif
  
     if executable('bash-language-server')
-      augroup LspSh
-        autocmd!
+      augroup LspSh | autocmd!
         autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'bash-language-server',
           \ 'cmd': {server_info->['bash-language-server', 'start']},
@@ -110,9 +124,8 @@ call plug#begin(stdpath('data') . '/plugged')
     endif
 
     if executable('docker-langserver')
-      augroup LspDocker
-        autocmd!
-        au User lsp_setup call lsp#register_server({
+      augroup LspDocker | autocmd!
+        augroup User lsp_setup call lsp#register_server({
           \ 'name': 'docker-langserver',
           \ 'cmd': {server_info->['docker-langserver', '--stdio']},
           \ 'whitelist': ['dockerfile'],
@@ -127,25 +140,7 @@ call plug#begin(stdpath('data') . '/plugged')
 
     set completeopt=menuone,noinsert,noselect
 
-    function! s:on_lsp_buffer_enabled() abort
-      setlocal omnifunc=lsp#complete
-      setlocal signcolumn=yes
-
-      highlight lspReference cterm=underline
-
-      nnoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
-      inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
-      nnoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
-      inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
-
-      nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
-      nnoremap <buffer> <Leader>lr <Cmd>LspRename<CR>
-      nnoremap <buffer> <Leader>lh <Cmd>LspHover<CR>
-    endfunction
-
-    augroup lsp_install
-      autocmd!
-      autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
+    augroup lsp_complete_setup | autocmd!
       autocmd User lsp_complete_done  call asyncomplete#close_popup()
     augroup END
 
@@ -194,11 +189,22 @@ call plug#begin(stdpath('data') . '/plugged')
     endfunction
     command! -nargs=* -bang RG call <SID>fzf_ripgrep(<q-args>, <bang>0)
 
-    nnoremap <Leader>ff <Cmd>Files<CR>
-    nnoremap <Leader>fr <Cmd>RG<CR>
+    nnoremap <silent> <Leader>f <Cmd>Files<CR>
+    nnoremap <silent> <Leader>r <Cmd>RG<CR>
+    nnoremap <silent> <Leader>h <Cmd>BLines<CR>
+    nnoremap <silent> <Leader>b <Cmd>Buffers<CR>
 
-    autocmd! FileType fzf setlocal laststatus=0 noshowmode noruler
-      \ | autocmd BufWinLeave <buffer> setlocal laststatus=2 ruler
+    augroup fzf_setup | autocmd!
+      function! s:on_fzf()
+        let [b:laststatus, b:ruler, b:showmode] = [&laststatus, &ruler, &showmode]
+        autocmd BufEnter <buffer> startinsert
+        autocmd BufWinLeave <buffer> call setwinvar(winnr(), '&laststatus', b:laststatus)
+          \ | call setwinvar(winnr(), '&ruler', b:ruler)
+          \ | call setwinvar(winnr(), '&showmode', b:showmode)
+        setlocal laststatus=0 noshowmode noruler
+      endfunction
+      autocmd! FileType fzf call <SID>on_fzf()
+    augroup END
   
   Plug 'tomtom/tcomment_vim'
     autocmd FileType * setlocal formatoptions-=ro
@@ -286,7 +292,7 @@ call plug#begin(stdpath('data') . '/plugged')
     endfunction
 
     function! LightlineReadonly()
-      return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
+      return &readonly && &buftype != 'help' ? 'RO' : ''
     endfunction
 
     function! LightlineFileformat()

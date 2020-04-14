@@ -76,14 +76,16 @@ set shortmess+=c
 noremap U <C-r>
 
 " jump by words with Alt/Ctrl + arrows
-noremap <A-Left>       b
-imap    <A-Left>  <C-o><A-Left>
-nmap    <C-Left>       <A-Left>
-imap    <C-Left>  <C-o><C-Left>
-noremap <A-Right>      e
-imap    <A-Right> <ESC><A-Right>a
-nmap    <C-Right>      <A-Right>
-imap    <C-Right> <ESC><C-Right>a
+noremap  <A-Left>       b
+imap     <A-Left>  <C-o><A-Left>
+cnoremap <A-Left>       <S-Left>
+nmap     <C-Left>       <A-Left>
+imap     <C-Left>  <C-o><C-Left>
+noremap  <A-Right>      e
+imap     <A-Right> <ESC><A-Right>a
+cnoremap <A-Right>      <S-Right>
+nmap     <C-Right>      <A-Right>
+imap     <C-Right> <ESC><C-Right>a
 
 nmap <S-A-Left>  <S-C-Left>
 nmap <S-A-Right> <S-C-Right>
@@ -94,11 +96,11 @@ vmap <S-A-Right> <S-C-Right>
 
 " <Home> gets you to the first not-blank character on the line
 noremap <silent> <expr> <Home> indent('.')+1 == virtcol('.') ? '0' : '^'
-imap <silent> <Home>   <C-o><Home>
+imap <Home>        <C-o><Home>
 
 vnoremap <silent> <expr> <S-Home> indent('.')+1 == virtcol('.') ? '0' : '^'
-nmap <silent> <S-Home> v<S-Home>
-imap <silent> <S-Home> <C-o><S-Home>
+nmap           <S-Home> v<S-Home>
+imap       <S-Home> <C-o><S-Home>
 
 " select until the end of line without newline character
 vnoremap <S-End> g_
@@ -111,9 +113,46 @@ noremap! <A-BS> <C-w>
 " delete selection with backspace
 vnoremap <BS> "_d
 
-" move by words with <A-arrows> in command line mode
-cnoremap <A-Right> <S-Right>
-cnoremap <A-Left>  <S-Left>
+vnoremap <Tab>   >gv
+vnoremap <S-Tab> <gv
+
+noremap <C-s><Right> <C-w>l
+noremap <C-s><Left>  <C-w>h
+noremap <C-s><Up>    <C-w>k
+noremap <C-s><Down>  <C-w>j
+noremap <C-s>!       <C-w>T
+noremap <C-s>=       <C-w>=
+
+imap <C-s><Right> <C-o><C-s><Right>
+imap <C-s><Left>  <C-o><C-s><Left>
+imap <C-s><Down>  <C-o><C-s><Down>
+imap <C-s><Up>    <C-o><C-s><Up>
+imap <C-s>!       <C-o><C-s>!
+imap <C-s>=       <C-o><C-s>=
+
+tmap <C-s><Right> <C-\><C-n><C-s><Right>
+tmap <C-s><Left>  <C-\><C-n><C-s><Left>
+tmap <C-s><Down>  <C-\><C-n><C-s><Down>
+tmap <C-s><Up>    <C-\><C-n><C-s><Up>
+tmap <C-s>!       <C-\><C-n><C-s>!
+tmap <C-s>=       <C-\><C-n><C-s>=
+
+noremap <silent> <C-s>\     <Cmd>vertical          split <Bar> terminal<CR>
+noremap <silent> <C-s><Bar> <Cmd>vertical botright split <Bar> terminal<CR>
+noremap <silent> <C-s>-     <Cmd>                  split <Bar> terminal<CR>
+noremap <silent> <C-s>_     <Cmd>         botright split <Bar> terminal<CR>
+
+imap <C-s>\     <C-o><C-s>\
+imap <C-s><Bar> <C-o><C-s><Bar>
+imap <C-s>-     <C-o><C-s>-
+imap <C-s>_     <C-o><C-s>_
+
+tmap <C-s>\     <C-\><C-n><C-s>\
+tmap <C-s><Bar> <C-\><C-n><C-s><Bar>
+tmap <C-s>-     <C-\><C-n><C-s>-
+tmap <C-s>_     <C-\><C-n><C-s>_
+
+nnoremap <Leader>b :ls<CR>:b<Space>
 
 " ======= UI ======= "
 " set terminal title
@@ -148,14 +187,21 @@ let g:netrw_browse_split = 2
 let g:netrw_altv = 1
 let g:netrw_winsize = 75
 
-augroup TerminalStuff
-  autocmd!
-  autocmd TermOpen * setlocal
-    \ signcolumn=no
-    \ nonumber
-    \ norelativenumber 
-    \ | startinsert
-augroup END
+if has('nvim')
+  function! s:on_terminal()
+    setlocal signcolumn=no
+    setlocal nonumber
+    setlocal norelativenumber
+    autocmd BufEnter,WinEnter,BufWinEnter <buffer> startinsert
+    " mouse click on terminal buffer brings it to terminal mode
+    nnoremap <buffer> <LeftRelease> <LeftRelease>i
+    startinsert
+  endfunction
+
+  augroup terminal_setup | autocmd!
+    autocmd TermOpen * call <SID>on_terminal()
+  augroup END
+endif
 
 runtime plugins.vim
 

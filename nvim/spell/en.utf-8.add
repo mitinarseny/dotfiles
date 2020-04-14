@@ -5,3 +5,16 @@ nvim
 symlink
 fzf
 TODO
+unindent
+autoindent
+LSP
+esc
+lsp
+getline
+endfunction
+autocmd
+endif
+inoremap
+expr
+regex
+NeoVim

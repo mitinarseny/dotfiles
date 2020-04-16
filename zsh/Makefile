@@ -47,10 +47,14 @@ ifeq (Darwin,$(UNAME))
 	antibody bundle Homebrew/brew kind:fpath path:completions/zsh >> $@
 endif
 
+.PHONY: update
+update: | .antibody
+	antibody update
+
 .PHONY: .antibody
 ifeq (Darwin,$(UNAME))
 .antibody: | .brew
-ifeq (,$(shell command -v antibody))
+ifeq (,$(shell command -v antibody 2> /dev/null))
 	brew install $(ANTIBODY_BREW_FORMULAE)
 endif
 else
@@ -60,7 +64,7 @@ endif
 
 .PHONY: .brew
 .brew:
-ifeq (,$(shell command -v brew))
+ifeq (,$(shell command -v brew 2> /dev/null))
 	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
 endif
 

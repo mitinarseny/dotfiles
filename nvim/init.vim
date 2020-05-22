@@ -19,6 +19,10 @@ if &t_Co > 1
   syntax enable
 endif
 
+set breakindent
+set breakindentopt=sbr
+let &showbreak = '~> '
+
 " disable bells 
 set noerrorbells
 set novisualbell
@@ -34,9 +38,6 @@ set autoread
 
 " keep more lines above and below cursor when scrolling
 set scrolloff=3
-
-" wrap long lines 
-set wrap
 
 " allow <Left> and <Right> move to next/previous line 
 set whichwrap=<,>,[,]
@@ -185,7 +186,7 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 2
 let g:netrw_altv = 1
-let g:netrw_winsize = 75
+let g:netrw_winsize = 85
 
 if has('nvim')
   function! s:on_terminal()
@@ -195,6 +196,7 @@ if has('nvim')
     autocmd BufEnter,WinEnter,BufWinEnter <buffer> startinsert
     " mouse click on terminal buffer brings it to terminal mode
     nnoremap <buffer> <LeftRelease> <LeftRelease>i
+    nnoremap <buffer> <Enter> <Cmd>startinsert<CR>
     startinsert
   endfunction
 

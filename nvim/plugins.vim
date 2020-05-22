@@ -34,13 +34,13 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_highlight_references_enabled = v:true
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
+    " let g:lsp_diagnostics_float_cursor     = v:true
 
     augroup lsp_setup | autocmd!
       " Close preview window with <esc>
       autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
         \ <Plug>(lsp-preview-close)
       autocmd User lsp_float_closed call lsp#ui#vim#references#highlight(v:false)
-        \ | nunmap <buffer> <Esc>
 
       function! s:on_lsp_buffer_enabled() abort
         setlocal omnifunc=lsp#complete
@@ -53,8 +53,9 @@ call plug#begin(stdpath('data') . '/plugged')
         nnoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
         inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
 
-        nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
         nnoremap <buffer> <Leader>lr <Cmd>LspRename<CR>
+        nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
+        nnoremap <buffer> <Leader>li <Cmd>LspImplementation<CR>
         nnoremap <buffer> <Leader>lh <Cmd>LspHover<CR>
       endfunction
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
@@ -264,10 +265,11 @@ call plug#begin(stdpath('data') . '/plugged')
       \     'lsp_ok':       'middle',
       \   },
       \   'component_function': {
-      \     'gitbranch':  'fugitive#head',
-      \     'filename':   'LightlineFilename',
-      \     'fileformat': 'LightlineFileformat',
-      \     'filetype':   'LightlineFiletype',
+      \     'gitbranch':    'fugitive#head',
+      \     'filename':     'LightlineFilename',
+      \     'fileformat':   'LightlineFileformat',
+      \     'filetype':     'LightlineFiletype',
+      \     'fileencoding': 'LightlineFileencoding'
       \   },
       \   'separator':    { 'left': '',  'right': ''  },
       \   'subseparator': { 'left': '|', 'right': '|' },
@@ -292,7 +294,7 @@ call plug#begin(stdpath('data') . '/plugged')
     endfunction
 
     function! LightlineReadonly()
-      return &readonly && &buftype != 'help' ? 'RO' : ''
+      return &readonly && &buftype != 'help' && &filetype != 'netrw' ? 'RO' : ''
     endfunction
 
     function! LightlineFileformat()
@@ -301,6 +303,10 @@ call plug#begin(stdpath('data') . '/plugged')
 
     function! LightlineFiletype()
       return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    endfunction
+
+    function! LightlineFileencoding()
+      return winwidth(0) > 70 ? &fileencoding : ''
     endfunction
 
     function! LightlineLSPWarnings() abort

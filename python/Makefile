@@ -3,6 +3,15 @@ BREW_FORMULAE := python
 UNAME         := $(shell uname -s)
 DOTFILES_ROOT := $(realpath $(CURDIR)/..)
 
+SUBDIRS := $(dir $(wildcard */Makefile))
+
+.PHONY: all
+all: install $(SUBDIRS)
+
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	@$(MAKE) --print-directory --directory $@ $(MAKECMDGOALS)
+
 .PHONY: install
 ifeq (Darwin,$(UNAME))
 install: | .brew

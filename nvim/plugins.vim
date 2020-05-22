@@ -74,7 +74,7 @@ call plug#begin(stdpath('data') . '/plugged')
 
     if executable('pyls')
       augroup LspPython | autocmd!
-        augroup User lsp_setup call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'pyls',
           \ 'cmd': {server_info->['pyls']},
           \ 'whitelist': ['python'],

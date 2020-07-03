@@ -119,7 +119,7 @@ defaults write com.apple.screencapture disable-shadow -bool true
 # tap to click trackpad
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.MultitouchTrackpad TrackpadRotate -bool true
-defaults write com.apple.MultitouchTrackpad TrackpadRightClick -bool 1
+defaults write com.apple.MultitouchTrackpad TrackpadRightClick -bool true
 defaults write com.apple.MultitouchTrackpad FirstClickThreshold -int 1
 defaults write com.apple.MultitouchTrackpad TrackpadPinch -bool true
 

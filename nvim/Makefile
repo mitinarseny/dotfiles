@@ -19,7 +19,7 @@ DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 dotfiles: $(DOTFILES)
 
 $(DOTFILES): $(CONFIG_DIR)/%: %
-	@mkdir -p $@
+	@mkdir -p $(@D)
 	@ln -svf $(realpath $<) $@
 
 .PHONY: install

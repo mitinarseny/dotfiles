@@ -40,7 +40,6 @@ call plug#begin(stdpath('data') . '/plugged')
       " Close preview window with <esc>
       autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
         \ <Plug>(lsp-preview-close)
-      autocmd User lsp_float_closed call lsp#ui#vim#references#highlight(v:false)
 
       function! s:on_lsp_buffer_enabled() abort
         setlocal omnifunc=lsp#complete
@@ -48,15 +47,15 @@ call plug#begin(stdpath('data') . '/plugged')
 
         highlight lspReference cterm=underline
 
-        nnoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
-        inoremap <buffer> <silent> <C-]>                    <Cmd>LspDefinition<CR>
-        nnoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
-        inoremap <buffer> <silent> <C-LeftMouse> <LeftMouse><Cmd>LspDefinition<CR>
+        nmap <buffer> <silent> <C-]>                         <Plug>(lsp-definition)
+        imap <buffer> <silent> <C-]>                    <C-O><Plug>(lsp-definition)
+        nmap <buffer> <silent> <C-LeftMouse> <LeftMouse>     <Plug>(lsp-definition)
+        imap <buffer> <silent> <C-LeftMouse> <LeftMouse><C-o><Plug>(lsp-definition)
 
-        nnoremap <buffer> <Leader>lr <Cmd>LspRename<CR>
-        nnoremap <buffer> <Leader>lu <Cmd>LspReferences<CR>
-        nnoremap <buffer> <Leader>li <Cmd>LspImplementation<CR>
-        nnoremap <buffer> <Leader>lh <Cmd>LspHover<CR>
+        nmap <buffer> <Leader>lr <Plug>(lsp-rename)
+        nmap <buffer> <Leader>lu <Plug>(lsp-references)
+        nmap <buffer> <Leader>li <Plug>(lsp-implementation)
+        nmap <buffer> <Leader>lh <Plug>(lsp-hover)
       endfunction
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
     augroup END

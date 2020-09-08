@@ -14,9 +14,13 @@ dotfiles: $(DOTFILES)
 ~/.tmux.conf: tmux.conf
 	@ln -svf $(realpath $<) $@
 
+ifeq (Darwin, $(UNAME))
+include ../macos/brew.mk
+endif
+
 .PHONY: install
 ifeq (Darwin,$(UNAME))
-install: | .brew
+install: | brew
 ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE)),,B)))
 	brew install $(BREW_FORMULAE)
 endif
@@ -25,10 +29,10 @@ install:
 	$(error only macOS is supported)
 endif
 
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+.PHONY: upgrade
+upgrade:
+ifeq (Darwin,$(UNAME))
+	brew upgrade $(BREW_FORMULAE)
 endif
 
 .PHONY: uninstall

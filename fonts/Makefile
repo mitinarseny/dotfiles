@@ -31,18 +31,16 @@ $(FONT_FILES): $(INSTALL_DIR)/FiraCode-%.ttf: | $(INSTALL_DIR)
 $(INSTALL_DIR):
 	@mkdir -p $@
 
+ifeq (Darwin, $(UNAME))
+include ../macos/brew.mk
+endif
+
 .PHONY: .fc-cache
 ifeq (Darwin,$(UNAME))
-.fc-cache: | .brew
+.fc-cache: | brew
 ifeq (,$(shell brew list --versions fontconfig))
 	brew install fontconfig
 endif
-endif
-
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
 endif
 
 .PHONY: clean

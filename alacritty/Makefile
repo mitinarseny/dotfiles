@@ -21,9 +21,13 @@ $(DOTFILES): $(CONFIG_DIR)/%: % | $(CONFIG_DIR)
 $(CONFIG_DIR):
 	@mkdir -p $@
 
+ifeq (Darwin,$(UNAME))
+include ../macos/brew.mk
+endif
+
 .PHONY: install
 ifeq (Darwin,$(UNAME))
-install: | .brew
+install: | brew
 ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew cask list --versions $(BREW_CASK) 2> /dev/null),,B)))
 	brew cask install $(BREW_CASK)
 endif
@@ -32,10 +36,10 @@ install:
 	$(error only macOS is supported)
 endif
 
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+.PHONY: upgrade
+upgrade:
+ifeq (Darwin,$(UNAME))
+	brew upgrade --cask $(BREW_CASK)
 endif
 
 .PHONY: uninstall

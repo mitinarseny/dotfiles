@@ -17,9 +17,9 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'airblade/vim-rooter'
     let g:rooter_targets       = '*'
-    let g:rooter_silent_chdir  = 1
+    let g:rooter_silent_chdir  = v:true
     let g:rooter_patterns      = ['.git', '.git/']
-    let g:rooter_resolve_links = 1
+    let g:rooter_resolve_links = v:true
 
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'

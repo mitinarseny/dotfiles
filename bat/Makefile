@@ -20,9 +20,13 @@ $(DOTFILES): $(CONFIG_DIR)/%: % | $(CONFIG_DIR)
 $(CONFIG_DIR):
 	@mkdir -p $@
 
+ifeq (Darwin, $(UNAME))
+include ../macos/brew.mk
+endif
+
 .PHONY: install
 ifeq (Darwin,$(UNAME))
-install: | .brew
+install: | brew
 ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE)),,B)))
 	brew install $(BREW_FORMULAE)
 endif
@@ -35,10 +39,10 @@ endif
 cache: | install
 	bat cache --build --source $(CURDIR)
 
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+.PHONY: upgrade
+upgrade:
+ifeq (Darwin,$(UNAME))
+	brew upgrade $(BREW_FORMULAE)
 endif
 
 .PHONY: uninstall

@@ -15,9 +15,13 @@ dotfiles: $(DOTFILES)
 ~/.zshrc: zshrc
 	@ln -svf $(realpath $<) $@
 
+ifeq (Darwin, $(UNAME))
+include ../macos/brew.mk
+endif
+
 .PHONY: install
 ifeq (Darwin,$(UNAME))
-install: | .brew
+install: | brew
 ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE)),,B)))
 	brew install $(BREW_FORMULAE)
 endif
@@ -53,7 +57,7 @@ update: | .antibody
 
 .PHONY: .antibody
 ifeq (Darwin,$(UNAME))
-.antibody: | .brew
+.antibody: | brew
 ifeq (,$(shell command -v antibody 2> /dev/null))
 	brew install $(ANTIBODY_BREW_FORMULAE)
 endif
@@ -62,10 +66,10 @@ else
 	curl --fail --silent --show-error --location git.io/antibody | sh -s - -b /usr/local/bin
 endif
 
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew 2> /dev/null))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+.PHONY: upgrade
+upgrade:
+ifeq (Darwin,$(UNAME))
+	brew upgrade $(BREW_FORMULAE)
 endif
 
 .PHONY: uninstall

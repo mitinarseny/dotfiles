@@ -9,20 +9,21 @@ prompt pure
 command -v fzf > /dev/null || disable-fzf-tab
 FZF_TAB_COMMAND=(
     fzf
-    --ansi   # Enable ANSI color support, necessary for showing groups
-    --expect='$continuous_trigger' # For continuous completion
-    --nth=2,3 --delimiter='\x00'  # Don't search prefix
+    --ansi # Enable ANSI color support, necessary for showing groups
+    --expect='$continuous_trigger,$print_query' # For continuous completion
+    --nth=2,3 --delimiter='\x00' # Don't search prefix
     # '--color=hl:$(( $#headers == 0 ? 108 : 255 ))'
     --layout=reverse --height='${FZF_TMUX_HEIGHT:=30%}' --min-height=12
     --tiebreak=begin -m --bind=tab:down,btab:up,change:top,ctrl-space:toggle --cycle
-    '--query=$query'   # $query will be expanded to query string at runtime.
+    '--query=$query' # $query will be expanded to query string at runtime.
     '--header-lines=$#headers' # $#headers will be expanded to lines of headers at runtime
+    --print-query
 )
 zstyle ':fzf-tab:*' command $FZF_TAB_COMMAND
 zstyle ':fzf-tab:*' insert-space false
 
 # white color is there is no group
-zstyle ':fzf-tab:*' $'\033[37m'
+zstyle ':fzf-tab:*' no-group-color $'\033[37m'
 
 # do not show groups if only one available
 zstyle ':fzf-tab:*' single-group ''
@@ -45,7 +46,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS
 FAST_HIGHLIGHT[whatis_chroma_type]=0
 
 ####### zsh-users/zsh-history-substring-search #######
-bindkey '\e[A'   history-substring-search-up
+bindkey '\e[A' history-substring-search-up
 bindkey '\e[B' history-substring-search-down
 typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=black,bg=cyan'
 typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=white,bg=red'

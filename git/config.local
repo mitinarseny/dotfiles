@@ -8,3 +8,6 @@
   type = cat-file -t
   dump = cat-file -p
   unstage = reset HEAD
+
+[pull]
+  rebase = false

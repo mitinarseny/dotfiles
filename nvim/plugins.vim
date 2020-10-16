@@ -59,6 +59,16 @@ call plug#begin(stdpath('data') . '/plugged')
       endfunction
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
     augroup END
+
+    if executable('clangd')
+      augroup LspCxx | autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'clangd',
+          \ 'cmd': {server_info->['clangd', '-background-index']},
+          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+          \ })
+      augroup END
+    endif
  
     if executable('gopls')
       augroup LspGo | autocmd!

@@ -18,6 +18,11 @@ node_modules/
 *.sublime-*
 .vscode/
 .idea/
+.vimrc
+.nvimrc
 
 # ctags
 .tags
+
+# clang
+.clangd/

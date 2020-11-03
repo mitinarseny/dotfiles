@@ -400,6 +400,8 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:vim_markdown_conceal             = v:false
     let g:vim_markdown_conceal_code_blocks = v:false
 
+  Plug 'cdelledonne/vim-cmake'
+
 call plug#end()
 
 colorscheme nord

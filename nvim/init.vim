@@ -2,6 +2,10 @@ set encoding=utf-8
 scriptencoding utf-8
 
 " ======= General ======= "
+" execute local .vimrc
+set exrc
+" do not allow autocmd, shell and write commands in local .vimrc
+set secure
 " change <Leader> to comma
 let mapleader = ","
 

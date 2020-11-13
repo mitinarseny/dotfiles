@@ -1,48 +1,19 @@
+include ../utils.mk
+.DEFAULT_GOAL :=
+
 CONFIG_DIR    := ~/.config/git
 BREW_FORMULAE := git
+
 ifneq (,$(shell command -v nvim))
 EDITOR := nvim
 else
 EDITOR := vim
 endif
 
-UNAME         := $(shell uname -s)
-DOTFILES_ROOT := $(realpath $(CURDIR)/..)
-
 ifeq (Darwin,$(UNAME))
 CREDENTIALS_HELPER := osxkeychain
 else
 CREDENTIALS_HELPER := cache
-endif
-
-.PHONY: all
-all: install dotfiles
-
-ifeq (Darwin, $(UNAME))
-include ../macos/brew.mk
-endif
-
-.PHONY: install
-ifeq (Darwin,$(UNAME))
-install: | brew
-ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE)),,B)))
-	brew install $(BREW_FORMULAE)
-endif
-else
-install:
-	$(error only macOS is supported)
-endif
-
-.PHONY: upgrade
-upgrade:
-ifeq (Darwin,$(UNAME))
-	brew upgrade $(BREW_FORMULAE)
-endif
-
-.PHONY: uninstall
-uninstall:
-ifeq (Darwin,$(UNAME))
-	brew uninstall $(BREW_FORMULAE)
 endif
 
 .PHONY: dotfiles
@@ -73,10 +44,16 @@ $(CONFIG_DIR)/config:
 	[ -e ~/.gitconfig ] && mv ~/.gitconfig $@ || touch $@
 
 
-.PHONY: .brew
-.brew:
-ifeq (,$(shell command -v brew))
-	$(MAKE) -C $(DOTFILES_ROOT)/macos brew
+.PHONY: install upgrade uninstall
+ifeq (Darwin,$(UNAME))
+install: | brew
+	brew install $(BREW_FORMULAE)
+
+upgrade:
+	brew upgrade $(BREW_FORMULAE)
+
+uninstall:
+	brew uninstall $(BREW_FORMULAE)
 endif
 
 .PHONY: clean

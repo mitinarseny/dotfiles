@@ -1,11 +1,20 @@
-UNAME := $(shell uname -s)
+include utils.mk
 
-SUBDIRS := $(dir $(wildcard */Makefile))
-
-MACOS_SPECIFIC := macos
+SUBDIRS := \
+	alacritty \
+	bat \
+	editorconfig \
+	fonts \
+	git \
+	inputrc \
+	less \
+	nvim \
+	python \
+	tmux \
+	zsh
 
 ifeq (Darwin,$(UNAME))
-SUBDIRS := $(filter-out $(addsuffix /,$(MACOS_SPECIFIC)),$(SUBDIRS))
+SUBDIRS += macos
 endif
 
 .PHONY: all
@@ -13,7 +22,7 @@ all: $(SUBDIRS)
 
 .PHONY: $(SUBDIRS)
 $(SUBDIRS):
-	@$(MAKE) --print-directory --directory $@ $(MAKECMDGOALS)
+	@$(MAKE) --print-directory --directory $@
 
 .PHONY: update
 update: pull all
@@ -21,7 +30,3 @@ update: pull all
 .PHONY: pull
 pull:
 	git pull origin
-
-.PHONY: test
-test: $(SUBDIRS)
-

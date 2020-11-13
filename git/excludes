@@ -24,5 +24,7 @@ node_modules/
 # ctags
 .tags
 
+.cache/
 # clang
 .clangd/
+compile_commands.json

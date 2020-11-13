@@ -1,11 +1,8 @@
-ifneq (Darwin,$(shell uname -s))
-$(error not macOS)
-endif
+include brew.mk
+.DEFAULT_GOAL :=
 
 .PHONY: all
 all: brew defaults
-
-include brew.mk
 
 .PHONY: defaults
 defaults: set-defaults.sh

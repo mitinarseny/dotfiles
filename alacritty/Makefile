@@ -1,13 +1,8 @@
-CONFIG_DIR := $(HOME)/.config/alacritty
+include ../utils.mk
+.DEFAULT_GOAL :=
+
 BREW_CASK  := alacritty
-
-UNAME         := $(shell uname -s)
-DOTFILES_ROOT := $(realpath $(CURDIR)/..)
-
-
-.PHONY: all
-all: dotfiles install
-
+CONFIG_DIR := $(HOME)/.config/alacritty
 DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 	alacritty.yml \
 	)
@@ -15,36 +10,19 @@ DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 .PHONY: dotfiles
 dotfiles: $(DOTFILES)
 
-$(DOTFILES): $(CONFIG_DIR)/%: % | $(CONFIG_DIR)
+$(DOTFILES): $(CONFIG_DIR)/%: %
+	@mkdir -p $(@D)
 	@ln -svf $(realpath $<) $@
 
-$(CONFIG_DIR):
-	@mkdir -p $@
-
-ifeq (Darwin,$(UNAME))
-include ../macos/brew.mk
-endif
-
-.PHONY: install
+.PHONY: install upgrade uninstall
 ifeq (Darwin,$(UNAME))
 install: | brew
-ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew cask list --versions $(BREW_CASK) 2> /dev/null),,B)))
 	brew cask install $(BREW_CASK)
-endif
-else
-install:
-	$(error only macOS is supported)
-endif
 
-.PHONY: upgrade
 upgrade:
-ifeq (Darwin,$(UNAME))
 	brew upgrade --cask $(BREW_CASK)
-endif
 
-.PHONY: uninstall
 uninstall:
-ifeq (Darwin,$(UNAME))
 	brew cask uninstall $(BREW_CASK)
 endif
 

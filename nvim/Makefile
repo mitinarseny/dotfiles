@@ -1,17 +1,14 @@
-CONFIG_DIR    := $(HOME)/.config/nvim
-BREW_FORMULAE := neovim
+include ../utils.mk
+.DEFAULT_GOAL :=
 
-UNAME         := $(shell uname -s)
-DOTFILES_ROOT := $(realpath $(CURDIR)/..)
-
-.PHONY: all
-all: dotfiles install
+CONFIG_DIR   := $(HOME)/.config/nvim
+BREW_FORMULA := neovim
 
 DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 		init.vim \
 		plugins.vim \
 		coc-settings.json \
-		$(wildcard ftplugin/*) \
+		$(wildcard ftplugin/*.vim) \
 		$(wildcard spell/*.*.add) \
 	)
 
@@ -22,31 +19,33 @@ $(DOTFILES): $(CONFIG_DIR)/%: %
 	@mkdir -p $(@D)
 	@ln -svf $(realpath $<) $@
 
-ifeq (Darwin, $(UNAME))
-include ../macos/brew.mk
-endif
-
-.PHONY: install
+.PHONY: install upgrade uninstall
 ifeq (Darwin,$(UNAME))
 install: | brew
-ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE) 2> /dev/null),,B)))
-	brew install $(BREW_FORMULAE)
-endif
-else
-install:
-	$(error only macOS is supported)
-endif
+	brew install $(BREW_FORMULA)
 
-.PHONY: upgrade
 upgrade:
-ifeq (Darwin,$(UNAME))
-	brew upgrade $(BREW_FORMULAE)
+	brew upgrade $(BREW_FORMULA)
+
+uninstall:
+	brew uninstall $(BREW_FORMULA)
 endif
 
-.PHONY: uninstall
-uninstall:
+.PHONY: lsp
+lsp: $(addprefix lsp_,\
+		clangd \
+		gopls \
+		pyls \
+		yaml-language-server \
+		vim-language-server \
+		bash-language-server \
+		docker-langserver \
+	)
+
+.PHONY: lsp_clangd
 ifeq (Darwin,$(UNAME))
-	brew uninstall $(BREW_FORMULAE)
+lsp_clangd: | brew
+	brew install llvm
 endif
 
 .PHONY: clean

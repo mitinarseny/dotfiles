@@ -1,12 +1,8 @@
-CONFIG_DIR    := $(HOME)/.config/bat
-BREW_FORMULAE := bat
+include ../utils.mk
+.DEFAULT_GOAL :=
 
-UNAME         := $(shell uname -s)
-DOTFILES_ROOT := $(realpath $(CURDIR)/..)
-
-.PHONY: all
-all: dotfiles install cache
-
+BREW_FORMULA := bat
+CONFIG_DIR   := $(HOME)/.config/bat
 DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 	config \
 	)
@@ -14,42 +10,25 @@ DOTFILES := $(addprefix $(CONFIG_DIR)/,\
 .PHONY: dotfiles
 dotfiles: $(DOTFILES)
 
-$(DOTFILES): $(CONFIG_DIR)/%: % | $(CONFIG_DIR)
+$(DOTFILES): $(CONFIG_DIR)/%: %
+	@mkdir -p $(@D)
 	@ln -svf $(realpath $<) $@
 
-$(CONFIG_DIR):
-	@mkdir -p $@
-
-ifeq (Darwin, $(UNAME))
-include ../macos/brew.mk
-endif
-
-.PHONY: install
+.PHONY: install upgrade uninstall
 ifeq (Darwin,$(UNAME))
 install: | brew
-ifneq (,$(or $(findstring B,$(MAKEFLAGS)),$(if $(shell brew list --versions $(BREW_FORMULAE)),,B)))
-	brew install $(BREW_FORMULAE)
-endif
-else
-install:
-	$(error only macOS is supported)
+	brew install $(BREW_FORMULA)
+
+upgrade:
+	brew upgrade $(BREW_FORMULA)
+
+uninstall:
+	brew uninstall $(BREW_FORMULA)
 endif
 
 .PHONY: cache
 cache: | install
 	bat cache --build --source $(CURDIR)
-
-.PHONY: upgrade
-upgrade:
-ifeq (Darwin,$(UNAME))
-	brew upgrade $(BREW_FORMULAE)
-endif
-
-.PHONY: uninstall
-uninstall:
-ifeq (Darwin,$(UNAME))
-	brew uninstall $(BREW_FORMULAE)
-endif
 
 .PHONY: clean
 clean:

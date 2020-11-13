@@ -1,8 +1,17 @@
 # [NeoVim](https://neovim.io)
 
 ## Install
+
+### Dotfiles
+
 ```sh
-make
+make dotfiles
+```
+
+### NeoVim
+
+```sh
+make install
 ```
 
 ## Commands

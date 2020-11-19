@@ -7,14 +7,19 @@
     <p align="center">
       <a href="https://github.com/mitinarseny/dotfiles/actions"><img alt="GitHub Actions" src="https://github.com/mitinarseny/dotfiles/workflows/CI/badge.svg"></a>
     </p>
-        <a href="https://github.com/mitinarseny/dotfiles">
-        <img src=".assets/screenshot.png" alt="screenshot" width="100%" />
-    </a>
 </p>
 
 ## Install
 
+### Using [cURL](https://curl.se)
+
 ```sh
 curl -fsSL https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
+```
+
+### Using [wget](https://www.gnu.org/software/wget)
+
+```sh
+wget -O - https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
 ```
 

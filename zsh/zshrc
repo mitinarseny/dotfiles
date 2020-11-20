@@ -52,6 +52,9 @@ _zcompinit_custom() {
   fi
 }
 
+[ -d ~/.local/bin ] || mkdir -p ~/.local/bin
+export PATH="${HOME}/.local/bin:${PATH}"
+
 fpath+=("${${(%):-%x}:P:h}/functions")
 autoload -Uz ${${(%):-%x}:P:h}/functions/*(.:t)
 

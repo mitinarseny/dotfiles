@@ -69,13 +69,6 @@ for file in ${(M)config_files:#*/path.zsh}; do
   . "${file}"
 done
 
-# load plugins
-if [ -r "${HOME}/.zsh_plugins.sh" ]; then
-  . "${${(%):-%x}:P:h}/_pre_plugins.zsh"
-  . "${HOME}/.zsh_plugins.sh"
-  . "${${(%):-%x}:P:h}/_post_plugins.zsh"
-fi
-
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
   . "${file}"
@@ -83,6 +76,13 @@ done
 
 # init completion
 _zcompinit_custom
+
+# load plugins
+if [ -r "${HOME}/.zsh_plugins.sh" ]; then
+  . "${${(%):-%x}:P:h}/_pre_plugins.zsh"
+  . "${HOME}/.zsh_plugins.sh"
+  . "${${(%):-%x}:P:h}/_post_plugins.zsh"
+fi
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}; do

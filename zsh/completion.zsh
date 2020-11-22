@@ -37,7 +37,7 @@ zstyle ':completion:*:options' auto-description '%d'
 
 
 if [[ -v functions[fzf-tab-complete] ]]; then
-  zstyle ':completion:*:descriptions' format '-- %d --'
+  zstyle ':completion:*:descriptions' format '[%d]'
 else
   zstyle ':completion:*'              format ' %F{yellow}-- %d --%f'
   zstyle ':completion:*:corrections'  format ' %F{green}-- %d (errors: %e) --%f'

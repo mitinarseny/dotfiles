@@ -7,8 +7,7 @@ prompt pure
 
 ####### Aloxaf/fzf-tab#fzf-tab #######
 command -v fzf > /dev/null || disable-fzf-tab
-FZF_TAB_COMMAND=(
-    fzf
+FZF_TAB_FLAGS=(
     --ansi # Enable ANSI color support, necessary for showing groups
     --expect='$continuous_trigger,$print_query' # For continuous completion
     --nth=2,3 --delimiter='\x00' # Don't search prefix
@@ -19,11 +18,16 @@ FZF_TAB_COMMAND=(
     '--header-lines=$#headers' # $#headers will be expanded to lines of headers at runtime
     --print-query
 )
-zstyle ':fzf-tab:*' command $FZF_TAB_COMMAND
+
+zstyle ':fzf-tab:*' fzf_flags $FZF_TAB_FLAGS
+
 zstyle ':fzf-tab:*' insert-space false
 
+# no prefix to indicate color
+zstyle ':fzf-tab:*:' prefix ''
+
 # white color is there is no group
-zstyle ':fzf-tab:*' no-group-color $'\033[37m'
+zstyle ':fzf-tab:*' default-color $'\033[37m'
 
 # do not show groups if only one available
 zstyle ':fzf-tab:*' single-group ''

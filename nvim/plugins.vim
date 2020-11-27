@@ -60,88 +60,78 @@ call plug#begin(stdpath('data') . '/plugged')
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
     augroup END
 
-    if executable('clangd')
-      augroup LspCxx | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'clangd',
-          \ 'cmd': {server_info->['clangd', '-background-index']},
-          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-          \ })
-      augroup END
-    endif
- 
-    if executable('gopls')
-      augroup LspGo | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'gopls',
-          \ 'cmd': {server_info->['gopls']},
-          \ 'whitelist': ['go'],
-          \ })
-        autocmd BufWritePre *.go LspDocumentFormatSync
-      augroup END
-    endif
+    augroup Lsp | autocmd!
+      let s:lsp_asked_for_install = {}
+      " ensure_executable checks for given executable and install it with
+      " given function of funcref in case it was not found.
+      " It returns given cmd if found or installed successfully
+      " or empty array otherwise
+      function! s:ensure_executable(executable, install, cmd) abort
+        if !get(s:lsp_asked_for_install, a:executable, v:false) && !executable(a:executable)
+          let s:lsp_asked_for_install[a:executable] = v:true
+          if confirm("'" . a:executable . "' is not found. Install?", "&Yes\n&No", 1) == 2
+            return []
+          endif
+          call a:install()
+        endif
+        return a:cmd
+      endfunction
+     
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'Cxx',
+        \ 'cmd': {server_info -> <SID>ensure_executable('clangd', {->1}, ['clangd', '-background-index'])},
+        \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
 
-    if executable('pyls')
-      augroup LspPython | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pyls',
-          \ 'cmd': {server_info->['pyls']},
-          \ 'whitelist': ['python'],
-          \ })
-      augroup END
-    endif
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'Golang',
+        \ 'cmd': {server_info -> <SID>ensure_executable('gopls', {->1}, ['gopls'])},
+        \ 'allowlist': ['go'],
+        \ })
 
-    if executable('yaml-language-server')
-      augroup LspYaml | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'yaml-language-server',
-          \ 'cmd': {server_info->['yaml-language-server', '--stdio']},
-          \ 'whitelist': ['yaml', 'yaml.ansible'],
-          \ 'workspace_config': {
-          \   'yaml': {
-          \     'validate': v:true,
-          \     'hover': v:true,
-          \     'completion': v:true,
-          \     'customTags': [],
-          \     'schemas': {},
-          \     'schemaStore': { 'enable': v:true },
-          \   }
-          \ }})
-      augroup END
-    endif
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'Python',
+        \ 'cmd': {server_info -> <SID>ensure_executable('pyls', {->1}, ['pyls'])},
+        \ 'allowlist': ['python'],
+        \ })
 
-    if executable('vim-language-server')
-      augroup LspVim | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'vim-language-server',
-          \ 'cmd': {server_info->['vim-language-server', '--stdio']},
-          \ 'whitelist': ['vim'],
-          \ 'initialization_options': {
-          \   'vimruntime': $VIMRUNTIME,
-          \   'runtimepath': &rtp,
-          \ }})
-      augroup END
-    endif
- 
-    if executable('bash-language-server')
-      augroup LspSh | autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'bash-language-server',
-          \ 'cmd': {server_info->['bash-language-server', 'start']},
-          \ 'whitelist': ['sh'],
-          \ })
-      augroup END
-    endif
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'YAML',
+        \ 'cmd': {server_info -> <SID>ensure_executable('yaml-language-server', {->1}, ['yaml-language-server', '--stdio'])},
+        \ 'allowlist': ['yaml', 'yaml.ansible'],
+        \ 'workspace_config': {
+        \   'yaml': {
+        \     'validate': v:true,
+        \     'hover': v:true,
+        \     'completion': v:true,
+        \     'customTags': [],
+        \     'schemas': {},
+        \     'schemaStore': { 'enable': v:true },
+        \   },
+        \ }})
 
-    if executable('docker-langserver')
-      augroup LspDocker | autocmd!
-        augroup User lsp_setup call lsp#register_server({
-          \ 'name': 'docker-langserver',
-          \ 'cmd': {server_info->['docker-langserver', '--stdio']},
-          \ 'whitelist': ['dockerfile'],
-          \ })
-      augroup END
-    endif
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'VIM',
+        \ 'cmd': {server_info -> <SID>ensure_executable('vim-language-server', {->1}, ['vim-language-server', '--stdio'])},
+        \ 'allowlist': ['vim'],
+        \ 'initialization_options': {
+        \   'vimruntime': $VIMRUNTIME,
+        \   'runtimepath': &rtp,
+        \ }})
+
+
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'Bash',
+        \ 'cmd': {server_info -> <SID>ensure_executable('bash-language-server', {->1}, ['bash-language-server', 'start'])},
+        \ 'allowlist': ['sh'],
+        \ })
+
+      autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'Docker',
+        \ 'cmd': {server_info -> <SID>ensure_executable('docker-language-server', {->1}, ['docker-langserver', '--stdio'])},
+        \ 'allowlist': ['dockerfile'],
+        \ })
+    augroup END
 
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'

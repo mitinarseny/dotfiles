@@ -72,32 +72,60 @@ call plug#begin(stdpath('data') . '/plugged')
           if confirm("'" . a:executable . "' is not found. Install?", "&Yes\n&No", 1) == 2
             return []
           endif
-          call a:install()
+          try
+            call a:install()
+          catch
+            echo 'unable to install: ' . v:exception
+          endtry
         endif
         return a:cmd
       endfunction
-     
+
+      function! s:lsp_install_clangd() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Cxx',
-        \ 'cmd': {server_info -> <SID>ensure_executable('clangd', {->1}, ['clangd', '-background-index'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('clangd',
+            \ funcref('<SID>lsp_install_clangd'),
+            \ ['clangd', '-background-index'])},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 
+      function! s:lsp_install_gopls() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Golang',
-        \ 'cmd': {server_info -> <SID>ensure_executable('gopls', {->1}, ['gopls'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('gopls',
+            \ funcref('<SID>lsp_install_gopls'),
+            \ ['gopls'])},
         \ 'allowlist': ['go'],
         \ })
 
+      function! s:lsp_install_pyls() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Python',
-        \ 'cmd': {server_info -> <SID>ensure_executable('pyls', {->1}, ['pyls'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('pyls',
+            \ funcref('<SID>lsp_install_pyls'),
+            \ ['pyls'])},
         \ 'allowlist': ['python'],
         \ })
 
+      function! s:lsp_install_yaml_language_server() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'YAML',
-        \ 'cmd': {server_info -> <SID>ensure_executable('yaml-language-server', {->1}, ['yaml-language-server', '--stdio'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('yaml-language-server',
+            \ funcref('<SID>lsp_install_yaml_language_server'),
+            \ ['yaml-language-server', '--stdio'])},
         \ 'allowlist': ['yaml', 'yaml.ansible'],
         \ 'workspace_config': {
         \   'yaml': {
@@ -110,25 +138,42 @@ call plug#begin(stdpath('data') . '/plugged')
         \   },
         \ }})
 
+      function! s:lsp_install_vim_language_server() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'VIM',
-        \ 'cmd': {server_info -> <SID>ensure_executable('vim-language-server', {->1}, ['vim-language-server', '--stdio'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('vim-language-server',
+            \ funcref('<SID>lsp_install_vim_language_server'),
+            \ ['vim-language-server', '--stdio'])},
         \ 'allowlist': ['vim'],
         \ 'initialization_options': {
         \   'vimruntime': $VIMRUNTIME,
         \   'runtimepath': &rtp,
         \ }})
 
-
+      function! s:lsp_install_bash_language_server() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Bash',
-        \ 'cmd': {server_info -> <SID>ensure_executable('bash-language-server', {->1}, ['bash-language-server', 'start'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('bash-language-server',
+            \ funcref('<SID>lsp_install_bash_language_server'),
+            \ ['bash-language-server', 'start'])},
         \ 'allowlist': ['sh'],
         \ })
 
+      function! s:lsp_install_docker_language_serer() abort
+        throw 'not supported'
+      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Docker',
-        \ 'cmd': {server_info -> <SID>ensure_executable('docker-language-server', {->1}, ['docker-langserver', '--stdio'])},
+        \ 'cmd': {server_info ->
+          \ <SID>ensure_executable('docker-language-server',
+            \ funcref('<SID>lsp_install_docker_language_server'),
+            \ ['docker-langserver', '--stdio'])},
         \ 'allowlist': ['dockerfile'],
         \ })
     augroup END

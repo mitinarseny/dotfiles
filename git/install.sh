@@ -6,12 +6,12 @@ CONFIG_DIR=~/.config/git
 
 cd "$(dirname "$0")"
 
-if ! git config --global --get include.path "$(readlink -ev config.local)" > /dev/null; then
-  git config --global --add include.path $(readlink -ev config.local)
+if ! git config --global --get include.path "$(pwd -P)"/config.local > /dev/null; then
+  git config --global --add include.path "$(pwd -P)"/config.local
 fi
 
-if ! git config --global --get core.excludesfile "$(readlink -ev excludes)" > /dev/null; then
-  git config --global --add core.excludesfile $(readlink -ev excludes)
+if ! git config --global --get core.excludesfile "$(pwd -P)"/excludes > /dev/null; then
+  git config --global --add core.excludesfile "$(pwd -P)"/excludes
 fi
 
 if ! git config --global --get credential.helper > /dev/null; then

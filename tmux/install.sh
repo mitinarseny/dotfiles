@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
 cd "$(dirname "$0")"
-ln -sfv $(readlink -ev tmux.conf) ~/.tmux.conf
+ln -sfv "$(pwd -P)"/tmux.conf ~/.tmux.conf

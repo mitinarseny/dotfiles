@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 cd "$(dirname "$0")"
-ln -sfv $(readlink -ev zshrc) ~/.zshrc
+ln -sfv "$(pwd -P)"/zshrc ~/.zshrc
 
 # check if CI
 [ -z "${CI+x}" ] && exit

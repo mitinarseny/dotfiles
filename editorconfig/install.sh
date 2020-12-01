@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
 cd "$(dirname "$0")"
-ln -sfv $(readlink -ev editorconfig) ~/.editorconfig
+ln -sfv "$(pwd -P)"/editorconfig ~/.editorconfig

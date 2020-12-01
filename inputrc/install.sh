@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
 cd "$(dirname "$0")"
-ln -sfv $(readlink -ev inputrc) ~/.inputrc
+ln -sfv "$(pwd -P)"/inputrc ~/.inputrc

@@ -1,6 +1,10 @@
 env:
   TERM: xterm-256color
 
+window:
+  decorations: none
+  startup_mode: Maximized
+
 font:
   size: 11.0
   # The normal (roman) font face to use.

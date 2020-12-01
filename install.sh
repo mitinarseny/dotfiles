@@ -1,8 +1,6 @@
-#!/bin/sh -e
-
-. ./helpers.sh
+#!/bin/sh
 
 for i in */install.sh; do
-  log_info "Installing $(dirname $i)...\n"
-  cd "$(dirname $i)" && ./$(basename $i)
+  echo "--> $(dirname $i)"
+  $i
 done

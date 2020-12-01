@@ -14,6 +14,6 @@
 ```sh
 $ git clone https://github.com/mitinarseny/dotfiles ~/.dotfiles
 $ cd ~/.dotfiles
-$ ./install
+$ ./install.sh
 ```
 

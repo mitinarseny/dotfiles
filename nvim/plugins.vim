@@ -61,70 +61,46 @@ call plug#begin(stdpath('data') . '/plugged')
     augroup END
 
     augroup Lsp | autocmd!
-      let s:lsp_asked_for_install = {}
-      " ensure_executable checks for given executable and install it with
-      " given function of funcref in case it was not found.
-      " It returns given cmd if found or installed successfully
-      " or empty array otherwise
-      function! s:ensure_executable(executable, install, cmd) abort
-        if !get(s:lsp_asked_for_install, a:executable, v:false) && !executable(a:executable)
-          let s:lsp_asked_for_install[a:executable] = v:true
-          if confirm("'" . a:executable . "' is not found. Install?", "&Yes\n&No", 1) == 2
-            return []
-          endif
-          try
-            call a:install()
-          catch
-            echo 'unable to install: ' . v:exception
-          endtry
+      function! s:ensure_executable(executable, install_help, cmd) abort
+        if !executable(a:executable)
+          echo "'" . a:executable . "' not found in PATH. Install: " . a:install_help
+          return []
         endif
         return a:cmd
       endfunction
 
-      function! s:lsp_install_clangd() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Cxx',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('clangd',
-            \ funcref('<SID>lsp_install_clangd'),
+            \ 'https://clangd.llvm.org',
             \ ['clangd', '-background-index'])},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 
-      function! s:lsp_install_gopls() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Golang',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('gopls',
-            \ funcref('<SID>lsp_install_gopls'),
+            \ 'https://github.com/golang/tools/tree/master/gopls',
             \ ['gopls'])},
         \ 'allowlist': ['go'],
         \ })
 
-      function! s:lsp_install_pyls() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Python',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('pyls',
-            \ funcref('<SID>lsp_install_pyls'),
+            \ 'https://github.com/palantir/python-language-server',
             \ ['pyls'])},
         \ 'allowlist': ['python'],
         \ })
 
-      function! s:lsp_install_yaml_language_server() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'YAML',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('yaml-language-server',
-            \ funcref('<SID>lsp_install_yaml_language_server'),
+            \ 'https://github.com/redhat-developer/yaml-language-server',
             \ ['yaml-language-server', '--stdio'])},
         \ 'allowlist': ['yaml', 'yaml.ansible'],
         \ 'workspace_config': {
@@ -138,14 +114,11 @@ call plug#begin(stdpath('data') . '/plugged')
         \   },
         \ }})
 
-      function! s:lsp_install_vim_language_server() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'VIM',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('vim-language-server',
-            \ funcref('<SID>lsp_install_vim_language_server'),
+            \ 'https://github.com/iamcco/vim-language-server',
             \ ['vim-language-server', '--stdio'])},
         \ 'allowlist': ['vim'],
         \ 'initialization_options': {
@@ -153,26 +126,20 @@ call plug#begin(stdpath('data') . '/plugged')
         \   'runtimepath': &rtp,
         \ }})
 
-      function! s:lsp_install_bash_language_server() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Bash',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('bash-language-server',
-            \ funcref('<SID>lsp_install_bash_language_server'),
+            \ 'https://github.com/bash-lsp/bash-language-server',
             \ ['bash-language-server', 'start'])},
         \ 'allowlist': ['sh'],
         \ })
 
-      function! s:lsp_install_docker_language_serer() abort
-        throw 'not supported'
-      endfunction
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Docker',
         \ 'cmd': {server_info ->
           \ <SID>ensure_executable('docker-language-server',
-            \ funcref('<SID>lsp_install_docker_language_server'),
+            \ 'https://github.com/rcjsuen/dockerfile-language-server-nodejs',
             \ ['docker-langserver', '--stdio'])},
         \ 'allowlist': ['dockerfile'],
         \ })

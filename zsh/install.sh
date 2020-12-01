@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 ln -sfv "$(pwd -P)"/zshrc ~/.zshrc
 
 # check if CI
-[ -z "${CI+x}" ] && exit
+[ -n "${CI+x}" ] && exit
 
 if ! command -v antibody > /dev/null; then
   curl --fail --silent --show-error --location git.io/antibody | sh -s - -b /usr/local/bin

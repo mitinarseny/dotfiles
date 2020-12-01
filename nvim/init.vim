@@ -121,12 +121,7 @@ vnoremap <BS> "_d
 vnoremap <Tab>   >gv
 vnoremap <S-Tab> <gv
 
-noremap <C-s><Right> <C-w>l
-noremap <C-s><Left>  <C-w>h
-noremap <C-s><Up>    <C-w>k
-noremap <C-s><Down>  <C-w>j
-noremap <C-s>!       <C-w>T
-noremap <C-s>=       <C-w>=
+noremap <C-w>! <C-w>T
 
 imap <C-s><Right> <C-o><C-s><Right>
 imap <C-s><Left>  <C-o><C-s><Left>
@@ -142,10 +137,10 @@ tmap <C-s><Up>    <C-\><C-n><C-s><Up>
 tmap <C-s>!       <C-\><C-n><C-s>!
 tmap <C-s>=       <C-\><C-n><C-s>=
 
-noremap <silent> <C-s>\     <Cmd>vertical          split <Bar> terminal<CR>
-noremap <silent> <C-s><Bar> <Cmd>vertical botright split <Bar> terminal<CR>
-noremap <silent> <C-s>-     <Cmd>                  split <Bar> terminal<CR>
-noremap <silent> <C-s>_     <Cmd>         botright split <Bar> terminal<CR>
+noremap <silent> <C-w>\     <Cmd>vertical          split<CR>
+noremap <silent> <C-w><Bar> <Cmd>vertical botright split<CR>
+noremap <silent> <C-w>-     <Cmd>                  split<CR>
+noremap <silent> <C-w>_     <Cmd>         botright split<CR>
 
 imap <C-s>\     <C-o><C-s>\
 imap <C-s><Bar> <C-o><C-s><Bar>
@@ -172,15 +167,12 @@ set number
 set cursorline
 
 " indentation guides for tabs
-set list listchars=tab:\|\ 
+set list listchars=tab:\|\ ,trail:-
 
 " always show sign columns
 set signcolumn=yes
 
-" prefer split to the right
-set splitright
-" prefer split below
-set splitbelow
+set noequalalways
 
 " limit completion menu size
 set pumheight=10

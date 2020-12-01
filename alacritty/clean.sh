@@ -1,4 +1,6 @@
 #!/bin/sh -e
 
-rm -f \
+. ../helpers.sh
+
+remove \
   ~/.config/alacritty/alacritty.yml

@@ -1,37 +1,40 @@
 #!/bin/sh -e 
 
-readonly DOTFILES_ROOT="$(git rev-parse --show-toplevel)"
-
-readonly OS="$(uname -s)"
-
 color () {
   local color=$1
   shift
   printf "$(tput setaf ${color})$*$(tput sgr0)"
 }
 
-info () {
-  printf "$(color 2 "[INFO]") $*"
+log_info () {
+  printf "$(color 2 "INFO:") $*" >&2
 }
 
-warning () {
-  printf "$(color 3 "[WARN]") $*"
+log_warning () {
+  printf "$(color 3 "WARN:") $*" >&2
 }
 
-error () {
-  printf "$(color 1 "[ERROR]") $*"
+log_error () {
+  printf "$(color 1 "ERROR:") $*" >&2
   exit 1
 }
 
-exe () {
-  printf "$(color 2 "[$]") $*\n"
-  $*
-}
 
 add_prefix () {
   local prefix=$1
   shift
   printf "${prefix}%s\n" $*
+}
+
+cannonicalize () {
+  printf "%s/%s" $(dirname $1) $(basename $1)
+}
+
+remove () {
+  for f in $*; do
+    log_info "$(color 3 "[R]") $f\n"
+    rm -f $f
+  done
 }
 
 symlink () {
@@ -40,7 +43,13 @@ symlink () {
   local sources
   sources="$(readlink -ev $*)"
 
-  ln -sfv ${sources} "${target}"
+  for s in ${sources}; do
+    local t="$(cannonicalize "${target}$([ -d "${target}" ] && printf "/" && basename "$s")")"
+    log_info "$(color 2 "[L]") $t -> $s\n"
+    ln -sf "$s" "$t"
+  done
+
+  # ln -sfv ${sources} "${target}"
 }
 
 symlink_into_dir () {
@@ -55,19 +64,11 @@ executable () {
 }
 
 ensure_installed () {
-  info "checking for '$1'... "
-  executable $1 && color 2 "ok\n" && return
-  color 3 "not found\n"
-  info "installing '$1'...\n"
+  log_info "Checking for '$1'... "
+  executable $1 && color 2 "ok!\n" && return
+  color 3 "not found!\n"
+  log_info "Installing '$1'...\n"
   $2
-}
-
-install_os () {
-  while [ "$#" -ge 2 ]; do
-    [ "${OS}" != $1 ] && shift 2 && continue
-    $2
-    return
-  done
-  error "${OS} is not supported\n"
+  log_info "'$1' was installed!\n"
 }
 

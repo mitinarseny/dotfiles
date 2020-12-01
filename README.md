@@ -11,15 +11,9 @@
 
 ## Install
 
-### Using [cURL](https://curl.se)
-
 ```sh
-curl -fsSL https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
-```
-
-### Using [wget](https://www.gnu.org/software/wget)
-
-```sh
-wget -O - https://raw.githubusercontent.com/mitinarseny/dotfiles/master/install | sh
+$ git clone https://github.com/mitinarseny/dotfiles ~/.dotfiles
+$ cd ~/.dotfiles
+$ ./install
 ```
 

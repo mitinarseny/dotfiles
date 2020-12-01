@@ -1,7 +1,9 @@
 #!/bin/sh -e
 
-. ../helpers.sh
+CONFIG_DIR=~/.config/alacritty
 
-symlink_into_dir ~/.config/alacritty \
-  alacritty.yml
+[ -d "${CONFIG_DIR}" ] || mkdir -p "${CONFIG_DIR}"
 
+ln -svf $(readlink -ev \
+    alacritty.yml
+  ) "${CONFIG_DIR}"

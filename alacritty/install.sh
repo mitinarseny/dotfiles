@@ -1,9 +1,10 @@
 #!/bin/sh -e
 
+cd "$(dirname "$0")"
 . ../helpers.sh
 
 install_linux () {
-  info "installing dependencies...\n"
+  log_info "Installing dependencies...\n"
   sudo apt-get install --no-install-recommends --yes \
     pkg-config \
     libfreetype6-dev \
@@ -11,15 +12,15 @@ install_linux () {
     libxcb-xfixes0-dev \
     python3
   
-  ensure_installed rustp ../rust/install.sh
+  ensure_installed rustup ../rust/install.sh
   ensure_installed cmake ../cmake/install.sh
 
   [ -d /tmp/alacritty ] && rm -rf /tmp/alacritty
-  info "cloning alacritty...\n"
+  log_info "Cloning alacritty...\n"
   git clone https://github.com/alacritty/alacritty.git /tmp/alacritty
   cd /tmp/alacritty
   
-  info "building alacritty...\n"
+  log_info "Building alacritty...\n"
   cargo build --release
   
   if ! infocmp alacritty 2>&1 > /dev/null; then
@@ -31,7 +32,7 @@ install_linux () {
   sudo desktop-file-install extra/linux/Alacritty.desktop
   sudo update-desktop-database
 
-  info "installing alacritty man pages...\n"
+  log_info "Installing alacritty man pages...\n"
   sudo mkdir -p /usr/local/share/man/man1
   gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
 
@@ -39,11 +40,20 @@ install_linux () {
 }
 
 install_darwin () {
-  info "installing alacritty...\n"
+  log_info "Installing alacritty...\n"
   brew cask install alacritty
 }
 
-install_os \
-  "Linux" install_linux \
-  "Darwin" install_darwin
+OS="$(uname -s)"
+case "${OS}" in
+  "Linux")
+    install_linux
+    ;;
+  "Darwin")
+    install_darwin
+    ;;
+  *)
+    log_error "${OS} is not supported\n"
+    ;;
+esac
 

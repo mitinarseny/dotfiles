@@ -27,8 +27,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Install
-      run: sudo make --keep-going
-
-    - name: Test
-      run: make test --keep-going
-
+      run: s./install.sh

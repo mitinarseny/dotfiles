@@ -9,6 +9,9 @@ fi
 
 antibody bundle < plugins.txt > ~/.zsh_plugins.sh
 
+# check if CI
+[ -z "${CI+x}" ] && exit
+
 if ! grep "$(command -v zsh)" /etc/shells > /dev/null; then
   sudo sh -c "echo $(command -v zsh) >> /etc/shells"
 fi

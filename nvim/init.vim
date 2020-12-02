@@ -172,6 +172,8 @@ set list listchars=tab:\|\ ,trail:-
 " always show sign columns
 set signcolumn=yes
 
+set splitright
+set splitbelow
 set noequalalways
 
 " limit completion menu size

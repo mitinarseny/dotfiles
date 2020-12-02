@@ -12,6 +12,7 @@ if !filereadable(s:autoload_plug_path)
 endif
 
 call plug#begin(stdpath('data') . '/plugged')
+  Plug 'tpope/vim-vinegar'
   Plug 'moll/vim-bbye' " vim-symlink optional dependency
   Plug 'aymericbeaumet/vim-symlink'
 

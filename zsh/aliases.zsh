@@ -1,4 +1,4 @@
-alias tree='tree -C'
+command -v tree > /dev/null && alias tree='tree -C'
 alias tb="nc termbin.com 9999"
 
 if ls --color > /dev/null 2>&1; then # GNU `ls`

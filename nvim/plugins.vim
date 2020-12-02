@@ -35,13 +35,10 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_highlight_references_enabled = v:true
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
+    let g:lsp_semantic_enabled             = v:true
     " let g:lsp_diagnostics_float_cursor     = v:true
 
     augroup lsp_setup | autocmd!
-      " Close preview window with <esc>
-      autocmd User lsp_float_opened nmap <buffer> <silent> <Esc>
-        \ <Plug>(lsp-preview-close)
-
       function! s:on_lsp_buffer_enabled() abort
         setlocal omnifunc=lsp#complete
         setlocal signcolumn=yes
@@ -152,10 +149,6 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:asyncomplete_auto_completeopt = v:false
 
     set completeopt=menuone,noinsert,noselect
-
-    augroup lsp_complete_setup | autocmd!
-      autocmd User lsp_complete_done  call asyncomplete#close_popup()
-    augroup END
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'

@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 CONFIG_DIR=~/.config/git
+[ -d "${CONFIG_DIR}" ] || mkdir -p "${CONFIG_DIR}"
 
 [ -r ~/.gitconfig ] && mv ~/.gitconfig "${CONFIG_DIR}/config" || touch "${CONFIG_DIR}/config"
 

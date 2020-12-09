@@ -2,12 +2,13 @@
 
 cd "$(dirname "$0")"
 ln -sfv "$(pwd -P)"/zshrc ~/.zshrc
+ln -sfv "$(pwd -P)"/zlogin ~/.zlogin
 
 # check if CI
 [ -n "${CI+x}" ] && exit
 
 if ! command -v antibody > /dev/null; then
-  curl --fail --silent --show-error --location git.io/antibody | sh -s - -b /usr/local/bin
+  curl --fail --silent --show-error --location git.io/antibody | sudo sh -s - -b /usr/local/bin
 fi
 
 antibody bundle < plugins.txt > ~/.zsh_plugins.sh

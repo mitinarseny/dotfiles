@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pgrep -x sxhkd > /dev/null || sxhkd "$(dirname "$0")"/sxhkdrc &
+pgrep -x sxhkd > /dev/null || sxhkd "$(cd "$(dirname "$0")" && pwd -P)"/sxhkdrc &
 
 NORD0=#2E3440
 NORD1=#3B4252
@@ -19,8 +19,8 @@ NORD13=#EBCB8B
 NORD14=#A3BE8C
 NORD15=#B48EAD
 
-for m in $(bspc query -M); do
-  bspc monitor "$m" -d 1 2 3 4 5 6 7 8 9
+for m in $(bspc query --monitors); do
+  bspc monitor "$m" --reset-desktops 1 2 3 4 5 6 7 8 9
 done
 
 bspc config normal_border_color  "${NORD1}"

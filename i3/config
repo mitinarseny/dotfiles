@@ -97,7 +97,7 @@ bindsym $mod+Control+Right workspace next
 bindsym $mod+Control+Tab   workspace back_and_forth
 
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r exec --no-startup-id polybar-msg cmd restart, restart
+bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 mode "resize" {
@@ -117,7 +117,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-exec --no-startup-id polybar default
+exec_always --no-startup-id polybar-msg cmd restart || polybar default
 
 bindsym $mod+Return exec alacritty
 bindsym $mod+d exec dmenu_run

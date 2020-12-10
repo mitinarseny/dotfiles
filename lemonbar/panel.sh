@@ -1,12 +1,17 @@
 #!/bin/sh
-
 # Usage: panel.sh <PANEL_WM_NAME>
 
 PANEL_WM_NAME=$1
 
 . ~/.config/nord/colors.sh
 
-bspwm_format() {
+stream_datetime() {
+  while
+    date '+T%a %-d %b | %H:%M'
+  do sleep 1; done
+}
+
+bspwm_report() {
   IFS=':'; for i in $*; do
     item=$i
     name=${item#?}
@@ -47,16 +52,32 @@ cleanup() {
 }
 trap 'cleanup' INT TERM QUIT EXIT
 
-bspc subscribe report > "${PANEL_FIFO}" &
+for s in \
+  "bspc subscribe report" \
+  stream_datetime \
+  "xtitle -sf X%s\n"
+do
+  $s > "${PANEL_FIFO}" &
+done
 
-while read -r line; do
-  case $line in
-    W*)
-      wm=$(bspwm_format ${line#?})
-      ;;
-  esac
-  printf "%s\n" "%{l}${wm}"
-done < "${PANEL_FIFO}" \
+panel() {
+  while read -r line; do
+    case $line in
+      W*)
+        wm=$(bspwm_report ${line#?})
+        ;;
+      T*)
+        datetime=${line#?}
+        ;;
+      X*)
+        title=${line#?}
+        ;;
+    esac
+    printf "%s\n" "%{l}${wm}%{c}${title}%{r}${datetime} "
+  done
+}
+
+panel < "${PANEL_FIFO}" \
   | lemonbar \
     -n "${PANEL_WM_NAME}" \
     -g "x24" \

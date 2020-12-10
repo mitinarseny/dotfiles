@@ -29,6 +29,5 @@ bspc config remove_unplugged_monitors true
 bspc rule -a Screenkey manage=off
 
 PANEL_WM_NAME='bspwm_panel'
-if ! xdo id -a "${PANEL_WM_NAME}" > /dev/null; then
-  ~/.config/lemonbar/panel.sh "${PANEL_WM_NAME}" &
-fi
+pkill -x panel.sh
+~/.config/lemonbar/panel.sh "${PANEL_WM_NAME}" &

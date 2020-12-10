@@ -1,23 +1,8 @@
 #!/bin/sh
 
-pgrep -x sxhkd > /dev/null || sxhkd "$(cd "$(dirname "$0")" && pwd -P)"/sxhkdrc &
+cd $(dirname $(readlink $0 || echo $0))
 
-NORD0=#2E3440
-NORD1=#3B4252
-NORD2=#434C5E
-NORD3=#4C566A
-NORD4=#D8DEE9
-NORD5=#E5E9F0
-NORD6=#ECEFF4
-NORD7=#8FBCBB
-NORD8=#88C0D0
-NORD9=#81A1C1
-NORD10=#5E81AC
-NORD11=#BF616A
-NORD12=#D08770
-NORD13=#EBCB8B
-NORD14=#A3BE8C
-NORD15=#B48EAD
+. ~/.config/nord/colors.sh
 
 for m in $(bspc query --monitors); do
   bspc monitor "$m" --reset-desktops 1 2 3 4 5 6 7 8 9
@@ -42,3 +27,8 @@ bspc config remove_disabled_monitors  true
 bspc config remove_unplugged_monitors true
 
 bspc rule -a Screenkey manage=off
+
+PANEL_WM_NAME='bspwm_panel'
+if ! xdo id -a "${PANEL_WM_NAME}" > /dev/null; then
+  ~/.config/lemonbar/panel.sh "${PANEL_WM_NAME}" &
+fi

@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 ln -sfv "$(pwd -P)"/zshrc ~/.zshrc
-ln -sfv "$(pwd -P)"/zlogin ~/.zlogin
+ln -sfv "$(pwd -P)"/zprofile ~/.zprofile
 
 # check if CI
 [ -n "${CI+x}" ] && exit

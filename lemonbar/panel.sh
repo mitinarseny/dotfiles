@@ -5,10 +5,23 @@ PANEL_WM_NAME=$1
 
 . ~/.config/nord/colors.sh
 
-stream_datetime() {
+stream_sys() {
+  local dt
+  local sign
+  local percent
   while
-    date '+T%a %-d %b | %H:%M'
-  do sleep 1; done
+    dt=$(date '+%a %-d %b | %H:%M:%S')
+    percent=$(cat /sys/class/power_supply/BAT0/capacity)
+    case $(cat /sys/class/power_supply/BAT0/status) in
+      Charging|Full)
+        sign=+
+        ;;
+      *)
+        sign=
+        ;;
+    esac
+    printf 'S%s%s%% %s\n' "${sign}" "${percent}" "${dt}"
+  do sleep 0.9; done
 }
 
 bspwm_report() {
@@ -48,32 +61,37 @@ PANEL_FIFO=$(mktemp --tmpdir --dry-run 'panel.XXX')
 mkfifo "${PANEL_FIFO}"
 cleanup() {
   trap - TERM
+  kill 0
   rm -rf "${PANEL_FIFO}"
 }
 trap 'cleanup' INT TERM QUIT EXIT
 
 for s in \
+  stream_sys \
   "bspc subscribe report" \
-  stream_datetime \
   "xtitle -sf X%s\n"
 do
   $s > "${PANEL_FIFO}" &
 done
 
 panel() {
+  local wm
+  local title
+  local sys
+
   while read -r line; do
     case $line in
       W*)
         wm=$(bspwm_report ${line#?})
         ;;
-      T*)
-        datetime=${line#?}
-        ;;
       X*)
         title=${line#?}
         ;;
+      S*)
+        sys=${line#?}
+        ;;
     esac
-    printf "%s\n" "%{l}${wm}%{c}${title}%{r}${datetime} "
+    printf "%s\n" "%{l}${wm}%{c}${title}%{r}${sys} "
   done
 }
 

@@ -29,14 +29,14 @@ super + shift + bracket{left,right}
 
 
 super + {t,shift + t,s,f}
-  bspc node --state '~{tiled,pseudo_tiled,floating,fullscreen}'
+  bspc node --state \~{tiled,pseudo_tiled,floating,fullscreen}
 
 
 super + ctrl + {h,Left,j,Down,k,Up,l,Right}
-  bspc node --presel-dir '~{west,west,\
+  bspc node --presel-dir \~{west,west,\
                             south,south,\
                             north,north,\
-                            east,east}'
+                            east,east}
 
 super + ctrl + {1-9}
   bspc node --presel-ratio 0.{1-9}
@@ -46,21 +46,21 @@ super + ctrl + Escape
 
 
 super + r: {h,Left,j,Down,k,Up,l,Right}
-  bspc node --resize '{left -20 0,left -20 0,\
-                       bottom 0 20,bottom 0 20,\
-                       top 0 -20,top 0 -20,\
-                       right 20 0,right 20 0}'
+  bspc node --resize {left -20 0,left -20 0,\
+                      bottom 0 20,bottom 0 20,\
+                      top 0 -20,top 0 -20,\
+                      right 20 0,right 20 0}
 
 super + r: shift + {h,Left,j,Down,k,Up,l,Right}
-  bspc node --resize '{right -20 0,right -20 0,\
-                       top 0 20,top 0 20,\
-                       bottom 0 -20,bottom 0 -20,\
-                       left 20 0,left 20 0}'
+  bspc node --resize {right -20 0,right -20 0,\
+                      top 0 20,top 0 20,\
+                      bottom 0 -20,bottom 0 -20,\
+                      left 20 0,left 20 0}
 
 
 super + alt + {h,Left,j,Down,k,Up,l,Right}
-  bspc node --move '{-20 0,-20 0,\
-                     0 20,0 20,\
-                     0 -20,0 -20,\
-                     20 0,20 0}'
+  bspc node --move {-20 0,-20 0,\
+                    0 20,0 20,\
+                    0 -20,0 -20,\
+                    20 0,20 0}
 

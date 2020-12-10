@@ -10,7 +10,7 @@ stream_sys() {
   local sign
   local percent
   while
-    dt=$(date '+%a %-d %b | %H:%M:%S')
+    dt=$(date '+%a %-d %b | %H:%M')
     percent=$(cat /sys/class/power_supply/BAT0/capacity)
     case $(cat /sys/class/power_supply/BAT0/status) in
       Charging|Full)
@@ -98,7 +98,8 @@ panel() {
 panel < "${PANEL_FIFO}" \
   | lemonbar \
     -n "${PANEL_WM_NAME}" \
-    -g "x24" \
+    -g 'x30' \
+    -f 'Fira Code:size=10' \
     -B "${NORD0}" \
     -F "${NORD6}" \
   | sh &

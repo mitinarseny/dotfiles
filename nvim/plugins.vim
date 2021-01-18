@@ -136,7 +136,7 @@ call plug#begin(stdpath('data') . '/plugged')
       autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Docker',
         \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('docker-language-server',
+          \ <SID>ensure_executable('docker-langserver',
             \ 'https://github.com/rcjsuen/dockerfile-language-server-nodejs',
             \ ['docker-langserver', '--stdio'])},
         \ 'allowlist': ['dockerfile'],

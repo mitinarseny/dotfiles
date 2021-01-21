@@ -300,17 +300,17 @@ call plug#begin(stdpath('data') . '/plugged')
     endfunction
 
     function! LightlineLSPWarnings() abort
-      let l:counts = lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      let l:counts = lsp#get_buffer_diagnostics_counts()
       return l:counts.warning == 0 ? '' : printf('W:%d', l:counts.warning)
     endfunction
 
     function! LightlineLSPErrors() abort
-      let l:counts = lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      let l:counts = lsp#get_buffer_diagnostics_counts()
       return l:counts.error == 0 ? '' : printf('E:%d', l:counts.error)
     endfunction
 
     function! LightlineLSPOk() abort
-      let l:counts =  lsp#ui#vim#diagnostics#get_buffer_diagnostics_counts()
+      let l:counts =  lsp#get_buffer_diagnostics_counts()
       let l:total = l:counts.error + l:counts.warning
       return l:total == 0 ? 'OK' : ''
     endfunction

@@ -59,47 +59,34 @@ call plug#begin(stdpath('data') . '/plugged')
     augroup END
 
     augroup Lsp | autocmd!
-      function! s:ensure_executable(executable, install_help, cmd) abort
-        if !executable(a:executable)
-          echo "'" . a:executable . "' not found in PATH. Install: " . a:install_help
-          return []
-        endif
-        return a:cmd
-      endfunction
+      if executable('clangd')
+        autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'Cxx',
+          \ 'cmd': {server_info -> ['clangd', '-background-index']},
+          \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
+          \ })
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'Cxx',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('clangd',
-            \ 'https://clangd.llvm.org',
-            \ ['clangd', '-background-index'])},
-        \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
-        \ })
-
-      autocmd User lsp_setup call lsp#register_server({
+      if executable('gopls')
+        autocmd User call lsp#register_server({
         \ 'name': 'Golang',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('gopls',
-            \ 'https://github.com/golang/tools/tree/master/gopls',
-            \ ['gopls'])},
+        \ 'cmd': {server_info -> ['gopls']},
         \ 'allowlist': ['go'],
         \ })
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
+      if executable('pyls')
+        autocmd User call lsp#register_server({
         \ 'name': 'Python',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('pyls',
-            \ 'https://github.com/palantir/python-language-server',
-            \ ['pyls'])},
+        \ 'cmd': {server_info -> ['pyls']},
         \ 'allowlist': ['python'],
         \ })
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
+      if executable('yaml-language-server')
+        autocmd User call lsp#register_server({
         \ 'name': 'YAML',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('yaml-language-server',
-            \ 'https://github.com/redhat-developer/yaml-language-server',
-            \ ['yaml-language-server', '--stdio'])},
+        \ 'cmd': {server_info -> ['yaml-language-server', '--stdio']},
         \ 'allowlist': ['yaml', 'yaml.ansible'],
         \ 'workspace_config': {
         \   'yaml': {
@@ -108,39 +95,37 @@ call plug#begin(stdpath('data') . '/plugged')
         \     'completion': v:true,
         \     'customTags': [],
         \     'schemas': {},
-        \     'schemaStore': { 'enable': v:true },
+        \     'schemaStore': {'enable': v:true},
         \   },
         \ }})
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'VIM',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('vim-language-server',
-            \ 'https://github.com/iamcco/vim-language-server',
-            \ ['vim-language-server', '--stdio'])},
+      if executable('vim-language-server')
+        autocmd User call lsp#register_server({
+        \ 'name': 'Vim',
+        \ 'cmd': {server_info -> ['vim-language-server', '--stdio']},
         \ 'allowlist': ['vim'],
         \ 'initialization_options': {
         \   'vimruntime': $VIMRUNTIME,
         \   'runtimepath': &rtp,
         \ }})
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
+      if executable('bash-language-server')
+        autocmd User call lsp#register_server({
         \ 'name': 'Bash',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('bash-language-server',
-            \ 'https://github.com/bash-lsp/bash-language-server',
-            \ ['bash-language-server', 'start'])},
+        \ 'cmd': {server_info -> ['bash-language-server', 'start']},
         \ 'allowlist': ['sh'],
         \ })
+      endif
 
-      autocmd User lsp_setup call lsp#register_server({
+      if executable('docker-langserver')
+        autocmd User call lsp#register_server({
         \ 'name': 'Docker',
-        \ 'cmd': {server_info ->
-          \ <SID>ensure_executable('docker-langserver',
-            \ 'https://github.com/rcjsuen/dockerfile-language-server-nodejs',
-            \ ['docker-langserver', '--stdio'])},
+        \ 'cmd': {server_info -> ['docker-langserver', '--stdio']},
         \ 'allowlist': ['dockerfile'],
         \ })
+      endif
     augroup END
 
   Plug 'prabirshrestha/asyncomplete.vim'

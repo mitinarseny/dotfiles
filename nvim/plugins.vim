@@ -49,10 +49,13 @@ call plug#begin(stdpath('data') . '/plugged')
         nmap <buffer> <silent> <C-LeftMouse> <LeftMouse>     <Plug>(lsp-definition)
         imap <buffer> <silent> <C-LeftMouse> <LeftMouse><C-o><Plug>(lsp-definition)
 
-        nmap <buffer> <Leader>lr <Plug>(lsp-rename)
-        nmap <buffer> <Leader>lu <Plug>(lsp-references)
-        nmap <buffer> <Leader>li <Plug>(lsp-implementation)
-        nmap <buffer> <Leader>lh <Plug>(lsp-hover)
+        nmap <buffer> <Leader>lr       <Plug>(lsp-rename)
+        nmap <buffer> <Leader>lu       <Plug>(lsp-references)
+        nmap <buffer> <Leader>li       <Plug>(lsp-implementation)
+        nmap <buffer> <Leader>lh       <Plug>(lsp-hover)
+        map  <buffer> <Leader>lf       <Plug>(lsp-document-format)
+        nmap <buffer> <Leader>l<Right> <Plug>(lsp-next-reference)
+        nmap <buffer> <Leader>l<Left>  <Plug>(lsp-previous-reference)
       endfunction
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
     augroup END

@@ -68,7 +68,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('gopls')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Golang',
         \ 'cmd': {server_info -> ['gopls']},
         \ 'allowlist': ['go'],
@@ -76,7 +76,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('pyls')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Python',
         \ 'cmd': {server_info -> ['pyls']},
         \ 'allowlist': ['python'],
@@ -84,7 +84,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('yaml-language-server')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'YAML',
         \ 'cmd': {server_info -> ['yaml-language-server', '--stdio']},
         \ 'allowlist': ['yaml', 'yaml.ansible'],
@@ -101,7 +101,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('vim-language-server')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Vim',
         \ 'cmd': {server_info -> ['vim-language-server', '--stdio']},
         \ 'allowlist': ['vim'],
@@ -112,7 +112,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('bash-language-server')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Bash',
         \ 'cmd': {server_info -> ['bash-language-server', 'start']},
         \ 'allowlist': ['sh'],
@@ -120,7 +120,7 @@ call plug#begin(stdpath('data') . '/plugged')
       endif
 
       if executable('docker-langserver')
-        autocmd User call lsp#register_server({
+        autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'Docker',
         \ 'cmd': {server_info -> ['docker-langserver', '--stdio']},
         \ 'allowlist': ['dockerfile'],

@@ -24,25 +24,22 @@ call plug#begin(stdpath('data') . '/plugged')
 
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/vim-lsp'
-    let g:lsp_diagnostics_enabled          = v:true
-    let g:lsp_diagnostics_echo_cursor      = v:true
-    let g:lsp_diagnostics_echo_delay       = 200
-    let g:lsp_signs_enabled                = v:true
-    let g:lsp_signs_error                  = { 'text': '>>' }
-    let g:lsp_signs_warning                = { 'text': '--' }
-    let g:lsp_signs_hint                   = { 'text': '..' }
-    let g:lsp_virtual_text_enabled         = v:false
-    let g:lsp_highlight_references_enabled = v:true
-    let g:lsp_signature_help_enabled       = v:true
-    let g:lsp_async_completion             = v:true
-    let g:lsp_semantic_enabled             = v:true
-    let g:lsp_work_done_progress_enabled   = v:true
-    let g:lsp_show_message_request_enabled = v:true
-    " let g:lsp_diagnostics_float_cursor     = v:true
+    let g:lsp_diagnostics_enabled                   = v:true
+    let g:lsp_diagnostics_echo_cursor               = v:true
+    let g:lsp_diagnostics_echo_delay                = 200
+    let g:lsp_diagnostics_signs_enabled             = v:true
+    let g:lsp_diagnostics_signs_insert_mode_enabled = v:true
+    let g:lsp_diagnostics_signs_error               = { 'text': '>>' }
+    let g:lsp_diagnostics_signs_warning             = { 'text': '--' }
+    let g:lsp_diagnostics_signs_hint                = { 'text': '..' }
+    let g:lsp_diagnostics_virtual_text_enabled      = v:false
+    let g:lsp_signature_help_enabled                = v:true
+    let g:lsp_semantic_enabled                      = v:true
+    let g:lsp_work_done_progress_enabled            = v:true
+    let g:lsp_show_message_request_enabled          = v:true
 
     augroup lsp_setup | autocmd!
       function! s:on_lsp_buffer_enabled() abort
-        setlocal omnifunc=lsp#complete
         setlocal signcolumn=yes
 
         highlight lspReference cterm=underline

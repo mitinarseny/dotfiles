@@ -36,6 +36,8 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_signature_help_enabled       = v:true
     let g:lsp_async_completion             = v:true
     let g:lsp_semantic_enabled             = v:true
+    let g:lsp_work_done_progress_enabled   = v:true
+    let g:lsp_show_message_request_enabled = v:true
     " let g:lsp_diagnostics_float_cursor     = v:true
 
     augroup lsp_setup | autocmd!

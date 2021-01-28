@@ -48,6 +48,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS
 ####### zdharma/fast-syntax-highlighting #######
 # https://github.com/zdharma/fast-syntax-highlighting/issues/135#issuecomment-497452498
 FAST_HIGHLIGHT[whatis_chroma_type]=0
+FAST_HIGHLIGHT_STYLES[unknown-token]='fg=red'
 
 ####### zsh-users/zsh-history-substring-search #######
 # bindkey "$terminfo[kcuu1]" history-substring-search-up

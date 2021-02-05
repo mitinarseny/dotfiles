@@ -46,6 +46,38 @@ set scrolloff=3
 " allow <Left> and <Right> move to next/previous line 
 set whichwrap=<,>,[,]
 
+" arrows move by graphical lines, not physical
+nnoremap   <Down>       g<Down>
+vmap       <Down>   <Esc><Down>
+imap       <Down>   <C-o><Down>
+vnoremap <S-Down>       g<Down>
+nmap     <S-Down>     v<S-Down>
+imap     <S-Down> <C-o><S-Down>
+
+nnoremap <Up>         g<Up>
+vmap     <Up>     <Esc><Up>
+imap     <Up>     <C-o><Up>
+vnoremap <S-Up>       g<Up>
+nmap     <S-Up>     v<S-Up>
+imap     <S-Up> <C-o><S-Up>
+
+" <Home> gets you to the first not-blank character on the line
+nnoremap <silent> <expr>  <Home> 'g' . (indent('.')+1 == virtcol('.') ? '0' : '^')
+vmap <Home> <Esc><Home>
+imap <Home> <C-o><Home>
+
+vnoremap <silent> <expr> <S-Home> 'g' . (indent('.')+1 == virtcol('.') ? '0' : '^')
+nmap <S-Home>     v<S-Home>
+imap <S-Home> <C-o><S-Home>
+
+nnoremap <End>      g<End>
+vmap     <End>  <Esc><End>
+imap     <End>  <C-o><End>
+
+vnoremap <S-End>      g$
+nmap     <S-End>     v<S-End>
+imap     <S-End> <C-o><S-End>
+
 " enable command-line completion
 set wildmenu
 set wildignore=*.o,*~,*.pyc
@@ -98,19 +130,6 @@ imap <S-A-Left>  <C-o><S-C-Left>
 imap <S-A-Right> <C-o><S-C-Right>
 vmap <S-A-Left>  <S-C-Left>
 vmap <S-A-Right> <S-C-Right>
-
-" <Home> gets you to the first not-blank character on the line
-noremap <silent> <expr> <Home> indent('.')+1 == virtcol('.') ? '0' : '^'
-imap <Home>        <C-o><Home>
-
-vnoremap <silent> <expr> <S-Home> indent('.')+1 == virtcol('.') ? '0' : '^'
-nmap           <S-Home> v<S-Home>
-imap       <S-Home> <C-o><S-Home>
-
-" select until the end of line without newline character
-vnoremap <S-End> g_
-nmap     <S-End> v<S-End>
-imap     <S-End> <C-o><S-End>
 
 " Alt+Backspace to delete word
 noremap! <A-BS> <C-w>

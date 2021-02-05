@@ -230,7 +230,7 @@ call plug#begin(stdpath('data') . '/plugged')
       \      'right': [
       \        ['readonly'],
       \        ['fileformat', 'fileencoding', 'lineinfo'],
-      \        ['lsp_errors', 'lsp_warnings', 'lsp_ok'],
+      \        ['lsp_progress', 'lsp_errors', 'lsp_warnings', 'lsp_ok'],
       \      ],
       \   },
       \   'inactive': {
@@ -249,6 +249,7 @@ call plug#begin(stdpath('data') . '/plugged')
       \     'lsp_warnings': 'LightlineLSPWarnings',
       \     'lsp_errors':   'LightlineLSPErrors',
       \     'lsp_ok':       'LightlineLSPOk',
+      \     'lsp_progress': 'LighlineLSPProgress',
       \   },
       \   'component_type': {
       \     'readonly':     'error',
@@ -317,9 +318,16 @@ call plug#begin(stdpath('data') . '/plugged')
       return l:total == 0 ? 'OK' : ''
     endfunction
 
-    augroup LightLineOnLSP
-      autocmd!
+    function! LightlineLSPProgress() abort
+      let l:progress = lsp#get_progress()
+      if empty(l:progress) | return '' | endif
+      let l:progress = l:progress[len(l:progress) - 1]
+      return l:progress['server'] . ': ' . l:progress['message']
+    endfunction
+
+    augroup LightLineOnLSP | autocmd!
       autocmd User lsp_diagnostics_updated call lightline#update()
+      autocmd User lsp_progress_updated call lightline#update()
     augroup END
 
   Plug 'Yggdroot/indentLine'

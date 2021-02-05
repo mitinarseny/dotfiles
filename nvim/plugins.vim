@@ -205,6 +205,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'junegunn/vim-easy-align'
 
   Plug 'jiangmiao/auto-pairs'
+  Plug 'ConradIrwin/vim-bracketed-paste'
 
   Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_ctags_tagfile = ".tags"

@@ -47,16 +47,16 @@ set scrolloff=3
 set whichwrap=<,>,[,]
 
 " arrows move by graphical lines, not physical
-nnoremap   <Down>       g<Down>
-vmap       <Down>   <Esc><Down>
-imap       <Down>   <C-o><Down>
+nnoremap             <Down>       g<Down>
+vmap                 <Down>   <Esc><Down>
+imap <silent> <expr> <Down> pumvisible() ? '<Down>' : '<C-o><Down>'
 vnoremap <S-Down>       g<Down>
 nmap     <S-Down>     v<S-Down>
 imap     <S-Down> <C-o><S-Down>
 
-nnoremap <Up>         g<Up>
-vmap     <Up>     <Esc><Up>
-imap     <Up>     <C-o><Up>
+nnoremap             <Up>         g<Up>
+vmap                 <Up>     <Esc><Up>
+imap <silent> <expr> <Up> pumvisible() ? '<Up>' : '<C-o><Up>'
 vnoremap <S-Up>       g<Up>
 nmap     <S-Up>     v<S-Up>
 imap     <S-Up> <C-o><S-Up>

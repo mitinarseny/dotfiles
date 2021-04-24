@@ -33,6 +33,7 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:lsp_diagnostics_signs_warning             = { 'text': '--' }
     let g:lsp_diagnostics_signs_hint                = { 'text': '..' }
     let g:lsp_diagnostics_virtual_text_enabled      = v:false
+    let g:lsp_fold_enabled                          = v:false
     let g:lsp_signature_help_enabled                = v:true
     let g:lsp_semantic_enabled                      = v:true
     let g:lsp_work_done_progress_enabled            = v:true
@@ -56,6 +57,8 @@ call plug#begin(stdpath('data') . '/plugged')
         map  <buffer> <Leader>lf       <Plug>(lsp-document-format)
         nmap <buffer> <Leader>l<Right> <Plug>(lsp-next-reference)
         nmap <buffer> <Leader>l<Left>  <Plug>(lsp-previous-reference)
+        nmap <buffer> <Leader>le       <Plug>(lsp-next-error)
+        nmap <buffer> <Leader>la       <Plug>(lsp-code-action)
       endfunction
       autocmd User lsp_buffer_enabled call <SID>on_lsp_buffer_enabled()
     augroup END
@@ -136,6 +139,10 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:asyncomplete_auto_completeopt = v:false
 
     set completeopt=menuone,noinsert,noselect
+
+    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
 
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'

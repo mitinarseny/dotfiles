@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 
 cd "$(dirname "$0")"
 ln -sfv "$(pwd -P)"/zshrc ~/.zshrc
@@ -14,7 +14,7 @@ fi
 antibody bundle < plugins.txt > ~/.zsh_plugins.sh
 
 if ! grep "$(command -v zsh)" /etc/shells > /dev/null; then
-  sudo sh -c "echo $(command -v zsh) >> /etc/shells"
+  echo $(command -v zsh) | sudo tee -a /etc/shells > /dev/null
 fi
 
 chsh -s "$(command -v zsh)"

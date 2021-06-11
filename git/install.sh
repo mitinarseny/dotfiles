@@ -18,10 +18,10 @@ fi
 if ! git config --global --get credential.helper > /dev/null; then
   case "$(uname -s)" in
     "Linux")
-      CREDENTIAL_HELPER=osxkeychain
+      CREDENTIAL_HELPER=cache
       ;;
     "Darwin")
-      CREDENTIAL_HELPER=cache
+      CREDENTIAL_HELPER=osxkeychain
       ;;
   esac
   git config --global credential.helper "${CREDENTIAL_HELPER}"

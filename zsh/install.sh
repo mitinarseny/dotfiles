@@ -12,9 +12,3 @@ if ! command -v antibody > /dev/null; then
 fi
 
 antibody bundle < plugins.txt > ~/.zsh_plugins.sh
-
-if ! grep "$(command -v zsh)" /etc/shells > /dev/null; then
-  echo $(command -v zsh) | sudo tee -a /etc/shells > /dev/null
-fi
-
-chsh -s "$(command -v zsh)"

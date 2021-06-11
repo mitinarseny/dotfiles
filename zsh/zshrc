@@ -175,8 +175,3 @@ for key     seq        mode      widget (
 
 bindkey '\e^?'    backward-kill-word
 
-# start tmux if interactive and not ssh session
-if [[ $- == *i* ]] && [[ ! -v TMUX ]] && [[ ! -v SSH_CONNECTION ]] && command -v tmux 2>&1 > /dev/null; then
-  tmux new-session -A -s main 
-fi
-

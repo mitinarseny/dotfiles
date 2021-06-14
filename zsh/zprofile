@@ -1,3 +1,11 @@
+XDG_CONFIG_HOME="${HOME}/.config"
+XDG_DATA_HOME="${HOME}/.local/share"
+XDG_CACHE_HOME="${HOME}/.cache"
+
 if [ -z "${DISPLAY}${WAYLAND_DISPLAY}" ] && [ $(tty) = '/dev/tty1' ]; then
-  exec hikari
+  exec dbus-run-session -- \
+    env \
+      XKB_DEFAULT_LAYOUT="us,ru" \
+      XKB_DEFAULT_OPTIONS="grp:alt_space_toggle" \
+    river
 fi

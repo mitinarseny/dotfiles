@@ -1,0 +1,126 @@
+.fonts:
+  awesome: &awesome Font Awesome 5 Free:style=solid:pixelsize=14
+
+# https://www.nordtheme.com/docs/colors-and-palettes
+.nord_colors:
+  0:  &nord0  2e3440ff
+  1:  &nord1  3b4252ff
+  2:  &nord2  434c5eff
+  3:  &nord3  4c566aff
+  4:  &nord4  d8dee9ff
+  5:  &nord5  e5e9f0ff
+  6:  &nord6  eceff4ff
+  7:  &nord7  8fbcbbff
+  8:  &nord8  88c0d0ff
+  9:  &nord9  81a1c1ff
+  10: &nord10 5e81acff
+  11: &nord11 bf616aff
+  12: &nord12 d08770ff
+  13: &nord13 ebcb8bff
+  14: &nord14 a3be8cff
+  15: &nord15 b48eadff
+
+bar:
+  height: 26
+  location: top
+  font: Fira Code:pixelsize=14
+  background: *nord0
+  foreground: *nord6
+  spacing: 10
+  margin: 7
+  border:
+    width: 1
+    color: *nord1
+
+  left:
+    - river:
+        content:
+          map:
+            tag: occupied
+            values:
+              false: {empty: {}}
+              true:
+                map:
+                  on-click: sh -c 'riverctl set-focused-tags $((1 << ({id} - 1)))'
+                  tag: state
+                  values:
+                    focused: {string: &river_tag {text: ' {id} '}}
+                    invisible: &invisible {string: {<<: *river_tag, foreground: *nord3}}
+                    unfocused: *invisible
+  center:
+    - river:
+        title: {string: {text: '{title}', max: 80}}
+        content: {empty: {}}
+  right:
+    - alsa:
+        card: default
+        mixer: Master
+        content:
+          map:
+            on-click: amixer -q sset Master toggle
+            tag: muted
+            values:
+              true: {string: {text: '', font: *awesome}}
+              false:
+                list:
+                  spacing: 4
+                  items:
+                    - map:
+                        tag: percent
+                        default: {string: {text: '', font: *awesome}}
+                        values:
+                          0: {string: {text: '', font: *awesome}}
+                    - string: {text: '{percent}%'}
+    - network:
+        name: wlo1
+        content:
+          map:
+            on-click: foot --window-size-chars 80x20 --app-id menu sh -c 'iwctl station {name} get-networks && iwctl'
+            tag: state
+            values:
+              down: {string: {text: '', font: *awesome}}
+              up:
+                map:
+                  tag: ipv4
+                  default: &ip_assigned {string: {text: '', font: *awesome}}
+                  values:
+                    '':
+                      map:
+                        tag: ipv6
+                        default: *ip_assigned
+                        values:
+                          '': {string: {text: '', font: *awesome}}
+    - battery:
+        name: BAT0
+        poll-interval: 30
+        content:
+          list:
+            spacing: 4
+            items:
+              - map:
+                  tag: state
+                  values:
+                    discharging:
+                      ramp:
+                        tag: capacity
+                        items:
+                          - string: {text: '', font: *awesome, foreground: *nord11}
+                          - string: {text: '', font: *awesome, foreground: *nord12}
+                          - string: {text: '', font: *awesome}
+                          - string: {text: '', font: *awesome}
+                          - string: {text: '', font: *awesome}
+                    charging:
+                      string: &charging {text: '', font: *awesome}
+                    full:
+                      string: {<<: *charging, foreground: *nord14}
+              - string: {text: '{capacity}%'}
+    - clock:
+        time-format: '%H:%M'
+        date-format: '%a %d %b'
+        content:
+          list:
+            spacing: 5
+            items:
+            - string: {text: '{date}'}
+            - string: {text: '{time}'}
+

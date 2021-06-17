@@ -1,0 +1,27 @@
+#!/bin/sh
+
+IFS=':'
+
+find_desktop_apps() {
+find /usr/share/applications \
+  /usr/local/share/applications \
+  ${XDG_DATA_HOME:-"${HOME}/.local/share"}/applications \
+  -name '*.desktop' \
+  -printf '%f\n' | \
+  sort --unique
+}
+
+get_selection() {
+  find_desktop_apps | \
+  sed 's/^\(.*\).desktop$/\1 &/' | \
+  fzf --nth 1 --with-nth 1 | \
+  cut --delimiter=' ' --fields=2 --only-delimited
+}
+
+if selection=$(get_selection); then
+  nohup gtk-launch "${selection}" > /dev/null 2>&1 &
+fi
+
+# a dirty hack to wait for nohup start the process
+/bin/true
+

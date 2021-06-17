@@ -2,8 +2,12 @@ env:
   TERM: xterm-256color
 
 window:
+  padding:
+    x: 2
+    y: 2
   decorations: none
   startup_mode: Maximized
+  gtk_theme_variant: dark
 
 font:
   size: 11.0

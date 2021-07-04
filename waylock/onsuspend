@@ -1,0 +1,4 @@
+#!/bin/sh
+
+waylock &
+sleep 1

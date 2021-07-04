@@ -3,18 +3,23 @@
 IFS=':'
 
 find_desktop_apps() {
-find /usr/share/applications \
-  /usr/local/share/applications \
-  ${XDG_DATA_HOME:-"${HOME}/.local/share"}/applications \
-  -name '*.desktop' \
-  -printf '%f\n' | \
-  sort --unique
+  find /usr/share/applications \
+    /usr/local/share/applications \
+    ${XDG_DATA_HOME:-"${HOME}/.local/share"}/applications \
+    -name '*.desktop' \
+    -printf '%f\n' 2> /dev/null | \
+    sort --unique
 }
 
 get_selection() {
   find_desktop_apps | \
   sed 's/^\(.*\).desktop$/\1 &/' | \
-  fzf --nth 1 --with-nth 1 | \
+  fzf --nth 1 --with-nth 1 \
+    --color hl:2,bg+:8,gutter:-1,hl+:2 \
+    --color pointer:6,info:8,spinner:8,header:8,prompt:1,marker:1 \
+    --cycle \
+    --layout=reverse --margin 1,2 \
+    --info=hidden | \
   cut --delimiter=' ' --fields=2 --only-delimited
 }
 
@@ -23,5 +28,5 @@ if selection=$(get_selection); then
 fi
 
 # a dirty hack to wait for nohup start the process
-/bin/true
+# /bin/true
 

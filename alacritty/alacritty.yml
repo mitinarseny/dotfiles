@@ -47,8 +47,8 @@ colors:
     text: '#2e3440'
     cursor: '#d8dee9'
   selection:
-    text: CellForeground
-    background: '#4c566a'
+    text: CellBackground
+    background: CellForeground
   search:
     matches:
       foreground: CellBackground

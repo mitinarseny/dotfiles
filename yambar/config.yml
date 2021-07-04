@@ -23,11 +23,12 @@
 bar:
   height: 26
   location: top
+  monitor: '*'
   font: Fira Code:pixelsize=14
   background: *nord0
   foreground: *nord6
   spacing: 10
-  margin: 7
+  margin: 10
   border:
     width: 1
     color: *nord1
@@ -38,15 +39,20 @@ bar:
           map:
             tag: occupied
             values:
-              false: {empty: {}}
               true:
                 map:
                   on-click: sh -c 'riverctl set-focused-tags $((1 << ({id} - 1)))'
                   tag: state
                   values:
-                    focused: {string: &river_tag {text: ' {id} '}}
+                    focused: &focused {string: &river_tag {text: ' {id} '}}
                     invisible: &invisible {string: {<<: *river_tag, foreground: *nord3}}
                     unfocused: *invisible
+              false:
+                map:
+                  tag: focused
+                  values:
+                    true: *focused
+                    false: {empty: {}}
   center:
     - river:
         title: {string: {text: '{title}', max: 80}}
@@ -62,23 +68,20 @@ bar:
             values:
               true: {string: {text: '', font: *awesome}}
               false:
-                list:
-                  spacing: 4
-                  items:
-                    - map:
-                        tag: percent
-                        default: {string: {text: '', font: *awesome}}
-                        values:
-                          0: {string: {text: '', font: *awesome}}
-                    - string: {text: '{percent}%'}
+                map:
+                  tag: percent
+                  default: {string: {text: '', font: *awesome}}
+                  values:
+                    0: {string: {text: '', font: *awesome}}
     - network:
         name: wlo1
         content:
           map:
             on-click: foot --window-size-chars 80x20 --app-id menu sh -c 'iwctl station {name} get-networks && iwctl'
             tag: state
+            default: {string: {text: '', font: *awesome, foreground: *nord3}}
             values:
-              down: {string: {text: '', font: *awesome}}
+              down: {string: {text: '', font: *awesome, foreground: *nord3}}
               up:
                 map:
                   tag: ipv4
@@ -105,7 +108,7 @@ bar:
                         tag: capacity
                         items:
                           - string: {text: '', font: *awesome, foreground: *nord11}
-                          - string: {text: '', font: *awesome, foreground: *nord12}
+                          - string: {text: '', font: *awesome}
                           - string: {text: '', font: *awesome}
                           - string: {text: '', font: *awesome}
                           - string: {text: '', font: *awesome}

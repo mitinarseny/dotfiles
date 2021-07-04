@@ -1,6 +1,6 @@
-XDG_CONFIG_HOME="${HOME}/.config"
-XDG_DATA_HOME="${HOME}/.local/share"
-XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_CACHE_HOME="${HOME}/.cache"
 
 if [ -z "${DISPLAY}${WAYLAND_DISPLAY}" ] && [ $(tty) = '/dev/tty1' ]; then
   exec dbus-run-session -- \

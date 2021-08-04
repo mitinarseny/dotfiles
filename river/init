@@ -182,7 +182,10 @@ if command -v pipewire > /dev/null; then
 fi
 
 if command -v yambar > /dev/null; then
-  (sleep 1 && yambar) &
+  # wait until pipewire is up and only then start yambar
+  (while ! pw-play --list-targets > /dev/null 2>&1; do
+    sleep 0.2
+  done && yambar) &
 fi
 
 if command -v mako > /dev/null; then

@@ -169,8 +169,8 @@ riverctl float-filter-add "popup"
 
 riverctl map normal None Print spawn "sh -c \"grim ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
 riverctl map normal Control Print spawn "sh -c 'grim - | wl-copy'"
-riverctl map normal $mod Print spawn "sh -c \"slurp | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
-riverctl map normal $mod+Control Print spawn "sh -c 'slurp | grim -g - - | wl-copy'"
+riverctl map normal $mod Print spawn "sh -c \"slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
+riverctl map normal $mod+Control Print spawn "sh -c 'slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy'"
 
 # Set app-ids of views which should use client side decorations
 riverctl csd-filter-add "gedit"

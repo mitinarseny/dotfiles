@@ -181,9 +181,13 @@ require('packer').startup(function(use)
                 },
               }, {
                 provider = 'file_info',
-                type = 'unique-short',
                 icon = '',
-                file_modified_icon = '*',
+                opts = {
+                  type = 'unique-short',
+                  colored_icon = false,
+                  file_modified_icon = '*',
+                  file_readonly_icon = '[RO]',
+                },
               },
             }, -- end(left)
             { -- right
@@ -296,10 +300,14 @@ require('packer').startup(function(use)
             { -- left
               {
                 provider = 'file_info',
-                type = 'unique-short',
                 icon = '',
-                file_modified_icon = '*',
-                hl = {bg = 'nord0', fg = 'nord3'},
+                opts = {
+                  type = 'unique-short',
+                  colored_icon = false,
+                  file_modified_icon = '*',
+                  file_readonly_icon = '[RO]',
+                  hl = {bg = 'nord0', fg = 'nord3'},
+                },
               },
             }, -- end(left)
             { -- right

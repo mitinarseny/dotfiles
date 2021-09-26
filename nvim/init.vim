@@ -35,7 +35,7 @@ set novisualbell
 set ignorecase
 
 " write more frequently
-set updatetime=100
+set updatetime=500
 
 " read changes outside of vim
 set autoread
@@ -104,7 +104,7 @@ set smartindent
 set keymodel=startsel,stopsel
 
 " set complete options
-set completeopt=menu,menuone,noinsert
+set completeopt=menu,menuone,noinsert,noselect
 
 " do not show insert completion popups 
 set shortmess+=c
@@ -222,5 +222,4 @@ if has('nvim')
   augroup END
 endif
 
-runtime plugins.vim
-
+lua require('plugins')

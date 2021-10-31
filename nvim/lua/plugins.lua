@@ -563,15 +563,17 @@ require('packer').startup(function(use)
       end
 
       local servers = {
-        'gopls',
-        'clangd',
+        gopls = {},
+        rust_analyzer = {},
+        clangd = {
+          cmd = { 'clangd', '--background-index', '--enable-config' },
+        },
       }
 
       local lspconfig = require('lspconfig')
-      for _, s in ipairs(servers) do
-        lspconfig[s].setup({
-          on_attach = on_lsp_attach
-        })
+      for s, cfg in pairs(servers) do
+        cfg.on_attach = on_lsp_attach
+        lspconfig[s].setup(cfg)
       end
     end
   }

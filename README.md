@@ -28,7 +28,7 @@ $ ./install.sh
 * [LLVM](http://llvm.org)
 * [NeoVim](https://neovim.io)
 * [Python](https://python.org)
-* [Rust]((https://rust-lang.org)
+* [Rust](https://rust-lang.org)
 
 ### Utilities
 

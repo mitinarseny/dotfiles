@@ -17,23 +17,49 @@ $ cd ~/.dotfiles
 $ ./install.sh
 ```
 
-## Utilities
+## Software
 
-* [`alacritty >= 0.6.0`](https://github.com/alacritty/alacritty)
-* [`bat >= 0.17.1`](https://github.com/sharkdp/bat)
-* [`curl >= 7.73.0`](https://curl.se)
-* [`docker >= 19.03.13`](https://docker.com)
-* [`fzf >= 0.24.3`](https://github.com/junegunn/fzf)
-* [`git >= 2.25.1`](https://git-scm.com)
-* [`go >= 1.15.2`](https://golang.org)
-* [`htop >= 3.0.2`](https://htop.dev)
-* [`i3 >= 4.19`](https://i3wm.org)
-* [`jq >= 1.6`](https://stedolan.github.io/jq)
-* [`llvm >= 11.0.1`](http://llvm.org)
-* [`nvim >= 0.4.4`](https://neovim.io)
-* [`polybar >= 3.5.0`](https://github.com/polybar/polybar)
-* [`python >= 3.9.0`](https://python.org)
-* [`rust >= 1.48.0`](https://rust-lang.org)
-* [`tmux >= 3.0a`](https://github.com/tmux/tmux)
-* [`zsh >= 5.8`](http://zsh.sourceforge.net)
+### Development
 
+* [CMake](https://cmake.org)
+* [Docker](https://docker.com)
+* [Git](https://git-scm.com)
+* [Golang](https://golang.org)
+* [LLVM](http://llvm.org)
+* [NeoVim](https://neovim.io)
+* [Python](https://python.org)
+* [Rust]((https://rust-lang.org)
+
+### Utilities
+
+* [bat](https://github.com/sharkdp/bat)
+* [curl](https://curl.se)
+* [fd](https://github.com/sharkdp/fd)
+* [fzf](https://github.com/junegunn/fzf)
+* [jq](https://stedolan.github.io/jq)
+* [htop](https://htop.dev)
+* [tmux](https://github.com/tmux/tmux)
+* [zsh](http://zsh.sourceforge.net)
+
+### System
+
+* [BlueZ](https://github.com/Vudentz/BlueZ)
+* [Light](https://github.com/haikarainen/light)
+* [iproute2](https://github.com/shemminger/iproute2)
+* [iwd](https://iwd.wiki.kernel.org)
+* [PAM_RUNDIR](https://github.com/jjk-jacky/pam_rundir)
+* [PipeWire](https://pipewire.org)
+* [seatd](https://sr.ht/~kennylevinsen/seatd)
+
+### GUI
+
+* [Alacritty](https://github.com/alacritty/alacritty)
+* [Firefox](https://www.mozilla.org/en-US/firefox)
+* [foot](https://codeberg.org/dnkl/foot)
+* [grim](https://github.com/emersion/grim)
+* [mako](https://github.com/emersion/mako)
+* [river](https://github.com/ifreund/river)
+* [slurp](https://github.com/emersion/slurp)
+* [waylock](https://github.com/ifreund/waylock)
+* [wob](https://github.com/francma/wob)
+* [Yambar](https://codeberg.org/dnkl/yambar)

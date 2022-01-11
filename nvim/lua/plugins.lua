@@ -124,20 +124,6 @@ require('packer').startup(function(use)
       function lsp.is_attached()
         return next(vim.lsp.buf_get_clients()) ~= nil
       end
-      function lsp.diagnostics_count(severity)
-        local bufnr = vim.api.nvim_get_current_buf()
-        local active_clients = vim.lsp.buf_get_clients(bufnr)
-        local count = 0
-
-        for _, client in pairs(active_clients) do
-          count = count + vim.lsp.diagnostic.get_count(bufnr, severity, client.id)
-        end
-
-        return count
-      end
-      function lsp.diagnostics_exist(severity)
-        return lsp.diagnostics_count(severity) > 0
-      end
 
       local mode = {}
       function mode.short_name()
@@ -165,6 +151,7 @@ require('packer').startup(function(use)
       end
 
       require('feline').setup({
+        preset = 'noicon',
         components = {
           active = {
             { -- left
@@ -180,6 +167,22 @@ require('packer').startup(function(use)
                   --hl = mode.hl,
                 },
               }, {
+                provider = function()
+                  return vim.b.gitsigns_head
+                end,
+                enabled = function()
+                  return vim.b.gitsigns_head ~= nil
+                end,
+                left_sep = {
+                  str = '[',
+                  hl = {},
+                },
+                right_sep = {
+                  str = ']',
+                  hl = {},
+                },
+                hl = {},
+              }, {
                 provider = 'file_info',
                 icon = '',
                 opts = {
@@ -192,8 +195,10 @@ require('packer').startup(function(use)
             }, -- end(left)
             { -- right
               {
-                provider = function() return 'i' .. lsp.diagnostics_count('Information') end,
-                enabled =  function() return lsp.diagnostics_exist('Information') end,
+                provider = function() return 'i' ..
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO}) end,
+                enabled =  function() return
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO}) > 0 end,
                 left_sep = {
                   str = ' ',
                   hl = {bg = 'nord7'},
@@ -204,8 +209,10 @@ require('packer').startup(function(use)
                 },
                 hl = {bg = 'nord7', fg = 'nord0'},
               }, {
-                provider = function() return 'H' .. lsp.diagnostocs_count('Hints') end,
-                enabled  = function() return lsp.diagnostics_exist('Hints') end,
+                provider = function() return 'H' ..
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.HINT}) end,
+                enabled =  function() return
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.HINT}) > 0 end,
                 left_sep = {
                   str = ' ',
                   hl = {bg = 'nord8'},
@@ -216,8 +223,10 @@ require('packer').startup(function(use)
                 },
                 hl = {bg = 'nord8', fg = 'nord0'},
               }, {
-                provider = function() return 'W' .. lsp.diagnostics_count('Warning') end,
-                enabled  = function() return lsp.diagnostics_exist('Warning') end,
+                provider = function() return 'W' ..
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.WARN}) end,
+                enabled =  function() return
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.WARN}) > 0 end,
                 left_sep = {
                   str = ' ',
                   hl = {bg = 'nord13'},
@@ -228,8 +237,10 @@ require('packer').startup(function(use)
                 },
                 hl = {bg = 'nord13', fg = 'nord0'},
               }, {
-                provider = function() return 'E' .. lsp.diagnostics_count('Error') end,
-                enabled  = function() return lsp.diagnostics_exist('Error') end,
+                provider = function() return 'E' ..
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR}) end,
+                enabled =  function() return
+                  #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR}) > 0 end,
                 left_sep = {
                   str = ' ',
                   hl = {bg = 'nord11'},
@@ -257,26 +268,6 @@ require('packer').startup(function(use)
                   hl = {bg = 'nord3'},
                 },
                 hl = {bg = 'nord3'},
-              }, {
-                provider = function()
-                  return vim.b.gitsigns_head
-                end,
-                enabled = function()
-                  return vim.b.gitsigns_head ~= nil
-                end,
-                left_sep = {
-                  str = ' [ ',
-                  hl = {},
-                },
-                right_sep = {
-                  str = ' ] ',
-                  hl = {},
-                },
-                hl = {},
-              }, {
-                provider = file.file_type,
-                left_sep = ' ',
-                right_sep = ' ',
               }, {
                 provider = file.file_encoding,
                 left_sep = '(',
@@ -312,14 +303,6 @@ require('packer').startup(function(use)
             }, -- end(left)
             { -- right
               {
-                provider = file.file_type,
-                left_sep = ' ',
-                right_sep = ' ',
-              }, {
-                provider = file.file_encoding,
-                left_sep = '(',
-                right_sep = ')',
-              }, {
                 provider = cursor.position,
                 left_sep = ' ',
                 right_sep = ' ',
@@ -335,7 +318,7 @@ require('packer').startup(function(use)
             }, -- end(right)
           },
         },
-        colors = {
+        theme = {
           bg     = _G.nord_colors['nord1'],
           fg     = _G.nord_colors['nord6'],
           nord0  = _G.nord_colors['nord0'],
@@ -490,10 +473,17 @@ require('packer').startup(function(use)
   }
 
   use {
+    'nvim-lua/lsp_extensions.nvim',
+    as = 'lsp_extensions',
+  }
+
+  use {
     'neovim/nvim-lspconfig',
+    as = 'lspconfig',
     after = {
       'nord',
       'compe',
+      'lsp_extensions',
       'telescope',
     },
     config = function()
@@ -525,12 +515,13 @@ require('packer').startup(function(use)
           map('v', '<Leader>lf', '<Cmd>lua vim.lsp.buf.range_formatting()<CR>', {noremap = true, silent = true})
         end
 
-        if client.resolved_capabilities.document_highlight then
-          vim.api.nvim_exec([[
-            autocmd CursorHold,CursorHoldI   <buffer> lua vim.lsp.buf.document_highlight()
-            autocmd CursorMoved,CursorMovedI <buffer> lua vim.lsp.buf.clear_references()
-          ]], true)
-        end
+        -- TODO: map to highlight references
+        -- if client.resolved_capabilities.document_highlight then
+        --   vim.api.nvim_exec([[
+        --     autocmd CursorHold,CursorHoldI   <buffer> lua vim.lsp.buf.document_highlight()
+        --     autocmd CursorMoved,CursorMovedI <buffer> lua vim.lsp.buf.clear_references()
+        --   ]], true)
+        -- end
 
         require('compe').setup({
           enabled = true;
@@ -563,10 +554,20 @@ require('packer').startup(function(use)
       end
 
       local servers = {
-        gopls = {},
-        rust_analyzer = {},
         clangd = {
           cmd = { 'clangd', '--background-index', '--enable-config' },
+        },
+        gopls = {},
+        pyright = {},
+        rust_analyzer = {
+          settings = {
+            ['rust-analyzer'] = {
+              assist = {
+                importGranularity = "module",
+                importPrefix      = "by_self",
+              },
+            },
+          },
         },
       }
 
@@ -575,8 +576,28 @@ require('packer').startup(function(use)
         cfg.on_attach = on_lsp_attach
         lspconfig[s].setup(cfg)
       end
+
+      require('lsp_extensions').inlay_hints({
+        prefix = '=>',
+        highlight = 'Comment',
+        enabled = {
+          'TypeHint',
+          'ParameterHint',
+        },
+      })
     end
   }
+
+  -- use {
+  --   'simrat39/rust-tools.nvim',
+  --   after = {
+  --     'lspconfig',
+  --     'telescope',
+  --   },
+  --   config = function()
+  --     require('rust-tools').setup({})
+  --   end,
+  -- }
 
   use {
     'fatih/vim-go',

@@ -163,5 +163,9 @@ if [ -r ${LOCALRC} ]; then
   . ${LOCALRC}
 fi
 
-exec runsvdir "${SVDIR}"
+# runsvdir on SIGHUP sends SIGTERM to all of running services,
+# so remap signal
+runsvdir "${SVDIR}" &
+trap "kill -1 -- $!" 15
+wait
 

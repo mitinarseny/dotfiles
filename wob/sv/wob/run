@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+exec 2>&1
+. ${XDG_CONFIG_HOME}/wob/conf.sh
+
+mkfifo "${WOBSOCK}"
+tail -f "${WOBSOCK}" | exec wob ${WOBOPTS}

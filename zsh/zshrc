@@ -8,7 +8,7 @@ setopt NOTIFY               # Report status of background jobs immediately.
 setopt HIST_BEEP            # Beep when accessing non-existent history.
 setopt HIST_FIND_NO_DUPS    # skip duplicate adjacent search results
 
-unsetopt AUTO_CD              # Auto changes to a directory without typing cd.
+unsetopt AUTO_CD            # Auto changes to a directory without typing cd.
 setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
 setopt AUTO_NAME_DIRS
 
@@ -16,10 +16,6 @@ setopt INTERACTIVE_COMMENTS # support for comments in command line mode
 
 LANG=${LANG:-en_US.UTF-8}
 WORDCHARS='*?_-~=&;!#$%^<>'
-
-export EDITOR=$(command -v nvim || echo 'vim')
-command -v less &> /dev/null && export PAGER='less'
-command -v code &> /dev/null && export VEDITOR='code'
 
 # Hitory
 HISTSIZE=10000
@@ -32,71 +28,128 @@ setopt EXTENDED_HISTORY
 
 CASE_SENSITIVE=0
 
-export CLICOLOR=1
+_fix_cursor() {
+   printf '\033[6 q'
+}
+precmd_functions+=(_fix_cursor)
 
-# https://github.com/arcticicestudio/nord-dircolors
-export LS_COLORS='no=00:rs=0:fi=00:di=01;34:ln=36:mh=04;36:pi=04;01;36:so=04;33:do=04;01;36:bd=01;33:cd=33:or=31:mi=01;37;41:ex=01;36:su=01;04;37:sg=01;04;37:ca=01;37:tw=01;37;44:ow=01;04;34:st=04;37;44:*.7z=01;32:*.ace=01;32:*.alz=01;32:*.arc=01;32:*.arj=01;32:*.bz=01;32:*.bz2=01;32:*.cab=01;32:*.cpio=01;32:*.deb=01;32:*.dz=01;32:*.ear=01;32:*.gz=01;32:*.jar=01;32:*.lha=01;32:*.lrz=01;32:*.lz=01;32:*.lz4=01;32:*.lzh=01;32:*.lzma=01;32:*.lzo=01;32:*.rar=01;32:*.rpm=01;32:*.rz=01;32:*.sar=01;32:*.t7z=01;32:*.tar=01;32:*.taz=01;32:*.tbz=01;32:*.tbz2=01;32:*.tgz=01;32:*.tlz=01;32:*.txz=01;32:*.tz=01;32:*.tzo=01;32:*.tzst=01;32:*.war=01;32:*.xz=01;32:*.z=01;32:*.Z=01;32:*.zip=01;32:*.zoo=01;32:*.zst=01;32:*.aac=32:*.au=32:*.flac=32:*.m4a=32:*.mid=32:*.midi=32:*.mka=32:*.mp3=32:*.mpa=32:*.mpeg=32:*.mpg=32:*.ogg=32:*.opus=32:*.ra=32:*.wav=32:*.3des=01;35:*.aes=01;35:*.gpg=01;35:*.pgp=01;35:*.doc=32:*.docx=32:*.dot=32:*.odg=32:*.odp=32:*.ods=32:*.odt=32:*.otg=32:*.otp=32:*.ots=32:*.ott=32:*.pdf=32:*.ppt=32:*.pptx=32:*.xls=32:*.xlsx=32:*.app=01;36:*.bat=01;36:*.btm=01;36:*.cmd=01;36:*.com=01;36:*.exe=01;36:*.reg=01;36:*~=02;37:*.bak=02;37:*.BAK=02;37:*.log=02;37:*.log=02;37:*.old=02;37:*.OLD=02;37:*.orig=02;37:*.ORIG=02;37:*.swo=02;37:*.swp=02;37:*.bmp=32:*.cgm=32:*.dl=32:*.dvi=32:*.emf=32:*.eps=32:*.gif=32:*.jpeg=32:*.jpg=32:*.JPG=32:*.mng=32:*.pbm=32:*.pcx=32:*.pgm=32:*.png=32:*.PNG=32:*.ppm=32:*.pps=32:*.ppsx=32:*.ps=32:*.svg=32:*.svgz=32:*.tga=32:*.tif=32:*.tiff=32:*.xbm=32:*.xcf=32:*.xpm=32:*.xwd=32:*.xwd=32:*.yuv=32:*.anx=32:*.asf=32:*.avi=32:*.axv=32:*.flc=32:*.fli=32:*.flv=32:*.gl=32:*.m2v=32:*.m4v=32:*.mkv=32:*.mov=32:*.MOV=32:*.mp4=32:*.mpeg=32:*.mpg=32:*.nuv=32:*.ogm=32:*.ogv=32:*.ogx=32:*.qt=32:*.rm=32:*.rmvb=32:*.swf=32:*.vob=32:*.webm=32:*.wmv=32:'
+alias ls='ls --color=auto' 2>/dev/null
+alias l='ls -lFh'   2>/dev/null #size,show type,human readable
+alias la='ls -lAFh' 2>/dev/null #long list,show almost all,show type,human readable
+alias lr='ls -tRFh' 2>/dev/null #sorted by date,recursive,show type,human readable
+alias lt='ls -ltFh' 2>/dev/null #long list,sorted by date,show type,human readable
+alias ll='ls -l'    2>/dev/null #long list
 
-_zcompinit_custom() {
+alias grep='grep --color' 2>/dev/null
+
+alias tree='tree -C' 2>/dev/null
+
+alias groot='git rev-parse --is-inside-work-tree > /dev/null 2>&1 && cd "$(git rev-parse --show-toplevel)"' 2>/dev/null
+
+alias ip='ip -color' 2>/dev/null
+
+alias tm='tmux new-session -A -s main' 2>/dev/null
+
+alias tb='nc termbin.com 9999' 2>/dev/null
+
+if [ -d ${XDG_DATA_HOME}/zsh/site-functions ] && [ -x ${XDG_DATA_HOME}/zsh/site-functions ]; then
+  fpath+=( ${XDG_DATA_HOME}/zsh/site-functions )
+  autoload -Uz ${XDG_DATA_HOME}/zsh/site-functions/*
+fi
+
+() { # init completion
   autoload -Uz compinit
   local zcd="${HOME}/.zcompdump"
   local zcdc="${zcd}.zwc"
   # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
   # in the background as this is doesn't affect the current session
   if [[ -f "${zcd}"(#qN.m+1) ]]; then
-        compinit -i -d "${zcd}"
-        { rm -f "${zcdc}" && zcompile "${zcd}" } &!
+    compinit -i -d "${zcd}"
+    { rm -f "${zcdc}" && zcompile "${zcd}" } &!
   else
-        compinit -C -d "${zcd}"
-        { [[ ! -f "${zcdc}" || "${zcd}" -nt "${zcdc}" ]] && rm -f "${zcdc}" && zcompile "${zcd}" } &!
+    compinit -C -d "${zcd}"
+    { [[ ! -f "${zcdc}" || "${zcd}" -nt "${zcdc}" ]] && rm -f "${zcdc}" && zcompile "${zcd}" } &!
   fi
 }
 
-[ -d ~/.local/bin ] || mkdir -p ~/.local/bin
-export PATH="${HOME}/.local/bin:${PATH}"
-
-fpath+=("${${(%):-%x}:P:h}/functions")
-autoload -Uz ${${(%):-%x}:P:h}/functions/*(.:t)
-
-typeset -U config_files
-# https://www.reddit.com/r/zsh/comments/alkq5a/how_can_i_change_the_default_location_of_zshrc/egaw8q9
-config_files=(${${(%):-%x}:P:h:h}/**/*.zsh)
-# ignore all *.zsh files starting with underscore
-config_files=(${config_files:#**/_*.zsh})
-
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}; do
-  . "${file}"
-done
-
-# load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
-  . "${file}"
-done
-
-# init completion
-_zcompinit_custom
-
 # load plugins
-if [ -r "${HOME}/.zsh_plugins.sh" ]; then
-  . "${${(%):-%x}:P:h}/_pre_plugins.zsh"
-  . "${HOME}/.zsh_plugins.sh"
-  . "${${(%):-%x}:P:h}/_post_plugins.zsh"
+if [ -r "${HOME}/.plugins.zsh" ]; then
+  . "${HOME}/.plugins.zsh"
 fi
 
-# load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}; do
-  . "${file}"
-done
+setopt AUTO_MENU
+setopt AUTO_LIST
+setopt AUTO_PARAM_SLASH
+setopt AUTO_PARAM_KEYS
+setopt FLOW_CONTROL
+setopt MAGIC_EQUAL_SUBST    # support completion after =
 
-unset config_files
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ${XDG_CACHE_HOME}/zsh
 
-# use .localrc for SUPER SECRET CRAP that you don't
-# want in your public, versioned repo.
-[ -r "${HOME}/.localrc" ] && . "${HOME}/.localrc"
+# when new programs is installed, auto update autocomplete without reloading shell
+zstyle ':completion:*' rehash true
 
-# remove duplicated from PATH
-typeset -U PATH
+# prevent cvs files/directories
+zstyle ':completion:*(all-|)files' ignore-patterns '(|*/)CVS'
+zstyle ':completion:*:cd:*' ignore-patterns '(*/)#CVS'
+
+# case-insensitive (all), partial-word, and then substring completion.
+zstyle ':completion:*' matcher-list '' \
+       'm:{a-z\-}={A-Z\_}' \
+       'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+       'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
+
+# don't complete unavailable commands or complete functions.
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+
+zstyle ':completion:*:*:*:*:*' menu select
+
+# group mathces
+zstyle ':completion:*:matches' group 'yes'
+
+#default group name
+zstyle ':completion:*' group-name ''
+
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+
+
+if [[ -v functions[fzf-tab-complete] ]]; then
+  zstyle ':completion:*:descriptions' format '[%d]'
+else
+  zstyle ':completion:*'              format ' %F{yellow}-- %d --%f'
+  zstyle ':completion:*:corrections'  format ' %F{green}-- %d (errors: %e) --%f'
+  zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+  zstyle ':completion:*:messages'     format ' %F{purple} -- %d --%f'
+  zstyle ':completion:*:warnings'     format ' %F{red}-- no matches found --%f'
+
+  zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+fi
+
+zstyle ':completion:*' verbose yes
+
+# directories
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
+zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
+zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' special-dirs true
+
+# Environmental Variables
+zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
+
+# separate sections for man pages
+zstyle ':completion:*:manuals'    separate-sections true
+zstyle ':completion:*:manuals.*'  insert-sections   true
+
+# populate hostname completion.
+zstyle -e ':completion:*:hosts' hosts 'reply=(
+  ${=${=${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) 2>/dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
+  ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
+)'
 
 # do not highlight pasted text
 zle_highlight=('paste:none')
@@ -175,3 +228,9 @@ for key     seq        mode      widget (
 
 bindkey '\e^?'    backward-kill-word
 
+# use ~/.localrc for SUPER SECRET CRAP that you don't
+# want in your public repo.
+[ -r "${HOME}/.localrc" ] && . "${HOME}/.localrc"
+
+# remove duplicated from PATH
+typeset -U PATH

@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+SOCK=$(mkfifo )
+
+echo 'lock lock1
+sleep sleep1
+shutdown shutdown1
+reboot reboot1' \
+| fzf --nth 1 --with-nth 1 \
+  --color hl:2,bg+:8,gutter:-1,hl+:2 \
+  --color pointer:6,info:8,spinner:8,header:8,prompt:1,marker:1 \

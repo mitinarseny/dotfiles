@@ -1,0 +1,4 @@
+#!/bin/sh -e
+LOGDIR=${XDG_STATE_HOME}/svlogd/logs/mako/${WAYLAND_DISPLAY}
+mkdir -p ${LOGDIR}
+exec svlogd -tt ${LOGDIR}

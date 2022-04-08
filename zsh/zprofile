@@ -1,13 +1,1 @@
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_DATA_HOME="${HOME}/.local/share"
-export XDG_CACHE_HOME="${HOME}/.cache"
-
-if [ -z "${DISPLAY}${WAYLAND_DISPLAY}" ] && [ $(tty) = '/dev/tty1' ]; then
-  exec dbus-run-session -- \
-    env \
-      XDG_SESSION_TYPE=wayland \
-      XDG_CURRENT_DESKTOP=river \
-      XKB_DEFAULT_LAYOUT="us,ru" \
-      XKB_DEFAULT_OPTIONS="grp:alt_space_toggle" \
-    river
-fi
+emulate sh -c ". ${HOME}/.profile"

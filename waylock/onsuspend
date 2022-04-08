@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/sh -e
 
+# light -O
+# light -S $(light -P)
 waylock &
 sleep 1
+

@@ -1,6 +1,0 @@
-#!/bin/sh
-
-for i in */install.sh; do
-  echo "--> $(dirname $i)"
-  $i
-done

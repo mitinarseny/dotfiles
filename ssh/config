@@ -1,2 +1,6 @@
 AddKeysToAgent yes
 ForwardAgent yes
+
+Host 89.248.206.251
+	User root
+	IdentityFile ~/.ssh/id_rsa

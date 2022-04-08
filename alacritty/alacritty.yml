@@ -1,6 +1,10 @@
 env:
   TERM: xterm-256color
 
+shell:
+  program: /bin/tmux
+  args: ['new-session']
+
 window:
   padding:
     x: 2

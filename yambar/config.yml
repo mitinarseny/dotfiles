@@ -45,6 +45,7 @@ bar:
                   tag: state
                   values:
                     focused: &focused {string: &river_tag {text: ' {id} '}}
+                    urgent: {string: {<<: *river_tag, foreground: *nord11}}
                     invisible: &invisible {string: {<<: *river_tag, foreground: *nord3}}
                     unfocused: *invisible
               false:
@@ -77,7 +78,7 @@ bar:
         name: wlo1
         content:
           map:
-            on-click: foot --window-size-chars 80x20 --app-id menu sh -c 'iwctl station {name} get-networks && iwctl'
+            on-click: foot --window-size-chars 80x20 --app-id float sh -c 'iwctl station {name} get-networks && exec iwctl'
             tag: state
             default: {string: {text: '', font: *awesome, foreground: *nord3}}
             values:
@@ -126,4 +127,3 @@ bar:
             items:
             - string: {text: '{date}'}
             - string: {text: '{time}'}
-

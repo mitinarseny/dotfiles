@@ -27,6 +27,6 @@ if selection=$(get_selection); then
   nohup gtk-launch "${selection}" >/dev/null 2>&1 </dev/null &
 fi
 
-# a dirty hack to wait for nohup start the process
+# a dirty hack to wait for nohup to start the process
 # /bin/true
 

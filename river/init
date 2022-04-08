@@ -2,20 +2,20 @@
 
 mod="Mod4" # Super
 
-. ${XDG_CONFIG_HOME:-"${HOME}/.config"}/nord/colors.sh
+. ${XDG_CONFIG_HOME}/wob/conf.sh
+. ${XDG_CONFIG_HOME}/nord/colors.sh
 
 riverctl map normal $mod+Shift Return spawn alacritty
 
-riverctl float-filter-add menu
+riverctl float-filter-add app-id float
 if command -v foot > /dev/null; then
-  foot --server > /dev/null 2>&1 &
   riverctl map normal $mod Space spawn 'footclient \
-    --app-id=menu \
+    --app-id=float \
     --title=Spotlight \
     --window-size-chars=60x12 \
     fzf_run'
 else
-  riverctl map normal $mod Space spawn 'alacritty --class=menu --title=Spotlight fzf_run'
+  riverctl map normal $mod Space spawn 'alacritty --class=float --title=Spotlight fzf_run'
 fi
 
 riverctl map normal $mod               Q close
@@ -25,6 +25,9 @@ riverctl map normal $mod L spawn waylock
 
 riverctl map normal $mod       Tab focus-view next
 riverctl map normal $mod+Shift Tab focus-view previous
+
+riverctl map normal $mod       grave focus-previous-tags
+riverctl map normal $mod+Shift grave send-to-previous-tags
 
 riverctl map normal $mod+Shift Period swap next
 riverctl map normal $mod+Shift Comma  swap previous
@@ -97,21 +100,6 @@ riverctl map normal $mod+Control Right set-layout-value rivertile string main_lo
 riverctl map normal $mod+Control Down  set-layout-value rivertile string main_location bottom
 riverctl map normal $mod+Control Left  set-layout-value rivertile string main_location left
 
-if command -v wob > /dev/null; then
-  WOBSOCK=${XDG_RUNTIME_DIR:-'/tmp'}/wob.sock
-  mkfifo ${WOBSOCK} && tail -f ${WOBSOCK} | wob \
-    --anchor bottom \
-    --margin 10 \
-    --offset 0 \
-    --padding 0 \
-    --border 2 \
-    --height 30 \
-    --width 400 \
-    --background-color "#ff${NORD0}" \
-    --border-color "#ff${NORD3}" \
-    --bar-color "#ff${NORD6}" &
-fi
-
 # Various media key mapping examples for both normal and locked mode which do
 # not have a modifier
 for mode in normal locked
@@ -120,25 +108,19 @@ do
     riverctl map $mode None XF86Eject spawn eject -T
 
     # ALSA
-    if [ -n "${WOBSOCK}" ]; then
-      riverctl map $mode None XF86AudioRaiseVolume  spawn "sh -c \" \
-        amixer sset Master 5%+ unmute | \
-        sed -En 's/.*\[([0-9]+)%\].*/\1 #ff${NORD0} #ff${NORD3} #ff${NORD6}/p' | \
+    riverctl map $mode None XF86AudioRaiseVolume  spawn "sh -c \" \
+      amixer sset Master 5%+ unmute | \
+      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' | \
+      head -1 > ${WOBSOCK}\""
+    riverctl map $mode None XF86AudioLowerVolume  spawn "sh -c \" \
+      amixer sset Master 5%- unmute | \
+      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' | \
+      head -1 > ${WOBSOCK}\""
+    riverctl map $mode None XF86AudioMute         spawn "sh -c \" \
+      amixer sset Master toggle | \
+        sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p' | \
         head -1 > ${WOBSOCK}\""
-      riverctl map $mode None XF86AudioLowerVolume  spawn "sh -c \" \
-        amixer sset Master 5%- unmute | \
-        sed -En 's/.*\[([0-9]+)%\].*/\1 #ff${NORD0} #ff${NORD3} #ff${NORD6}/p' | \
-        head -1 > ${WOBSOCK}\""
-      riverctl map $mode None XF86AudioMute         spawn "sh -c \" \
-        amixer sset Master toggle | \
-          sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #ff${NORD0} #ff${NORD3} #ff${NORD6}/p' \
-                  -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #ff${NORD0} #ff${NORD11} #ff${NORD6}/p' | \
-          head -1 > ${WOBSOCK}\""
-    else
-      riverctl map $mode None XF86AudioRaiseVolume  spawn 'amixer -q sset Master 5%+ unmute'
-      riverctl map $mode None XF86AudioLowerVolume  spawn 'amixer -q sset Master 5%- unmute'
-      riverctl map $mode None XF86AudioMute         spawn 'amixer -q sset Master toggle'
-    fi
 
     # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     # riverctl map $mode None XF86AudioMedia spawn playerctl play-pause
@@ -147,33 +129,21 @@ do
     # riverctl map $mode None XF86AudioNext  spawn playerctl next
 
     # Control screen backlight brighness with light (https://github.com/haikarainen/light)
-    if [ -n "${WOBSOCK}" ]; then
-      riverctl map $mode None XF86MonBrightnessUp   spawn "sh -c \" \
-        light -A 5 && light -G | \
-        sed -En 's/([0-9]+)\.[0-9]{2}/\1 #ff${NORD0} #ff${NORD3} #ff${NORD6}/p' > ${WOBSOCK}\""
-      riverctl map $mode None XF86MonBrightnessDown spawn "sh -c \" \
-        light -U 5 && light -G | \
-        sed -En 's/([0-9]+)\.[0-9]{2}/\1 #ff${NORD0} #ff${NORD3} #ff${NORD6}/p' > ${WOBSOCK}\""
-    else
-      riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5'
-      riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
-    fi
+    riverctl map $mode None XF86MonBrightnessUp   spawn "sh -c \" \
+      light -A 5 && light -G | \
+      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}\""
+    riverctl map $mode None XF86MonBrightnessDown spawn "sh -c \" \
+      light -U 5 && light -G | \
+      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}\""
 done
 
 # Set repeat rate
 riverctl set-repeat 50 300
 
-# Set app-ids of views which should float
-riverctl float-filter-add "float"
-riverctl float-filter-add "popup"
-
 riverctl map normal None Print spawn "sh -c \"grim ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
 riverctl map normal Control Print spawn "sh -c 'grim - | wl-copy'"
 riverctl map normal $mod Print spawn "sh -c \"slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
-riverctl map normal $mod+Control Print spawn "sh -c 'slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy'"
-
-# Set app-ids of views which should use client side decorations
-riverctl csd-filter-add "gedit"
+riverctl map normal $mod+Control Print spawn "sh -c \"slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy\""
 
 # Set opacity and fade effect
 # riverctl opacity 1.0 0.75 0.0 0.1 20
@@ -182,30 +152,16 @@ riverctl csd-filter-add "gedit"
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
 
-if command -v pipewire > /dev/null; then
-  pipewire &
-fi
-
-if command -v yambar > /dev/null; then
-  # wait until pipewire is up and only then start yambar
-  (while ! pw-play --list-targets > /dev/null 2>&1; do
-    sleep 0.2
-  done && yambar) &
-fi
-
-if command -v mako > /dev/null; then
-  mako &
-fi
-
 riverctl attach-mode bottom
 riverctl border-width 2
 riverctl background-color       "0x${NORD0}"
 riverctl border-color-focused   "0x${NORD3}"
 riverctl border-color-unfocused "0x${NORD1}"
 
-LOCALRC=${XDG_CONFIG_HOME:-${HOME}/.config}/river/local
-if [ -x ${LOCALRC} ]; then
-  ${LOCALRC}
+LOCALRC=${XDG_CONFIG_HOME}/river/local
+if [ -r ${LOCALRC} ]; then
+  . ${LOCALRC}
 fi
 
-exec rivertile -outer-padding 1 -view-padding 1
+exec runsvdir "${SVDIR}"
+

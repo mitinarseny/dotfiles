@@ -11,10 +11,16 @@
 
 ## Install
 
+> **NOTE:** make sure the following is installed:
+> * [curl](https://curl.se/)
+> * [git](https://git-scm.com/)
+> * [make](https://www.gnu.org/software/make/)
+> * [sudo](https://www.sudo.ws/)
+
 ```sh
 $ git clone https://github.com/mitinarseny/dotfiles ~/.dotfiles
 $ cd ~/.dotfiles
-$ ./install.sh
+$ make
 ```
 
 ## Software
@@ -47,7 +53,7 @@ $ ./install.sh
 * [Light](https://github.com/haikarainen/light)
 * [iproute2](https://github.com/shemminger/iproute2)
 * [iwd](https://iwd.wiki.kernel.org)
-* [PAM_RUNDIR](https://github.com/jjk-jacky/pam_rundir)
+* [PAM_RUNDIR](https://github.com/ifreund/rundird)
 * [PipeWire](https://pipewire.org)
 * [seatd](https://sr.ht/~kennylevinsen/seatd)
 

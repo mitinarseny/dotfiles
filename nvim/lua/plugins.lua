@@ -1,6 +1,6 @@
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+  vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
   vim.cmd 'packadd packer.nvim'
 end
 
@@ -30,6 +30,7 @@ require('packer').startup(function(use)
 
   use {
     'arcticicestudio/nord-vim',
+    tag = 'v0.18.0',
     as = 'nord',
     config = function()
       vim.g.nord_bold_vertical_split_line = true
@@ -178,7 +179,7 @@ require('packer').startup(function(use)
                   hl = {},
                 },
                 right_sep = {
-                  str = ']',
+                  str = '] ',
                   hl = {},
                 },
                 hl = {},

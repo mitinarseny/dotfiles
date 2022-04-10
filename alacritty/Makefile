@@ -13,7 +13,7 @@ $(CONFIG_DIR)/alacritty.yml: alacritty.yml | make_tmux
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: install
-ifneq (,$(filter void,$(DISTRO_ID)))
+ifneq (,$(filter void arch,$(DISTRO_ID)))
 install: | install_pkgs
 install_pkgs: PKGS += alacritty
 else

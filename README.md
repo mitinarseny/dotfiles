@@ -11,7 +11,7 @@
 ```sh
 $ git clone https://github.com/mitinarseny/dotfiles ~/.dotfiles
 $ cd ~/.dotfiles
-$ make
+$ make -k
 ```
 
 ## Software

@@ -34,7 +34,7 @@ install_language_servers: $(addprefix install_,clangd gopls pyright rust_analyze
 
 .PHONY: install_gopls
 install_gopls: | make_golang
-	GONOPROXY=* go install golang.org/x/tools/gopls@latest
+	GO111MODULE=on GONOPROXY=* go install golang.org/x/tools/gopls@latest
 
 .PHONY: install_clangd
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))

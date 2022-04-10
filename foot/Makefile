@@ -13,7 +13,7 @@ $(CONFIG_DIR)/%.ini: %.ini
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: install
-ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+ifneq (,$(filter void arch,$(DISTRO_ID)))
 install: | install_pkgs
 install_pkgs: PKGS += foot
 else

@@ -1,7 +1,7 @@
 include ../inc.mk
 
 .PHONY: all
-all: install dotfiles install_language_servers
+all: install dotfiles install_language_servers make_fzf
 
 CONFIG_DIR := $(XDG_CONFIG_HOME)/nvim
 
@@ -34,9 +34,8 @@ install_language_servers: $(addprefix install_,clangd gopls pyright rust_analyze
 
 .PHONY: install_gopls
 install_gopls: | make_golang
-	go install golang.org/x/tools/gopls@latest
+	GONOPROXY=* go install golang.org/x/tools/gopls@latest
 
-CLANG_VERSION := 13.0.0
 .PHONY: install_clangd
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
 install_clangd: | install_pkgs

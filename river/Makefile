@@ -10,6 +10,7 @@ dotfiles: $(CONFIG_DIR)/init
 
 $(CONFIG_DIR)/init: init | $(addprefix make_,\
 	alacritty \
+	firefox \
 	foot \
 	mako \
 	nord \

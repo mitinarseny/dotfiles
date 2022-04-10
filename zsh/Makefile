@@ -1,7 +1,7 @@
 include ../inc.mk
 
 .PHONY: all
-all: install dotfiles
+all: install dotfiles chsh
 
 DOTFILES := $(addprefix $(HOME)/,.profile .zprofile .zshrc)
 .PHONY: dotfiles
@@ -37,7 +37,7 @@ GIT_PLUGINS := $(addprefix $(PLUGINS_DIR)/,\
 	github.com/docker/compose \
 )
 
-$(HOME)/.plugins.zsh: plugins.zsh | $(GIT_PLUGINS)
+$(HOME)/.plugins.zsh: plugins.zsh | $(GIT_PLUGINS) make_fzf
 	@$(LNS) $(realpath $<) $@
 
 $(GIT_PLUGINS): $(PLUGINS_DIR)/%:
@@ -52,4 +52,14 @@ install_pkgs: PKGS += zsh
 else
 install: ; $(ERR_OS)
 endif
+
+ZSH_COMMAND = $(shell command -v zsh)
+.PHONY: chsh
+chsh: | install add_to_shells
+	[ "$$(getent passwd $(USER) | cut -d':' -f7)" = "$(ZSH_COMMAND)" ] || \
+		sudo chsh -s $(ZSH_COMMAND)
+
+.PHONY: add_to_shells
+add_to_shells: /etc/shells | install
+	grep -qxF $(ZSH_COMMAND) $< || echo $(ZSH_COMMAND) | sudo tee -a $< >/dev/null
 

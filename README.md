@@ -9,6 +9,8 @@
     </p>
 </p>
 
+# `~/.*` [![GitHub Actions](https://github.com/mitinarseny/dotfiles/workflows/CI/badge.svg)](https://github.com/mitinarseny/dotfiles/actions?query=workflow%3ACI)
+
 ## Install
 
 > **NOTE:** make sure the following is installed:

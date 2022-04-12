@@ -2,6 +2,19 @@
 
 exec 2>&1
 . ${XDG_CONFIG_HOME}/wob/conf.sh
+. ${XDG_CONFIG_HOME}/nord/colors.sh
 
+rm -f "${WOBSOCK}"
 mkfifo "${WOBSOCK}"
-tail -f "${WOBSOCK}" | exec wob ${WOBOPTS}
+tail -f "${WOBSOCK}" | wob \
+  --anchor bottom \
+  --margin 10 \
+  --offset 0 \
+  --padding 0 \
+  --border 2 \
+  --height 30 \
+  --width 400 \
+  --background-color "#ff${NORD0}" \
+  --border-color "#ff${NORD3}" \
+  --bar-color "#ff${NORD6}"
+

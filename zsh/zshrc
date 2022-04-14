@@ -234,3 +234,10 @@ bindkey '\e^?'    backward-kill-word
 
 # remove duplicated from PATH
 typeset -U PATH
+
+if command -v less > /dev/null; then
+  export LESS='-FSXiwMRj4a#4z-4'
+  if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
+    LESS+='--mouse --wheel-lines=2'
+  fi
+fi

@@ -30,14 +30,18 @@ require('packer').startup(function(use)
 
   use {
     'arcticicestudio/nord-vim',
-    tag = 'v0.18.0',
     as = 'nord',
-    config = function()
+    setup = function()
       vim.g.nord_bold_vertical_split_line = true
       vim.g.nord_uniform_diff_background  = true
-
+    end,
+    config = function()
       vim.api.nvim_exec('colorscheme nord', true)
       vim.o.termguicolors = true
+      -- fix: remove background highlighting of Diff* groups
+      for _,g in ipairs({'DiffAdd', 'DiffChange', 'DiffDelete'}) do
+        vim.highlight.create(g, {ctermbg='NONE', guibg='NONE'}, false)
+      end
 
       _G.nord_colors = vim.fn['NordPalette']()
     end,
@@ -86,8 +90,9 @@ require('packer').startup(function(use)
           topdelte      = {text = '‾'},
           chandedelete  = {text = '≈'},
         },
-        keymaps = {},
         signcolumn = true,
+        numhl      = false,
+        linehl     = false,
       })
     end
   }

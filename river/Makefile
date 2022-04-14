@@ -25,7 +25,7 @@ $(CONFIG_DIR)/init: init | $(addprefix make_,\
 .PHONY: install
 ifneq (,$(filter void,$(DISTRO_ID)))
 install: | install_pkgs
-install_pkgs: PKGS += river
+install_pkgs: PKGS += river xdg-desktop-portal-wlr
 else
 install: ; $(ERR_OS)
 endif

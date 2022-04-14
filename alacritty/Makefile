@@ -8,7 +8,7 @@ CONFIG_DIR = $(XDG_CONFIG_HOME)/alacritty
 .PHONY: dotfiles
 dotfiles: $(CONFIG_DIR)/alacritty.yml
 
-$(CONFIG_DIR)/alacritty.yml: alacritty.yml | make_tmux
+$(CONFIG_DIR)/alacritty.yml: alacritty.yml | make_tmux make_fonts
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 

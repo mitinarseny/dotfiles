@@ -1,9 +1,9 @@
-env:
-  TERM: xterm-256color
-
 shell:
   program: /bin/tmux
-  args: ['new-session']
+  args:
+    - '-T'
+    - '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title'
+    - 'new-session'
 
 window:
   padding:

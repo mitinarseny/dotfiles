@@ -22,8 +22,15 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     
-    - name: 'System Upgrade'
-      run: sudo apt-get update && sudo apt-get upgrade
+    - name: 'Install tools'
+      run: |
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get install --yes \
+          dash bash \
+          curl \
+          git \
+          make
 
     # Runs a single command using the runners shell
     - name: Make

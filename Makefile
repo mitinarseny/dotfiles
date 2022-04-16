@@ -706,7 +706,7 @@ export ZDOTDIR ?= $(XDG_CONFIG_HOME)/zsh
 .PHONY: zsh.dotfiles
 zsh.dotfiles: $(ZDOTDIR)/.zshrc zsh.functions
 
-$(HOME)/.zprofile: zsh/zprofile | profile.00-xdg.sh
+$(HOME)/.zprofile: zsh/zprofile | $(addprefix profile.,00-xdg.sh 10-zsh.sh)
 	@$(LNS) $(realpath $<) $@
 
 $(ZDOTDIR)/.zshrc: zsh/zshrc | $(HOME)/.zprofile zsh.plugins profile.00-colors.sh

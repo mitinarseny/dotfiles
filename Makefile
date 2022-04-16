@@ -51,6 +51,7 @@ endif
 all: profiles services XDG_RUNTIME_DIR \
 	alacritty \
 	cmake \
+	fd \
 	firefox \
 	fonts \
 	foot \
@@ -65,6 +66,7 @@ all: profiles services XDG_RUNTIME_DIR \
 	pipewire \
 	python \
 	river \
+	ripgrep \
 	rust \
 	ssh \
 	tmux \
@@ -80,7 +82,8 @@ DEB_INSTALL    := sudo apt-get update && sudo apt-get install --yes
 
 ERR_OS = $(error Unsupported OS: "$(DISTRO_ID)")
 
-PKGS_INSTALL    =  $(ERR_OS)
+PKGS_INSTALL = $(ERR_OS)
+PKGS         = $(ERR_OS)
 ifeq (void,$(DISTRO_ID))
 PKGS_INSTALL := $(XBPS_INSTALL)
 else ifeq (arch,$(DISTRO_ID))
@@ -115,11 +118,11 @@ SV_FILES := run finish check down log/run log/finish
 
 .PHONY: runit
 runit:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) runit socklog
-else
-	$(ERR_OS)
+runit: PKGS := runit socklog
 endif
+
 
 .PHONY: services
 SERVICES := $(patsubst sv/%/run,service.%,$(wildcard sv/*/run))
@@ -176,8 +179,9 @@ alacritty.install:
 	$(PKGS_INSTALL) alacritty
 else
 alacritty.install: | rust.install
-	cargo install alacritty
+	$(CARGO_INSTALL) alacritty
 endif
+
 
 CMAKE_VERSION ?= 3.32.0
 CMAKE_GITHUB_RELEASE := https://github.com/Kitware/CMake/releases/download/v$(CMAKE_VERSION)
@@ -195,15 +199,30 @@ else
 	$(ERR_KERNEL)
 endif
 
-.PHONY: firefox
-firefox:
-ifneq (,$(filter void arch ubuntu,$(DISTRO_ID)))
-	$(PKGS_INSTALL) firefox
-else ifeq (debian,$(DISTRO_ID))
-	$(PKGS_INSTALL) firefox-esr
-else
-	$(ERR_OS)
+
+.PHONY: fd
+ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+fd:
+	$(PKGS_INSTALL) $(PKGS)
+ifneq (,$(filter void arch,$(DISTRO_ID)))
+fd: PKGS := fd
+else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
+	@$(LNS) $$(command -v fdfind) $(HOME)/.local/bin
+fd: PKGS := fd-find
 endif
+else
+fd: | rust.install
+	$(CARGO_INSTALL) fd-find
+endif
+
+.PHONY: firefox
+ifneq (,$(filter void arch ubuntu,$(DISTRO_ID)))
+firefox: PKGS := firefox
+else ifeq (debian,$(DISTRO_ID))
+firefox: PKGS := firefox-esr
+endif
+firefox:
+	$(PKGS_INSTALL) $(PKGS)
 
 FONTCONFIG_CONFIG_DIR := $(XDG_CONFIG_HOME)/fontconfig
 FONTS_DIR := $(XDG_DATA_HOME)/fonts
@@ -225,10 +244,11 @@ fonts.install: | $(addprefix _fonts.install.,fontconfig \
 
 .PHONY: _fonts.install.fontconfig
 _fonts.install.fontconfig:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) fontconfig
+_fonts.install.fontconfig: PKGS := fontconfig
 else
-	$(ERR_OS)
+_fonts.install.fontconfig: PKGS = $(ERR_OS)
 endif
 
 .PHONY: fonts.cache
@@ -236,21 +256,24 @@ fonts.cache: _fonts.install.fontconfig
 	fc-cache --force --verbose
 
 .PHONY: _fonts.install.firacode
-ifneq (,$(filter void arch,$(DISTRO_ID)))
-_fonts.install.firacode:
-ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) font-firacode
-else ifeq (arch,$(DISTRO_ID))
-	$(PKGS_INSTALL) ttf-fira-code
-endif
-else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
+ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
+_fonts.install.firacode: PKGS := fonts-firacode
 _fonts.install.firacode: | _install.add-apt-repository
-ifeq (ubuntu,$(DISTRO_ID))
-	$(ADD_APT_REPOSITORY) universe
-else ifeq (debian,$(DISTRO_ID))
-	$(ADD_APT_REPOSITORY) contrib
+	$(ADD_APT_REPOSITORY) $(REPO)
+else
+_fonts.install.firacode:
 endif
-	$(PKGS_INSTALL) fonts-firacode
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+_fonts.install.firacode: PKGS := font-firacode
+else ifeq (arch,$(DISTRO_ID))
+_fonts.install.firacode: PKGS := ttf-fira-code
+else ifeq (ubuntu,$(DISTRO_ID))
+_fonts.install.firacode: REPO := universe
+else ifeq (debian,$(DISTRO_ID))
+_fonts.install.firacode: REPO := contrib
+endif
 else
 FIRACODE_VERSION := 6.2
 FIRACODE_ZIP := Fira_Code_v$(FIRACODE_VERSION).zip
@@ -284,10 +307,9 @@ endif
 
 .PHONY: fzf
 fzf:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) fzf
-else
-	$(ERR_OS)
+fzf: PKGS := fzf
 endif
 
 .PHONY: git
@@ -334,10 +356,9 @@ git.set_user: $(addprefix git.set_user.,email name)
 
 .PHONY: git.install
 git.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) git
-else
-	$(ERR_OS)
+git.install: PKGS := git
 endif
 
 
@@ -356,10 +377,13 @@ GOARCH = $(ERR_ARCH)
 endif
 .PHONY: golang.install
 golang.install:
+ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch,$(DISTRO_ID)))
-	$(PKGS_INSTALL) go
+golang.install: PKGS := go
 else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) golang
+golang.install: PKGS := golang
+endif
 else
 	-@sudo rm -rf /usr/local/go
 	curl -fsSL https://go.dev/dl/go$(GO_VERSION).$(KERNEL)-$(GOARCH).tar.gz | \
@@ -380,10 +404,9 @@ less: less.install profile.10-less.sh
 
 .PHONY: less.install
 less.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) less
-else
-	$(ERR_OS)
+less.install: PKGS := less
 endif
 
 
@@ -402,12 +425,11 @@ $(MAKO_CONFIG_DIR)/config: mako/config
 
 .PHONY: mako.install
 mako.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch,$(DISTRO_ID)))
-	$(PKGS_INSTALL) mako
+mako.install: PKGS := mako
 else ifeq (ubuntu,$(DISTRO_ID))
-	$(PKGS_INSTALL) mako-notifier
-else
-	$(ERR_OS)
+mako.install: PKGS := mako-notifier
 endif
 
 NORD_CONFIG_DIR := $(XDG_CONFIG_HOME)/nord
@@ -421,7 +443,7 @@ $(NORD_CONFIG_DIR)/colors.sh: nord/colors.sh
 
 
 .PHONY: nvim
-nvim: $(addprefix nvim.,install dotfiles) profile.10-nvim.sh lsp
+nvim: $(addprefix nvim.,install dotfiles) profile.10-nvim.sh lsp fd ripgrep
 
 .PHONY: nvim.dotfiles
 NVIM_DOTFILES := $(addprefix $(XDG_CONFIG_HOME)/,$(wilcarrd nvim/*.vim nvim/lua/*.lua nvim/ftplugin/*.vim))
@@ -446,42 +468,43 @@ nvim.install: | cmake
 endif
 
 .PHONY: lsp
-lsp: $(addprefix lsp.,clangd gopls pyright rust_analyzer)
+lsp: clangd gopls pyright rust_analyzer
 
-.PHONY: lsp.gopls
-lsp.gopls: | golang
+.PHONY: gopls
+gopls: | golang
 	GONOPROXY=* go install golang.org/x/tools/gopls@latest
 
-.PHONY: lsp.clangd
-lsp.clangd: $(addprefix lsp.clangd.,install dotfiles)
+.PHONY: clangd
+clangd: $(addprefix clangd.,install dotfiles)
 
-.PHONY: lsp.clangd.dotfiles
+.PHONY: clangd.dotfiles
 CLANGD_CONFIG_DIR := $(XDG_CONFIG_HOME)/clangd
-lsp.clangd.dotfiles: $(CLANGD_CONFIG_DIR)/config.yaml
+clangd.dotfiles: $(CLANGD_CONFIG_DIR)/config.yaml
 
 $(CLANGD_CONFIG_DIR)/config.yaml: clangd/config.yaml
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
-.PHONY: lsp.clangd.install
-lsp.clangd.install:
+.PHONY: clangd.install
+clangd.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch,$(DISTRO_ID)))
-	$(PKGS_INSTALL) clang
+clangd.install: PKGS := clang
 else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) clangd
-else
-	$(ERR_OS)
+clangd.install: PKGS := clangd
 endif
 
-.PHONY: lsp.pyright
-lsp.pyright: | python
+.PHONY: pyright
+pyright: | python
 	pip3 install pyright
 
-.PHONY: lsp.rust_analyzer
-lsp.rust_analyzer: | profile.00-xdg.sh
+.PHONY: rust_analyzer
+rust_analyzer: $(HOME)/.local/bin/rust-analyzer | profile.00-xdg.sh
+
+$(HOME)/.local/bin/rust-analyzer:
 	curl -fsSL https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-$(ARCH)-unknown-linux-$(LIBC).gz | \
-		gunzip -c - > ~/.local/bin/rust-analyzer && \
-		chmod +x ~/.local/bin/rust-analyzer
+		gunzip -c - > $@
+	chmod +x $@
 
 
 .PHONY: pipewire
@@ -489,19 +512,17 @@ pipewire: pipewire.install service.pipewire
 
 .PHONY: pipewire.install
 pipewire.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) pipewire
-else
-	$(ERR_OS)
+pipewire.install: PKGS := pipewire
 endif
 
 
 .PHONY: python
 python:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) python3
-else
-	$(ERR_OS)
+python: PKGS := python3
 endif
 
 
@@ -526,10 +547,20 @@ $(RIVER_CONFIG_DIR)/init: river/init | runit \
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: river.install
+river.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) river xdg-desktop-portal-wlr
+river.install: PKGS := river xdg-desktop-portal-wlr
+endif
+
+
+.PHONY: ripgrep
+ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+ripgrep:
+	$(PKGS_INSTALL) ripgrep
 else
-	$(ERR_OS)
+ripgrep: | rust.install
+	$(CARGO_INSTALL) ripgrep
 endif
 
 
@@ -545,18 +576,19 @@ else
 	rustup self update
 endif
 
+CARGO_INSTALL := cargo install
+
 
 .PHONY: ssh
 ssh: ssh.install profile.70-ssh-agent.sh
 
 .PHONY: ssh.install
 ssh.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch,$(DISTRO_ID)))
-	$(PKGS_INSTALL) openssh
+ssh.install: PKGS := openssh
 else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) openssh-client openssh-server
-else
-	$(ERR_OS)
+ssh.install: PKGS := openssh-client openssh-server
 endif
 
 
@@ -572,12 +604,11 @@ $(HOME)/.tmux.conf: tmux/tmux.conf
 TMUX_MIN_VERSION := 3.2
 .PHONY: tmux.install
 tmux.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) 'tmux>=$(TMUX_MIN_VERSION)' 'ncurses-term>=6.3'
+tmux.install: PKGS := 'tmux>=$(TMUX_MIN_VERSION)' 'ncurses-term>=6.3'
 else ifneq (,$(filter arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) 'tmux>=$(TMUX_MIN_VERSION)'
-else
-	$(ERR_OS)
+tmux.install: PKGS := 'tmux>=$(TMUX_MIN_VERSION)'
 endif
 
 
@@ -596,18 +627,16 @@ $(HOME)/.onsuspend: waylock/onsuspend | _install.zzz-user-hooks
 
 .PHONY: waylock.install
 waylock.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) waylock
-else
-	$(ERR_OS)
+waylock.install: PKGS := waylock
 endif
 
 .PHONY: _install.zzz-user-hooks
 _install.zzz-user-hooks:
+	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) zzz-user-hooks
-else
-	$(ERR_OS)
+_install.zzz-user-hooks: PKGS := zzz-user-hooks
 endif
 
 .PHONY: wob
@@ -624,10 +653,9 @@ $(WOB_CONFIG_DIR)/conf.sh: wob/conf.sh
 
 .PHONY: wob.install
 wob.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) wob
-else
-	$(ERR_OS)
+wob.install: PKGS := wob
 endif
 
 .PHONY: yambar
@@ -644,10 +672,9 @@ $(YAMBAR_CONFIG_DIR)/conf.sh: yambar/config.yml
 
 .PHONY: yambar.install
 yambar.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void,$(DISTRO_ID)))
-	$(PKGS_INSTALL) yambar
-else
-	$(ERR_OS)
+yambar.install: PKGS := yambar
 endif
 
 .PHONY: zsh
@@ -701,10 +728,9 @@ $(foreach p,$(ZSH_GIT_PLUGINS),$(eval $(call ZSH_GIT_PLUGIN_tmpl,$(p))))
 
 .PHONY: zsh.install
 zsh.install:
+	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-	$(PKGS_INSTALL) 'zsh>=5.8'
-else
-	$(ERR_OS)
+zsh.install: PKGS := 'zsh>=5.8'
 endif
 
 ZSH_COMMAND = $(shell command -v zsh)
@@ -720,8 +746,7 @@ zsh.add_to_shells: /etc/shells | zsh.install
 
 .PHONY: XDG_RUNTIME_DIR
 XDG_RUNTIME_DIR:
+	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-	$(PKGS_INSTALL) 'dumb_runtime_dir>=1'
-else
-	$(ERR_OS)
+XDG_RUNTIME_DIR: PKGS := 'dumb_runtime_dir>=1'
 endif

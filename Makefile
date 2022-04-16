@@ -48,7 +48,7 @@ DISTRO_ID := macos
 endif
 
 .PHONY: all
-all: profiles services XDG_RUNTIME_DIR \
+all: bin profiles services XDG_RUNTIME_DIR \
 	alacritty \
 	cmake \
 	fd \
@@ -61,6 +61,7 @@ all: profiles services XDG_RUNTIME_DIR \
 	inputrc \
 	less \
 	mako \
+	nnn \
 	nord \
 	nvim \
 	pipewire \
@@ -97,6 +98,14 @@ _install.software-properties-common:
 _install.add-apt-repository: _install.software-properties-common
 	$(eval ADD_APT_REPOSITORY := sudo add-apt-repository)
 endif
+
+.PHONY: bin
+BIN_FILES := $(addprefix $(HOME)/.local/,$(wildcard bin/*))
+bin: $(BIN_FILES)
+
+$(BIN_FILES): $(HOME)/.local/%: %
+	@mkdir -p $(dir $@)
+	@$(LNS) $(realpath $<) $@
 
 .PHONY: profiles
 PROFILES := $(addprefix profile.,$(notdir $(wildcard profiles/[0-9][0-9]-*.sh)))
@@ -432,6 +441,18 @@ else ifeq (ubuntu,$(DISTRO_ID))
 mako.install: PKGS := mako-notifier
 endif
 
+
+.PHONY: nnn
+nnn: $(addprefix nnn.,install)
+
+.PHONY: nnn.install
+nnn.install:
+	$(PKGS_INSTALL) $(PKGS)
+ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
+nnn.install: PKGS := nnn
+endif
+
+
 NORD_CONFIG_DIR := $(XDG_CONFIG_HOME)/nord
 
 .PHONY: nord
@@ -680,11 +701,16 @@ endif
 .PHONY: zsh
 zsh: $(addprefix zsh.,install dotfiles chsh)
 
-.PHONY: zsh.dotfiles
-ZSH_DOTFILES := $(addprefix $(HOME)/,.zprofile .zshrc)
-zsh.dotfiles: $(ZSH_DOTFILES) zsh.functions zsh.plugins $(addprefix profile.,00-colors.sh 00-xdg.sh)
+export ZDOTDIR ?= $(XDG_CONFIG_HOME)/zsh
 
-$(ZSH_DOTFILES): $(HOME)/.%: zsh/%
+.PHONY: zsh.dotfiles
+zsh.dotfiles: $(ZDOTDIR)/.zshrc zsh.functions
+
+$(HOME)/.zprofile: zsh/zprofile | profile.00-xdg.sh
+	@$(LNS) $(realpath $<) $@
+
+$(ZDOTDIR)/.zshrc: zsh/zshrc | $(HOME)/.zprofile zsh.plugins profile.00-colors.sh
+	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
 ZSH_FUNCTIONS := $(addprefix $(XDG_DATA_HOME)/,$(wildcard zsh/site-functions/*))
@@ -696,7 +722,7 @@ $(FUNCTIONS): $(XDG_DATA_HOME)/%: %
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: zsh.plugins
-zsh.plugins: $(HOME)/.plugins.zsh
+zsh.plugins: $(ZDOTDIR)/plugins.zsh
 
 ZSH_PLUGINS_DIR := $(XDG_DATA_HOME)/zsh/plugins
 ZSH_GIT_PLUGINS := \
@@ -713,7 +739,10 @@ ZSH_GIT_PLUGINS := \
 	github.com/docker/cli \
 	github.com/docker/compose
 
-$(HOME)/.plugins.zsh: zsh/plugins.zsh | $(addprefix $(ZSH_PLUGINS_DIR)/,$(ZSH_GIT_PLUGINS)) fzf
+$(ZDOTDIR)/plugins.zsh: zsh/plugins.zsh | $(addprefix $(ZSH_PLUGINS_DIR)/,$(ZSH_GIT_PLUGINS)) \
+	fzf \
+	nnn
+	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
 define ZSH_GIT_PLUGIN_tmpl

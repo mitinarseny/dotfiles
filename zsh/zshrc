@@ -2,6 +2,14 @@
 
 zmodload zsh/zprof
 
+if [ -z "${ZDOTDIR}" ]; then
+  if [ -z "${XDG_CONFIG_HOME}" ]; then
+    export XDG_CONFIG_HOME="${HOME}/.config"
+  fi
+  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+fi
+[ -d "${ZDOTDIR}" ] || mkdir -p "${ZDOTDIR}"
+
 unsetopt MAIL_WARNING       # Don't print a warning message if a mail file has been accessed.
 setopt NOTIFY               # Report status of background jobs immediately.
 
@@ -20,7 +28,7 @@ WORDCHARS='*?_-~=&;!#$%^<>'
 # Hitory
 HISTSIZE=10000
 SAVEHIST=10000
-HISTFILE=$HOME/.zsh_history
+HISTFILE="${ZDOTDIR}/.zsh_history"
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_SAVE_NO_DUPS
@@ -59,7 +67,7 @@ fi
 
 () { # init completion
   autoload -Uz compinit
-  local zcd="${HOME}/.zcompdump"
+  local zcd="${ZDOTDIR}/.zcompdump"
   local zcdc="${zcd}.zwc"
   # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
   # in the background as this is doesn't affect the current session
@@ -73,8 +81,8 @@ fi
 }
 
 # load plugins
-if [ -r "${HOME}/.plugins.zsh" ]; then
-  . "${HOME}/.plugins.zsh"
+if [ -r "${ZDOTDIR}/plugins.zsh" ]; then
+  . "${ZDOTDIR}/plugins.zsh"
 fi
 
 setopt AUTO_MENU
@@ -235,9 +243,11 @@ bindkey '\e^?'    backward-kill-word
 # remove duplicated from PATH
 typeset -U PATH
 
-if command -v less > /dev/null; then
-  export LESS='-FSXiwMRj4a#4z-4'
-  if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
-    LESS+='--mouse --wheel-lines=2'
-  fi
+# less(1)
+export LESS='-FSXiwMRj4a#4z-4'
+if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
+  LESS+='--mouse --wheel-lines=2'
 fi
+
+# nnn(1)
+export NNN_OPTS=''

@@ -6,7 +6,7 @@ exec 2>&1
 
 rm -f "${WOBSOCK}"
 mkfifo "${WOBSOCK}"
-tail -f "${WOBSOCK}" | wob \
+tail --follow=name "${WOBSOCK}" | wob \
   --anchor bottom \
   --margin 10 \
   --offset 0 \

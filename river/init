@@ -12,15 +12,16 @@ mod="Mod4" # Super
 riverctl map normal $mod+Shift Return spawn alacritty
 
 riverctl float-filter-add app-id float
-if command -v foot > /dev/null; then
-  riverctl map normal $mod Space spawn 'footclient \
-    --app-id=float \
-    --title=Spotlight \
-    --window-size-chars=60x12 \
-    fzf_run'
-else
-  riverctl map normal $mod Space spawn 'alacritty --class=float --title=Spotlight fzf_run'
-fi
+riverctl map normal $mod Space spawn "footclient \
+  --app-id=float \
+  --title=Launch -o locked-title=true \
+  --window-size-chars=60x12 \
+  ${XDG_CONFIG_HOME}/fzr/applications"
+riverctl map normal $mod+Control Space spawn "footclient \
+  --app-id=float \
+  --title=Launch -o locked-title=true \
+  --window-size-chars=60x12 \
+  fzr"
 
 riverctl map normal $mod               Q close
 riverctl map normal $mod+Control+Shift Q exit

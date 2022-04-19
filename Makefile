@@ -56,12 +56,12 @@ all: bin profiles services XDG_RUNTIME_DIR \
 	fonts \
 	foot \
 	fzf \
+	fzr \
 	git \
 	golang \
 	inputrc \
 	less \
 	mako \
-	nnn \
 	nord \
 	nvim \
 	pipewire \
@@ -100,10 +100,13 @@ _install.add-apt-repository: _install.software-properties-common
 endif
 
 .PHONY: bin
-BIN_FILES := $(addprefix $(HOME)/.local/,$(wildcard bin/*))
-bin: $(BIN_FILES)
+BINARIES := $(notdir $(wildcard bin/*))
+bin: $(addprefix bin.,$(BINARIES))
 
-$(BIN_FILES): $(HOME)/.local/%: %
+.PHONY: $(addprefix bin.,$(BINARIES))
+$(addprefix bin.,$(BINARIES)): bin.%: $(HOME)/.local/bin/%
+
+$(addprefix $(HOME)/.local/bin/,$(BINARIES)): $(HOME)/.local/bin/%: bin/%
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
@@ -321,6 +324,17 @@ ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
 fzf: PKGS := fzf
 endif
 
+.PHONY: fzr
+FZRS := $(notdir $(wildcard fzr/*))
+fzr: $(addprefix fzr.,$(FZRS))
+
+FZR_CONFIG_DIR := $(XDG_CONFIG_HOME)/fzr
+$(addprefix fzr.,$(FZRS)): fzr.%: $(FZR_CONFIG_DIR)/%
+
+$(addprefix $(FZR_CONFIG_DIR)/,$(FZRS)): $(FZR_CONFIG_DIR)/%: fzr/% | bin.fzr
+	@mkdir -p $(dir $@)
+	@$(LNS) $(realpath $<) $@
+
 .PHONY: git
 git: $(addprefix git.,install include set_user set_credential_helper)
 
@@ -441,18 +455,6 @@ else ifeq (ubuntu,$(DISTRO_ID))
 mako.install: PKGS := mako-notifier
 endif
 
-
-.PHONY: nnn
-nnn: $(addprefix nnn.,install)
-
-.PHONY: nnn.install
-nnn.install:
-	$(PKGS_INSTALL) $(PKGS)
-ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-nnn.install: PKGS := nnn
-endif
-
-
 NORD_CONFIG_DIR := $(XDG_CONFIG_HOME)/nord
 
 .PHONY: nord
@@ -558,6 +560,7 @@ river.dotfiles: $(RIVER_CONFIG_DIR)/init
 $(RIVER_CONFIG_DIR)/init: river/init | runit \
 	alacritty \
 	foot \
+	fzr \
 	mako \
 	nord \
 	pipewire \
@@ -741,7 +744,6 @@ ZSH_GIT_PLUGINS := \
 
 $(ZDOTDIR)/plugins.zsh: zsh/plugins.zsh | $(addprefix $(ZSH_PLUGINS_DIR)/,$(ZSH_GIT_PLUGINS)) \
 	fzf \
-	nnn
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 

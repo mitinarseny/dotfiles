@@ -159,6 +159,8 @@ zstyle -e ':completion:*:hosts' hosts 'reply=(
   ${=${${${${(@M)${(f)"$(cat ~/.ssh/config 2>/dev/null)"}:#Host *}#Host }:#*\**}:#*\?*}}
 )'
 
+zstyle ':completion:*:*:*:*:processes' command 'ps -e -o pid,user,cmd -w -w'
+
 # do not highlight pasted text
 zle_highlight=('paste:none')
 
@@ -248,6 +250,3 @@ export LESS='-FSXiwMRj4a#4z-4'
 if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
   LESS+='--mouse --wheel-lines=2'
 fi
-
-# nnn(1)
-export NNN_OPTS=''

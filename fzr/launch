@@ -5,7 +5,7 @@ TERMINAL_CMD=${TERMINAL_CMD:-${TERMINAL:-alacritty} -e}
 DIRS=$(printf -- '%s/applications ' $(echo "${XDG_DATA_HOME:-${HOME}/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" | tr ':' ' '))
 
 # Based on https://github.com/Biont/sway-launcher-desktop
-find -L ${DIRS} -type f -name '*.desktop' -printf '%p\0%P\n' 2>/dev/null \
+COMMAND=$(find -L ${DIRS} -type f -name '*.desktop' -printf '%p\0%P\n' 2>/dev/null \
   | sort -t '\0' -u -k 2 | cut -s -d '' -f1 \
   | xargs -I '{}' awk -v terminal_cmd="${TERMINAL_CMD}" '
     BEGIN{FS="="; action=-1}
@@ -21,7 +21,7 @@ find -L ${DIRS} -type f -name '*.desktop' -printf '%p\0%P\n' 2>/dev/null \
         e=sprintf("%s %s", terminal_cmd, e);
       if (path)
         e=sprintf("env -C %s %s", path, e);
-      return sprintf("setsid -f %s", e);
+      return e;
     }
     /^#/{next}
     /^\[Desktop Entry\]$/{
@@ -84,5 +84,11 @@ find -L ${DIRS} -type f -name '*.desktop' -printf '%p\0%P\n' 2>/dev/null \
           continue;
         printf("%s\n%s (%s)%c", expandExec(actions[i,"exec"]), name, actions[i,"name"], 0);
       }
-    }' '{}'\
-  | fzr --prompt='launch: '
+    }' '{}' \
+  | fzf --no-multi --with-nth 2.. --read0 --delimiter '\n' \
+    --cycle --layout=reverse --info=hidden \
+    --prompt='launch: ' | head -n 1)
+
+[ -n "${COMMAND}" ] || exit 1
+
+setsid -f ${COMMAND} >/dev/null 2>&1 </dev/null

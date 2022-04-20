@@ -252,6 +252,7 @@ $(FONTCONFIG_CONFIG_DIR)/fonts.conf: fonts/fonts.conf
 .PHONY: fonts.install
 fonts.install: | $(addprefix _fonts.install.,fontconfig \
 	firacode \
+	awesome \
 	) fonts.cache
 
 .PHONY: _fonts.install.fontconfig
@@ -296,6 +297,16 @@ _fonts.install.firacode:
 	@rm -f /tmp/$(FIRACODE_ZIP)
 endif
 
+.PHONY: _fonts.install.awesome
+_fonts.install.awesome:
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+_fonts.install.awesome: PKGS := font-awesome5
+else ifeq (arch,$(DISTRO_ID))
+_fonts.install.awesome: PKGS := ttf-font-awesome
+else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
+_fonts.install.awesome: PKGS := fonts-font-awesome
+endif
 
 FOOT_CONFIG_DIR := $(XDG_CONFIG_HOME)/foot
 
@@ -318,10 +329,13 @@ else
 endif
 
 .PHONY: fzf
-fzf:
+fzf: fzf.install profile.00-fzf.sh
+
+.PHONY: fzf.install
+fzf.install:
 	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-fzf: PKGS := fzf
+fzf.install: PKGS := fzf
 endif
 
 .PHONY: fzr
@@ -331,7 +345,7 @@ fzr: $(addprefix fzr.,$(FZRS))
 FZR_CONFIG_DIR := $(XDG_CONFIG_HOME)/fzr
 $(addprefix fzr.,$(FZRS)): fzr.%: $(FZR_CONFIG_DIR)/%
 
-$(addprefix $(FZR_CONFIG_DIR)/,$(FZRS)): $(FZR_CONFIG_DIR)/%: fzr/% | bin.fzr
+$(addprefix $(FZR_CONFIG_DIR)/,$(FZRS)): $(FZR_CONFIG_DIR)/%: fzr/% | bin.fzr fzf
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
@@ -690,7 +704,7 @@ YAMBAR_CONFIG_DIR := $(XDG_CONFIG_HOME)/yambar
 .PHONY: yambar.dotfiles
 yambar.dotfiles: $(YAMBAR_CONFIG_DIR)/config.yml
 
-$(YAMBAR_CONFIG_DIR)/conf.sh: yambar/config.yml
+$(YAMBAR_CONFIG_DIR)/config.yml: yambar/config.yml | fonts
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 

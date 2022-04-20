@@ -1,0 +1,14 @@
+#!/bin/sh
+
+SERVICE=$(find -L ${SVDIR:-/var/service} -mindepth 1 -maxdepth 1 -type d -printf '%P\n' \
+  | fzf --no-multi --cycle --layout=reverse --info=hidden --prompt='sv: ')
+
+[ -n "${SERVICE}" ] || exit 1
+
+COMMAND=$(echo 'up\ndown\nonce\npause\ncont\nhup\nalarm\ninterrupt\nquit\n1\n2\nterm\nkill\nexit' \
+  | fzf --no-multi --cycle --layout=reverse --info=hidden \
+    --prompt="${SERVICE}: " --header="$(sv status ${SERVICE})")
+
+[ -n "${COMMAND}" ] || exit 1
+
+exec sv ${COMMAND} ${SERVICE}

@@ -15,12 +15,12 @@ riverctl float-filter-add app-id float
 riverctl map normal $mod Space spawn "footclient \
   --app-id=float \
   --title=Launch -o locked-title=true \
-  --window-size-chars=60x12 \
-  ${XDG_CONFIG_HOME}/fzr/applications"
+  --window-size-chars=60x8 \
+  ${XDG_CONFIG_HOME}/fzr/launch"
 riverctl map normal $mod+Control Space spawn "footclient \
   --app-id=float \
-  --title=Launch -o locked-title=true \
-  --window-size-chars=60x12 \
+  --title=FZR -o locked-title=true \
+  --window-size-chars=60x8 \
   fzr"
 
 riverctl map normal $mod               Q close

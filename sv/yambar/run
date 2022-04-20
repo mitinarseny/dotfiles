@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/bin/sh
+
+sv start pipewire
 
 exec 2>&1
 exec yambar

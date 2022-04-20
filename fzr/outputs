@@ -1,0 +1,20 @@
+#!/bin/sh
+
+wlr-randr \
+  | awk 'BEGIN{FS=" "} /^[^[:space:]$]/{print $1}' \
+  | fzf --no-multi --exit-0 \
+    --cycle --layout=reverse --info=hidden \
+    --header='toggle (A+Enter) scale up/down/1 (A+=/-/0) rotate (A[+S]+arrows)' \
+    --bind 'alt-enter:execute-silent:wlr-randr --output {} | grep -qx "  Enabled: yes" && wlr-randr --output {} --off || wlr-randr --output {} --on' \
+    --bind 'alt-0:execute-silent:wlr-randr --output {} --scale 1' \
+    --bind 'alt-=:execute-silent:wlr-randr --output {} --scale $(($(wlr-randr --output {} | sed -En "s/^  Scale: ([0-9]+(\.[0-9]+))$/\1/p") * 1.1))' \
+    --bind 'alt--:execute-silent:wlr-randr --output {} --scale $(($(wlr-randr --output {} | sed -En "s/^  Scale: ([0-9]+(\.[0-9]+))$/\1/p") / 1.1))' \
+    --bind 'alt-up:execute-silent:wlr-randr --output {} --transform normal' \
+    --bind 'alt-right:execute-silent:wlr-randr --output {} --transform 90' \
+    --bind 'alt-down:execute-silent:wlr-randr --output {} --transform 180' \
+    --bind 'alt-left:execute-silent:wlr-randr --output {} --transform 270' \
+    --bind 'alt-shift-up:execute-silent:wlr-randr --output {} --transform flipped' \
+    --bind 'alt-shift-right:execute-silent:wlr-randr --output {} --transform flipped-90' \
+    --bind 'alt-shift-down:execute-silent:wlr-randr --output {} --transform flipped-180' \
+    --bind 'alt-shift-left:execute-silent:wlr-randr --output {} --transform flipped-270' \
+    --prompt='output: ' > /dev/null

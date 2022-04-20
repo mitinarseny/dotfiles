@@ -51,6 +51,7 @@ endif
 all: bin profiles services XDG_RUNTIME_DIR \
 	alacritty \
 	cmake \
+	dbus \
 	fd \
 	firefox \
 	fonts \
@@ -60,6 +61,7 @@ all: bin profiles services XDG_RUNTIME_DIR \
 	git \
 	golang \
 	inputrc \
+	kanshi \
 	less \
 	mako \
 	nord \
@@ -72,6 +74,7 @@ all: bin profiles services XDG_RUNTIME_DIR \
 	ssh \
 	tmux \
 	waylock \
+	wlr-randr \
 	wob \
 	yambar \
 	zsh
@@ -211,6 +214,12 @@ else
 	$(ERR_KERNEL)
 endif
 
+.PHONY: dbus
+dbus:
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+dbus: PKGS := dbus
+endif
 
 .PHONY: fd
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
@@ -435,6 +444,12 @@ $(HOME)/.inputrc: inputrc/inputrc
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
+.PHONY: kanshi
+kanshi: | service.kanshi
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+kanshi: PKGS := kanshi
+endif
 
 .PHONY: less
 less: less.install profile.10-less.sh
@@ -445,7 +460,6 @@ less.install:
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
 less.install: PKGS := less
 endif
-
 
 .PHONY: mako
 mako: $(addprefix mako.,install dotfiles) service.mako
@@ -564,22 +578,24 @@ endif
 
 
 .PHONY: river
-river: $(addprefix river.,install dotfiles) profile.99-river.sh
+river: $(addprefix river.,install dotfiles)
 
 RIVER_CONFIG_DIR := $(XDG_CONFIG_HOME)/river
 
 .PHONY: river.dotfiles
-river.dotfiles: $(RIVER_CONFIG_DIR)/init
+river.dotfiles: $(RIVER_CONFIG_DIR)/init | dbus profile.99-river.sh
 
 $(RIVER_CONFIG_DIR)/init: river/init | runit \
 	alacritty \
 	foot \
 	fzr \
+	kanshi \
 	mako \
 	nord \
 	pipewire \
 	waylock \
 	wob \
+	wlr-randr \
 	yambar
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
@@ -675,6 +691,13 @@ _install.zzz-user-hooks:
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
 _install.zzz-user-hooks: PKGS := zzz-user-hooks
+endif
+
+.PHONY: wlr-randr
+wlr-randr:
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+wlr-randr: PKGS := wlr-randr
 endif
 
 .PHONY: wob

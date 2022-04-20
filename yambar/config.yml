@@ -64,16 +64,21 @@ bar:
         mixer: Master
         content:
           map:
-            on-click: amixer -q sset Master toggle
-            tag: muted
+            tag: online
             values:
-              true: {string: {text: '', font: *awesome}}
-              false:
+              false: {string: {text: ''}}
+              true:
                 map:
-                  tag: percent
-                  default: {string: {text: '', font: *awesome}}
+                  on-click: amixer -q sset Master toggle
+                  tag: muted
                   values:
-                    0: {string: {text: '', font: *awesome}}
+                    true: {string: {text: '', font: *awesome}}
+                    false:
+                      map:
+                        tag: percent
+                        default: {string: {text: '  {percent}%', font: *awesome}}
+                        values:
+                          0: {string: {text: '  {percent}%', font: *awesome}}
     - network:
         name: wlo1
         content:

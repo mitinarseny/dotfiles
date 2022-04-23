@@ -619,7 +619,7 @@ endif
 
 
 .PHONY: rust
-rust: rust.install profile.10-cargo.sh
+rust: rust.install rust.zsh profile.10-cargo.sh
 
 .PHONY: rust.install
 rust.install:
@@ -629,6 +629,17 @@ ifeq (,$(shell command -v rustup))
 else
 	rustup self update
 endif
+
+.PHONY: rust.zsh
+rust.zsh: $(addprefix $(XDG_DATA_HOME)/zsh/site-functions/_,rustup cargo)
+
+$(XDG_DATA_HOME)/zsh/site-functions/_rustup: | rust.install
+	@mkdir -p $(dir $@)
+	rustup completions zsh > $@
+
+$(XDG_DATA_HOME)/zsh/site-functions/_cargo: | rust.install
+	@mkdir -p $(dir $@)
+	rustup completions zsh cargo > $@
 
 CARGO_INSTALL := cargo install
 

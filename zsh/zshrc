@@ -67,7 +67,7 @@ fi
 
 () { # init completion
   autoload -Uz compinit
-  local zcd="${ZDOTDIR}/.zcompdump"
+  local zcd="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/zcompdump"
   local zcdc="${zcd}.zwc"
   # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
   # in the background as this is doesn't affect the current session

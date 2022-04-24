@@ -1,6 +1,7 @@
 shell:
-  program: /bin/tmux
+  program: /bin/env
   args:
+    - 'tmux'
     - '-T'
     - '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title'
     - 'new-session'

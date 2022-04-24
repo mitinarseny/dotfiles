@@ -65,25 +65,25 @@ if [ -d ${XDG_DATA_HOME}/zsh/site-functions ] && [ -x ${XDG_DATA_HOME}/zsh/site-
   autoload -Uz ${XDG_DATA_HOME}/zsh/site-functions/*
 fi
 
-() { # init completion
-  autoload -Uz compinit
-  local zcd="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/zcompdump"
-  local zcdc="${zcd}.zwc"
-  # Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
-  # in the background as this is doesn't affect the current session
-  if [[ -f "${zcd}"(#qN.m+1) ]]; then
-    compinit -i -d "${zcd}"
-    { rm -f "${zcdc}" && zcompile "${zcd}" } &!
-  else
-    compinit -C -d "${zcd}"
-    { [[ ! -f "${zcdc}" || "${zcd}" -nt "${zcdc}" ]] && rm -f "${zcdc}" && zcompile "${zcd}" } &!
-  fi
-}
-
 # load plugins
 if [ -r "${ZDOTDIR}/plugins.zsh" ]; then
   . "${ZDOTDIR}/plugins.zsh"
 fi
+
+() { # init completion
+  autoload -Uz compinit
+  local zcd="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/zcompdump"
+  compinit -i -d "${zcd}"
+  # recompile in background
+  {
+    autoload -Uz zrecompile
+    zrecompile -qp \
+      -R "${ZDOTDIR}/.zshrc" -- \
+      -M "${zcd}"
+  } &!
+}
+
+
 
 setopt AUTO_MENU
 setopt AUTO_LIST

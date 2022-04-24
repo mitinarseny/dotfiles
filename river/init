@@ -9,7 +9,7 @@ mod="Mod4" # Super
 . ${XDG_CONFIG_HOME}/wob/conf.sh
 . ${XDG_CONFIG_HOME}/nord/colors.sh
 
-riverctl map normal $mod+Shift Return spawn alacritty
+riverctl map normal $mod+Shift Return spawn foot
 
 riverctl float-filter-add app-id float
 riverctl map normal $mod Space spawn "footclient \

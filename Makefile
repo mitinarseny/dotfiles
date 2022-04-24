@@ -49,7 +49,6 @@ endif
 
 .PHONY: all
 all: bin profiles services XDG_RUNTIME_DIR \
-	alacritty \
 	cmake \
 	dbus \
 	fd \
@@ -176,28 +175,6 @@ $(SVDIR)/%/log/supervise:
 	@$(LNS) $(XDG_RUNTIME_DIR)/supervise.$*-log $@
 
 
-.PHONY: alacritty
-alacritty: $(addprefix alacritty.,install dotfiles)
-
-ALACRITTY_CONFIG_DIR := $(XDG_CONFIG_HOME)/alacritty
-
-.PHONY: alacritty.dotfiles
-alacritty.dotfiles: $(ALACRITTY_CONFIG_DIR)/alacritty.yml
-
-$(ALACRITTY_CONFIG_DIR)/alacritty.yml: alacritty/alacritty.yml | tmux fonts
-	@mkdir -p $(dir $@)
-	@$(LNS) $(realpath $<) $@
-
-.PHONY: alacritty.install
-ifneq (,$(filter void arch,$(DISTRO_ID)))
-alacritty.install:
-	$(PKGS_INSTALL) alacritty
-else
-alacritty.install: | rust.install
-	$(CARGO_INSTALL) alacritty
-endif
-
-
 CMAKE_VERSION ?= 3.32.0
 CMAKE_GITHUB_RELEASE := https://github.com/Kitware/CMake/releases/download/v$(CMAKE_VERSION)
 .PHONY: cmake
@@ -317,15 +294,16 @@ else ifneq (,$(filter ubuntu debian,$(DISTRO_ID)))
 _fonts.install.awesome: PKGS := fonts-font-awesome
 endif
 
-FOOT_CONFIG_DIR := $(XDG_CONFIG_HOME)/foot
 
 .PHONY: foot
 foot: $(addprefix foot.,install dotfiles) service.foot
 
+FOOT_CONFIG_DIR := $(XDG_CONFIG_HOME)/foot
+
 .PHONY: foot.dotfiles
 foot.dotfiles: $(FOOT_CONFIG_DIR)/foot.ini
 
-$(FOOT_CONFIG_DIR)/%.ini: foot/%.ini
+$(FOOT_CONFIG_DIR)/%.ini: foot/%.ini | tmux fonts
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
@@ -586,7 +564,6 @@ RIVER_CONFIG_DIR := $(XDG_CONFIG_HOME)/river
 river.dotfiles: $(RIVER_CONFIG_DIR)/init | dbus profile.99-river.sh
 
 $(RIVER_CONFIG_DIR)/init: river/init | runit \
-	alacritty \
 	foot \
 	fzr \
 	kanshi \

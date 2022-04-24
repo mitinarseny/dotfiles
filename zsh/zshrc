@@ -84,7 +84,6 @@ fi
 }
 
 
-
 setopt AUTO_MENU
 setopt AUTO_LIST
 setopt AUTO_PARAM_SLASH

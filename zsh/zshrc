@@ -175,7 +175,7 @@ bindkey '^Z' _zsh_cli_fg
 _r-delregion() {
   if ((REGION_ACTIVE)) then
      zle kill-region
-  else 
+  else
     local widget_name=$1
     shift
     zle $widget_name -- $@
@@ -236,6 +236,38 @@ for key     seq        mode      widget (
 }
 
 bindkey '\e^?'    backward-kill-word
+
+
+
+_r_copy() {
+  if ((REGION_ACTIVE)) then
+    zle copy-region-as-kill
+  else
+    zle vi-yank-whole-line
+  fi
+  if [ -n "${WAYLAND_DISPLAY}" ] && command -v wl-copy >/dev/null; then
+    print -rn -- "${CUTBUFFER}" | wl-copy
+  elif [ -n "${DISPLAY}" ] && command -v xclip >/dev/null; then
+    print -rn -- "${CUTBUFFER}" | xclip -selection clipboard -i
+  fi
+}
+zle -N _r_copy
+_r_cut() {
+  if ((REGION_ACTIVE)) then
+    zle kill-region
+  else
+    zle kill-whole-line
+  fi
+  if [ -n "${WAYLAND_DISPLAY}" ] && command -v wl-copy >/dev/null; then
+    print -rn -- "${CUTBUFFER}" | wl-copy
+  elif [ -n "${DISPLAY}" ] && command -v xclip >/dev/null; then
+    print -rn -- "${CUTBUFFER}" | xclip -selection clipboard -i
+  fi
+}
+zle -N _r_cut
+
+bindkey $'^Y' _r_copy
+bindkey $'^E' _r_cut
 
 # use ~/.localrc for SUPER SECRET CRAP that you don't
 # want in your public repo.

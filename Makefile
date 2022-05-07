@@ -578,10 +578,17 @@ $(RIVER_CONFIG_DIR)/init: river/init | runit \
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: river.install
-river.install:
+river.install: | wayland
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
 river.install: PKGS := river xdg-desktop-portal-wlr
+endif
+
+.PHONY: wayland
+wayland:
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+wayland: PKGS := wl-clipboard
 endif
 
 

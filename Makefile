@@ -15,6 +15,7 @@ export XDG_STATE_HOME  ?= $(HOME)/.local/state
 export XDG_RUNTIME_DIR ?= /run/user/$(UID)
 
 LNS := ln -sfv
+LNSB := $(LNS) --backup=existing
 GIT := git
 GIT_CLONE = $(GIT) clone -q
 
@@ -214,13 +215,32 @@ fd: | rust.install
 endif
 
 .PHONY: firefox
+firefox: $(addprefix firefox.,install dotfiles)
+
+.PHONY: firefox.install
 ifneq (,$(filter void arch ubuntu,$(DISTRO_ID)))
-firefox: PKGS := firefox
+firefox.install: PKGS := firefox
 else ifeq (debian,$(DISTRO_ID))
-firefox: PKGS := firefox-esr
+firefox.install: PKGS := firefox-esr
 endif
-firefox:
+firefox.install:
 	$(PKGS_INSTALL) $(PKGS)
+
+FIREFOX_CONFIG_DIR := $(HOME)/.mozilla/firefox
+
+.PHONY: firefox.dotfiles
+firefox.dotfiles: $(FIREFOX_CONFIG_DIR)/profiles.ini
+
+$(FIREFOX_CONFIG_DIR)/profiles.ini: firefox/profiles.ini | firefox.profile
+	@mkdir -p $(dir $@)
+	@$(LNSB) $(realpath $<) $@
+
+.PHONY: firefox.profile
+firefox.profile: $(patsubst firefox/%,$(FIREFOX_CONFIG_DIR)/%,$(wildcard firefox/dotfiles.profile/*))
+
+$(FIREFOX_CONFIG_DIR)/dotfiles.profile/%: firefox/dotfiles.profile/%
+	@mkdir -p $(dir $@)
+	@$(LNS) $(realpath $<) $@
 
 FONTCONFIG_CONFIG_DIR := $(XDG_CONFIG_HOME)/fontconfig
 FONTS_DIR := $(XDG_DATA_HOME)/fonts

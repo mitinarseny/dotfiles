@@ -180,19 +180,17 @@ endif
 firefox.install:
 	$(PKGS_INSTALL) $(PKGS)
 
-FIREFOX_CONFIG_DIR := $(HOME)/.mozilla/firefox
-
 .PHONY: firefox.dotfiles
-firefox.dotfiles: $(FIREFOX_CONFIG_DIR)/profiles.ini
+firefox.dotfiles: $(HOME)/.mozilla/firefox/profiles.ini
 
-$(FIREFOX_CONFIG_DIR)/profiles.ini: firefox/profiles.ini | firefox.profile
+$(HOME)/.mozilla/firefox/profiles.ini: firefox/profiles.ini | firefox.profile
 	@mkdir -p $(dir $@)
 	@$(LNSB) $(realpath $<) $@
 
 .PHONY: firefox.profile
-firefox.profile: $(patsubst firefox/%,$(FIREFOX_CONFIG_DIR)/%,$(wildcard firefox/dotfiles.profile/*))
+firefox.profile: $(addprefix $(HOME)/.mozilla/,$(wildcard firefox/dotfiles.profile/*))
 
-$(FIREFOX_CONFIG_DIR)/dotfiles.profile/%: firefox/dotfiles.profile/%
+$(HOME)/.mozilla/firefox/dotfiles.profile/%: firefox/dotfiles.profile/%
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
@@ -535,7 +533,7 @@ river: $(addprefix river.,install dotfiles)
 RIVER_CONFIG_DIR := $(XDG_CONFIG_HOME)/river
 
 .PHONY: river.dotfiles
-river.dotfiles: $(RIVER_CONFIG_DIR)/init  $(patsubst river/%,$(RIVER_CONFIG_DIR)/%,$(wildcard river/autostart/*)) | dbus profile.99-river.sh
+river.dotfiles: $(RIVER_CONFIG_DIR)/init  $(addprefix $(XDG_CONFIG_HOME)/,$(wildcard river/autostart/*)) | dbus profile.99-river.sh
 
 $(RIVER_CONFIG_DIR)/init: river/init | \
 	foot \
@@ -722,7 +720,7 @@ ZSH_FUNCTIONS := $(addprefix $(XDG_DATA_HOME)/,$(wildcard zsh/site-functions/*))
 .PHONY: zsh.functions
 zsh.functions: $(ZSH_FUNCTIONS)
 
-$(FUNCTIONS): $(XDG_DATA_HOME)/%: %
+$(ZSH_FUNCTIONS): $(XDG_DATA_HOME)/%: %
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 

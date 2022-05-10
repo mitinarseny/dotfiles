@@ -48,36 +48,39 @@ else ifeq (darwin,$(KERNEL))
 DISTRO_ID := macos
 endif
 
-.PHONY: all
-all: bin profiles XDG_RUNTIME_DIR \
-	cmake \
-	dbus \
+.PHONY: minimal
+minimal: bin profiles XDG_RUNTIME_DIR \
 	fd \
-	firefox \
-	fonts \
-	foot \
 	fzf \
 	fzr \
 	git \
-	golang \
 	inputrc \
-	kanshi \
 	less \
-	mako \
+	man \
 	nord \
 	nvim \
-	pipewire \
-	python \
-	river \
 	ripgrep \
-	rust \
 	ssh \
 	tmux \
-	waylock \
-	wob \
-	yambar \
 	zsh
 
+.PHONY: all
+all: minimal dev gui
+
+.PHONY: dev
+dev: minimal \
+	cmake \
+	golang \
+	man.dev \
+	python \
+	rust
+
+.PHONY: gui
+gui: minimal \
+	firefox \
+	fonts \
+	foot \
+	river
 
 XBPS_INSTALL   := sudo xbps-install -Su --yes
 PACMAN_INSTALL := sudo pacman -Sy --noconfirm
@@ -421,6 +424,22 @@ else ifeq (ubuntu,$(DISTRO_ID))
 mako.install: PKGS := mako-notifier
 endif
 
+
+.PHONY: man
+man:
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+man: PKGS := man man-pages
+endif
+
+.PHONY: man.dev
+man.dev: | man
+	$(PKGS_INSTALL) $(PKGS)
+ifeq (void,$(DISTRO_ID))
+man.dev: PKGS := man-pages-devel man-pages-posix
+endif
+
+
 NORD_CONFIG_DIR := $(XDG_CONFIG_HOME)/nord
 
 .PHONY: nord
@@ -548,7 +567,7 @@ river.install: PKGS := river
 endif
 
 .PHONY: wayland
-wayland:
+wayland: | XDG_RUNTIME_DIR
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
 wayland: PKGS := wl-clipboard xdg-desktop-portal-wlr wlr-randr

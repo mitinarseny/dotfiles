@@ -19,7 +19,8 @@ jobs:
             dash bash \
             curl \
             git \
-            make
+            make \
+            sudo
 
       - name: Checkout
         uses: actions/checkout@v3

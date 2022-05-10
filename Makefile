@@ -523,7 +523,7 @@ endif
 python:
 	$(PKGS_INSTALL) $(PKGS)
 ifneq (,$(filter void arch ubuntu debian,$(DISTRO_ID)))
-python: PKGS := python3
+python: PKGS := python3 python3-pip
 endif
 
 

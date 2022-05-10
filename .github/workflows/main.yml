@@ -8,7 +8,7 @@ on:
   release:
 
 jobs:
-  install:
+  Install:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     container: 'voidlinux/voidlinux'
@@ -21,5 +21,8 @@ jobs:
             git \
             make
 
+
+      - name: 'PWD'
+        run: pwd && ls -R
       - name: Make
         run: make -Bk

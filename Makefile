@@ -49,7 +49,7 @@ DISTRO_ID := macos
 endif
 
 .PHONY: minimal
-minimal: bin profiles XDG_RUNTIME_DIR \
+minimal: bin XDG_RUNTIME_DIR \
 	fd \
 	fzf \
 	fzr \
@@ -115,10 +115,7 @@ $(addprefix $(HOME)/.local/bin/,$(BINARIES)): $(HOME)/.local/bin/%: bin/%
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
-.PHONY: profiles
 PROFILES := $(addprefix profile.,$(notdir $(wildcard profiles/[0-9][0-9]-*.sh)))
-profiles: $(PROFILES)
-
 .PHONY: $(PROFILES)
 $(PROFILES): profile.%: $(HOME)/.profile.d/%
 

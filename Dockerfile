@@ -11,7 +11,7 @@ WORKDIR /root/
 
 COPY . ./.dotfiles
 
-RUN make -BC ./.dotfiles
+RUN make -BC ./.dotfiles dev
 
 RUN xbps-remove -O --yes
 

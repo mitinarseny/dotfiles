@@ -1,13 +1,34 @@
 #!/bin/sh
 
+mod="Mod4" # Super
+
 if command -v dbus-update-activation-environment > dev/null && [ -n "${DBUS_SESSION_BUS_ADDRESS}" ]; then
   dbus-update-activation-environment WAYLAND_DISPLAY
 fi
 
-mod="Mod4" # Super
+. ${XDG_CONFIG_HOME}/nord/colors.sh
+
+riverctl spawn pipewire
+riverctl spawn yambar
+riverctl spawn mako
+riverctl spawn kanshi
+riverctl spawn 'foot --server --log-no-syslog'
 
 . ${XDG_CONFIG_HOME}/wob/conf.sh
-. ${XDG_CONFIG_HOME}/nord/colors.sh
+[ ! -e "${WOBSOCK}" ] || rm -f "${WOBSOCK}"
+mkfifo "${WOBSOCK}"
+riverctl spawn "tail --follow=name '${WOBSOCK}' | wob
+  --anchor bottom
+  --margin 10
+  --offset 0
+  --padding 0
+  --border 2
+  --height 30
+  --width 400
+  --background-color '#ff${NORD0}'
+  --border-color '#ff${NORD3}'
+  --bar-color '#ff${NORD6}'"
+
 
 riverctl map normal $mod+Shift Return spawn foot
 
@@ -105,6 +126,7 @@ riverctl map normal $mod+Control Right set-layout-value rivertile string main_lo
 riverctl map normal $mod+Control Down  set-layout-value rivertile string main_location bottom
 riverctl map normal $mod+Control Left  set-layout-value rivertile string main_location left
 
+
 # Various media key mapping examples for both normal and locked mode which do
 # not have a modifier
 for mode in normal locked
@@ -113,19 +135,19 @@ do
     riverctl map $mode None XF86Eject spawn eject -T
 
     # ALSA
-    riverctl map $mode None XF86AudioRaiseVolume  spawn "sh -c \" \
-      amixer sset Master 5%+ unmute | \
-      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' | \
-      head -1 > ${WOBSOCK}\""
-    riverctl map $mode None XF86AudioLowerVolume  spawn "sh -c \" \
-      amixer sset Master 5%- unmute | \
-      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' | \
-      head -1 > ${WOBSOCK}\""
-    riverctl map $mode None XF86AudioMute         spawn "sh -c \" \
+    riverctl map $mode None XF86AudioRaiseVolume  spawn "
+      amixer sset Master 5%+ unmute |
+      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' |
+      head -1 > ${WOBSOCK}"
+    riverctl map $mode None XF86AudioLowerVolume  spawn "
+      amixer sset Master 5%- unmute |
+      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' |
+      head -1 > ${WOBSOCK}"
+    riverctl map $mode None XF86AudioMute         spawn "
       amixer sset Master toggle | \
-        sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
-                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p' | \
-        head -1 > ${WOBSOCK}\""
+        sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p'
+                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p'
+        head -1 > ${WOBSOCK}"
 
     # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     # riverctl map $mode None XF86AudioMedia spawn playerctl play-pause
@@ -134,21 +156,21 @@ do
     # riverctl map $mode None XF86AudioNext  spawn playerctl next
 
     # Control screen backlight brighness with light (https://github.com/haikarainen/light)
-    riverctl map $mode None XF86MonBrightnessUp   spawn "sh -c \" \
-      light -A 5 && light -G | \
-      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}\""
-    riverctl map $mode None XF86MonBrightnessDown spawn "sh -c \" \
-      light -U 5 && light -G | \
-      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}\""
+    riverctl map $mode None XF86MonBrightnessUp   spawn "
+      light -A 5 && light -G
+      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
+    riverctl map $mode None XF86MonBrightnessDown spawn "
+      light -U 5 && light -G |
+      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
 done
 
 # Set repeat rate
 riverctl set-repeat 50 300
 
-riverctl map normal None Print spawn "sh -c \"grim ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
-riverctl map normal Control Print spawn "sh -c 'grim - | wl-copy'"
-riverctl map normal $mod Print spawn "sh -c \"slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')\""
-riverctl map normal $mod+Control Print spawn "sh -c \"slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy\""
+riverctl map normal None Print spawn "grim ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')"
+riverctl map normal Control Print spawn 'grim - | wl-copy'
+riverctl map normal $mod Print spawn "slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')"
+riverctl map normal $mod+Control Print spawn "slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy"
 
 # Set opacity and fade effect
 # riverctl opacity 1.0 0.75 0.0 0.1 20
@@ -163,14 +185,16 @@ riverctl background-color       "0x${NORD0}"
 riverctl border-color-focused   "0x${NORD3}"
 riverctl border-color-unfocused "0x${NORD1}"
 
+if [ -d "${XDG_CONFIG_HOME}/river/autostart" ]; then
+  for f in ${XDG_CONFIG_HOME}/river/autostart/*; do
+    [ -x "${f}" ] || continue
+    riverctl spawn "${f}"
+  done
+fi
+
 LOCALRC=${XDG_CONFIG_HOME}/river/local
 if [ -r ${LOCALRC} ]; then
   . ${LOCALRC}
 fi
 
-# runsvdir on SIGHUP sends SIGTERM to all of running services,
-# so remap signal
-runsvdir "${SVDIR}" &
-trap "kill -1 -- $!" 15
-wait
-
+exec rivertile -outer-padding 1 -view-padding 1

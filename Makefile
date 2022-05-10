@@ -49,7 +49,7 @@ DISTRO_ID := macos
 endif
 
 .PHONY: all
-all: bin profiles services XDG_RUNTIME_DIR \
+all: bin profiles XDG_RUNTIME_DIR \
 	cmake \
 	dbus \
 	fd \
@@ -74,7 +74,6 @@ all: bin profiles services XDG_RUNTIME_DIR \
 	ssh \
 	tmux \
 	waylock \
-	wlr-randr \
 	wob \
 	yambar \
 	zsh
@@ -130,51 +129,6 @@ $(HOME)/.profile: profile
 
 export SVDIR := $(HOME)/.local/sv
 SV_FILES := run finish check down log/run log/finish
-
-.PHONY: runit
-runit:
-	$(PKGS_INSTALL) $(PKGS)
-ifneq (,$(filter void ubuntu debian,$(DISTRO_ID)))
-runit: PKGS := runit socklog
-endif
-
-
-.PHONY: services
-SERVICES := $(patsubst sv/%/run,service.%,$(wildcard sv/*/run))
-services: $(SERVICES)
-
-define SERVICE_tmpl
-.PHONY: service.$(1)
-service.$(1): $(patsubst sv/%,$(SVDIR)/%,$(wildcard $(addprefix sv/$(1)/,$(SV_FILES)))) | runit
-endef
-$(foreach s,$(patsubst service.%,%,$(SERVICES)),$(eval $(call SERVICE_tmpl,$(s))))
-
-$(SVDIR)/%/run: sv/%/run | $(SVDIR)/%/supervise
-	@mkdir -p $(dir $@)
-	@$(LNS) $(realpath $<) $@
-
-$(SVDIR)/%/finish: sv/%/finish
-	@mkdir -p $(dir $@)
-	@$(LNS) $(realpath $<) $@
-
-$(SVDIR)/%/check: sv/%/check
-	@mkdir -p $(dir $@)
-	@$(LNS) $(realpath $<) $@
-
-$(SVDIR)/%/down: sv/%/down
-	@mkdir -p $(dir $@)
-	@$(LNS) $(realpath $<) $@
-
-.PRECIOUS: $(SVDIR)/%/supervise
-$(SVDIR)/%/supervise:
-	@mkdir -p $(dir $@)
-	@$(LNS) $(XDG_RUNTIME_DIR)/supervise.$* $@
-
-.PRECIOUS: $(SVDIR)/%/log/supervise
-$(SVDIR)/%/log/supervise:
-	@mkdir -p $(dir $@)
-	@$(LNS) $(XDG_RUNTIME_DIR)/supervise.$*-log $@
-
 
 CMAKE_VERSION ?= 3.32.0
 CMAKE_GITHUB_RELEASE := https://github.com/Kitware/CMake/releases/download/v$(CMAKE_VERSION)
@@ -316,7 +270,7 @@ endif
 
 
 .PHONY: foot
-foot: $(addprefix foot.,install dotfiles) service.foot
+foot: $(addprefix foot.,install dotfiles)
 
 FOOT_CONFIG_DIR := $(XDG_CONFIG_HOME)/foot
 
@@ -443,7 +397,7 @@ $(HOME)/.inputrc: inputrc/inputrc
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: kanshi
-kanshi: | service.kanshi
+kanshi:
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
 kanshi: PKGS := kanshi
@@ -460,7 +414,7 @@ less.install: PKGS := less
 endif
 
 .PHONY: mako
-mako: $(addprefix mako.,install dotfiles) service.mako
+mako: $(addprefix mako.,install dotfiles)
 
 MAKO_CONFIG_DIR := $(XDG_CONFIG_HOME)/mako
 
@@ -557,7 +511,7 @@ $(HOME)/.local/bin/rust-analyzer:
 
 
 .PHONY: pipewire
-pipewire: pipewire.install service.pipewire
+pipewire: pipewire.install
 
 .PHONY: pipewire.install
 pipewire.install:
@@ -581,9 +535,9 @@ river: $(addprefix river.,install dotfiles)
 RIVER_CONFIG_DIR := $(XDG_CONFIG_HOME)/river
 
 .PHONY: river.dotfiles
-river.dotfiles: $(RIVER_CONFIG_DIR)/init | dbus profile.99-river.sh
+river.dotfiles: $(RIVER_CONFIG_DIR)/init  $(patsubst river/%,$(RIVER_CONFIG_DIR)/%,$(wildcard river/autostart/*)) | dbus profile.99-river.sh
 
-$(RIVER_CONFIG_DIR)/init: river/init | runit \
+$(RIVER_CONFIG_DIR)/init: river/init | \
 	foot \
 	fzr \
 	kanshi \
@@ -592,8 +546,11 @@ $(RIVER_CONFIG_DIR)/init: river/init | runit \
 	pipewire \
 	waylock \
 	wob \
-	wlr-randr \
 	yambar
+	@mkdir -p $(dir $@)
+	@$(LNS) $(realpath $<) $@
+
+$(RIVER_CONFIG_DIR)/autostart/%: river/autostart/%
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 
@@ -601,14 +558,14 @@ $(RIVER_CONFIG_DIR)/init: river/init | runit \
 river.install: | wayland
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-river.install: PKGS := river xdg-desktop-portal-wlr
+river.install: PKGS := river
 endif
 
 .PHONY: wayland
 wayland:
 	$(PKGS_INSTALL) $(PKGS)
 ifeq (void,$(DISTRO_ID))
-wayland: PKGS := wl-clipboard
+wayland: PKGS := wl-clipboard xdg-desktop-portal-wlr wlr-randr
 endif
 
 
@@ -708,15 +665,8 @@ ifeq (void,$(DISTRO_ID))
 _install.zzz-user-hooks: PKGS := zzz-user-hooks
 endif
 
-.PHONY: wlr-randr
-wlr-randr:
-	$(PKGS_INSTALL) $(PKGS)
-ifeq (void,$(DISTRO_ID))
-wlr-randr: PKGS := wlr-randr
-endif
-
 .PHONY: wob
-wob: $(addprefix wob.,install dotfiles) service.wob
+wob: $(addprefix wob.,install dotfiles)
 
 WOB_CONFIG_DIR := $(XDG_CONFIG_HOME)/wob
 
@@ -735,7 +685,7 @@ wob.install: PKGS := wob
 endif
 
 .PHONY: yambar
-yambar: $(addprefix yambar.,install dotfiles) service.yambar
+yambar: $(addprefix yambar.,install dotfiles)
 
 YAMBAR_CONFIG_DIR := $(XDG_CONFIG_HOME)/yambar
 
@@ -795,7 +745,7 @@ ZSH_GIT_PLUGINS := \
 	github.com/docker/compose
 
 $(ZDOTDIR)/plugins.zsh: zsh/plugins.zsh | $(addprefix $(ZSH_PLUGINS_DIR)/,$(ZSH_GIT_PLUGINS)) \
-	fzf \
+	fzf
 	@mkdir -p $(dir $@)
 	@$(LNS) $(realpath $<) $@
 

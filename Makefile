@@ -309,7 +309,7 @@ $(addprefix $(FZR_CONFIG_DIR)/,$(FZRS)): $(FZR_CONFIG_DIR)/%: fzr/% | bin.fzr fz
 	@$(LNS) $(realpath $<) $@
 
 .PHONY: git
-git: $(addprefix git.,install include set_user set_credential_helper)
+git: $(addprefix git.,install include set_credential_helper)
 
 .PHONY: git.include_files
 git.include: $(addprefix git.include.,config_local excludes)
@@ -337,18 +337,6 @@ git.set_credential_helper:
 ifeq (,$(shell $(GIT_CONFIG_GLOBAL) --get credential.helper))
 	$(GIT_CONFIG_GLOBAL) credential.helper $(GIT_CREDENTIAL_HELPER)
 endif
-
-define GIT.SET_USER_tmpl
-.PHONY: git.set_user.$(1)
-git.set_user.$(1):
-ifeq (,$$(shell $$(GIT_CONFIG_GLOBAL) --get user.$(1)))
-	read -r -p 'GitHub user $(1): ' user_$(1) && $$(GIT_CONFIG_GLOBAL) user.$(1) "$${user_$(1)}"
-endif
-endef
-$(foreach key,email name,$(eval $(call GIT.SET_USER_tmpl,$(key))))
-
-.PHONY: git.set_user
-git.set_user: $(addprefix git.set_user.,email name)
 
 .PHONY: git.install
 git.install:
@@ -447,7 +435,7 @@ $(NORD_CONFIG_DIR)/colors.sh: nord/colors.sh
 nvim: $(addprefix nvim.,install dotfiles) profile.10-nvim.sh lsp fd ripgrep
 
 .PHONY: nvim.dotfiles
-NVIM_DOTFILES := $(addprefix $(XDG_CONFIG_HOME)/,$(wilcarrd nvim/*.vim nvim/lua/*.lua nvim/ftplugin/*.vim))
+NVIM_DOTFILES := $(addprefix $(XDG_CONFIG_HOME)/,$(wildcard nvim/*.vim nvim/lua/*.lua nvim/ftplugin/*.vim))
 nvim.dotfiles: $(NVIM_DOTFILES)
 
 $(NVIM_DOTFILES): $(XDG_CONFIG_HOME)/%: %
@@ -578,10 +566,10 @@ endif
 
 
 .PHONY: rust
-rust: rust.install rust.zsh profile.10-cargo.sh
+rust: rust.install rust.zsh
 
 .PHONY: rust.install
-rust.install:
+rust.install: profile.10-cargo.sh
 ifeq (,$(shell command -v rustup))
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
 		sh -s -- -y --no-modify-path
@@ -594,11 +582,11 @@ rust.zsh: $(addprefix $(XDG_DATA_HOME)/zsh/site-functions/_,rustup cargo)
 
 $(XDG_DATA_HOME)/zsh/site-functions/_rustup: | rust.install
 	@mkdir -p $(dir $@)
-	rustup completions zsh > $@
+	$(HOME)/.cargo/bin/rustup completions zsh > $@
 
 $(XDG_DATA_HOME)/zsh/site-functions/_cargo: | rust.install
 	@mkdir -p $(dir $@)
-	rustup completions zsh cargo > $@
+	$(HOME)/.cargo/bin/rustup completions zsh cargo > $@
 
 CARGO_INSTALL := cargo install
 
@@ -736,7 +724,7 @@ ZSH_GIT_PLUGINS := \
 	github.com/zsh-users/zsh-autosuggestions \
 	github.com/zsh-users/zsh-completions \
 	github.com/hlissner/zsh-autopair \
-	github.com/zdharma/fast-syntax-highlighting \
+	github.com/z-shell/F-Sy-H \
 	github.com/zsh-users/zsh-history-substring-search \
 	github.com/mnowotnik/extra-fzf-completions \
 	github.com/docker/cli \

@@ -37,23 +37,28 @@ bar:
     - river:
         content:
           map:
-            tag: occupied
+            tag: id
             values:
-              true:
-                map:
-                  on-click: sh -c 'riverctl set-focused-tags $((1 << ({id} - 1)))'
-                  tag: state
-                  values:
-                    focused: &focused {string: &river_tag {text: ' {id} '}}
-                    urgent: {string: {<<: *river_tag, foreground: *nord11}}
-                    invisible: &invisible {string: {<<: *river_tag, foreground: *nord3}}
-                    unfocused: *invisible
-              false:
-                map:
-                  tag: focused
-                  values:
-                    true: *focused
-                    false: {empty: {}}
+              32: {empty: {}} # sticky tag
+            default:
+              map:
+                tag: occupied
+                values:
+                  true:
+                    map:
+                      on-click: sh -c 'riverctl set-focused-tags $((1 << ({id} - 1)))'
+                      tag: state
+                      values:
+                        focused: &focused {string: &river_tag {text: ' {id} '}}
+                        urgent: {string: {<<: *river_tag, foreground: *nord11}}
+                        invisible: &invisible {string: {<<: *river_tag, foreground: *nord3}}
+                        unfocused: *invisible
+                  false:
+                    map:
+                      tag: focused
+                      values:
+                        true: *focused
+                        false: {empty: {}}
   center:
     - river:
         title: {string: {text: '{title}', max: 80}}

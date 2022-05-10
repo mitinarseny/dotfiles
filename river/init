@@ -17,16 +17,16 @@ riverctl spawn 'foot --server --log-no-syslog'
 . ${XDG_CONFIG_HOME}/wob/conf.sh
 [ ! -e "${WOBSOCK}" ] || rm -f "${WOBSOCK}"
 mkfifo "${WOBSOCK}"
-riverctl spawn "tail --follow=name '${WOBSOCK}' | wob
-  --anchor bottom
-  --margin 10
-  --offset 0
-  --padding 0
-  --border 2
-  --height 30
-  --width 400
-  --background-color '#ff${NORD0}'
-  --border-color '#ff${NORD3}'
+riverctl spawn "tail --follow=name '${WOBSOCK}' | wob \
+  --anchor bottom \
+  --margin 10 \
+  --offset 0 \
+  --padding 0 \
+  --border 2 \
+  --height 30 \
+  --width 400 \
+  --background-color '#ff${NORD0}' \
+  --border-color '#ff${NORD3}' \
   --bar-color '#ff${NORD6}'"
 
 
@@ -136,18 +136,18 @@ do
 
     # ALSA
     riverctl map $mode None XF86AudioRaiseVolume  spawn "
-      amixer sset Master 5%+ unmute |
-      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' |
-      head -1 > ${WOBSOCK}"
+      amixer sset Master 5%+ unmute \
+      | sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+      | head -1 > ${WOBSOCK}"
     riverctl map $mode None XF86AudioLowerVolume  spawn "
-      amixer sset Master 5%- unmute |
-      sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' |
-      head -1 > ${WOBSOCK}"
+      amixer sset Master 5%- unmute \
+      | sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+      | head -1 > ${WOBSOCK}"
     riverctl map $mode None XF86AudioMute         spawn "
-      amixer sset Master toggle | \
-        sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p'
-                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p'
-        head -1 > ${WOBSOCK}"
+      amixer sset Master toggle \
+        | sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p' \
+        | head -1 > ${WOBSOCK}"
 
     # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     # riverctl map $mode None XF86AudioMedia spawn playerctl play-pause
@@ -157,11 +157,11 @@ do
 
     # Control screen backlight brighness with light (https://github.com/haikarainen/light)
     riverctl map $mode None XF86MonBrightnessUp   spawn "
-      light -A 5 && light -G
-      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
+      light -A 5 && light -G \
+      | sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
     riverctl map $mode None XF86MonBrightnessDown spawn "
-      light -U 5 && light -G |
-      sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
+      light -U 5 && light -G \
+      | sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
 done
 
 # Set repeat rate

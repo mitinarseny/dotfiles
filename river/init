@@ -98,6 +98,7 @@ ALL_TAGS=$(((1 << 32) - 1))
 STICKY_TAG=$((1 << 31))
 ALL_BUT_STICKY_TAG=$((ALL_TAGS ^ STICKY_TAG))
 
+riverctl spawn-tagmask ${ALL_BUT_STICKY_TAG}
 riverctl map normal $mod 0 set-focused-tags ${ALL_TAGS}
 riverctl map normal $mod+Shift 0 toggle-view-tags ${STICKY_TAG}
 

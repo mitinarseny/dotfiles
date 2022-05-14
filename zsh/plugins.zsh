@@ -1,5 +1,4 @@
 PLUGINS_DIR=${XDG_DATA_HOME}/zsh/plugins
-
 fpath+=( ${PLUGINS_DIR}/github.com/mafredri/zsh-async/async.zsh )
 
 fpath+=( ${PLUGINS_DIR}/github.com/sindresorhus/pure )
@@ -10,7 +9,7 @@ prompt pure
 # zstyle ':prompt:pure:prompt:success' color cyan
 export PATH="${PLUGINS_DIR}/github.com/paulirish/git-open:${PATH}"
 
-if command -v fzf > /dev/null; then
+if [ -r "${PLUGINS_DIR}/github.com/Aloxaf/fzf-tab/fzf-tab.zsh" ] && command -v fzf > /dev/null; then
   . ${PLUGINS_DIR}/github.com/Aloxaf/fzf-tab/fzf-tab.zsh
   command -v fzf > /dev/null
   FZF_TAB_FLAGS=(
@@ -38,38 +37,47 @@ if command -v fzf > /dev/null; then
   # do not show groups if only one available
   zstyle ':fzf-tab:*' single-group ''
 fi
-. ${PLUGINS_DIR}/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
-# https://github.com/zsh-users/zsh-autosuggestions#enable-asynchronous-mode
-ZSH_AUTOSUGGEST_USE_ASYNC=true
-ZSH_AUTOSUGGEST_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS} \
-  key-right \
-  key-end \
-  key-end2 \
-"
-ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS} \
-  key-cright \
-  key-aright \
-"
+
+if [ -r "${PLUGINS_DIR}/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  . ${PLUGINS_DIR}/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+  # https://github.com/zsh-users/zsh-autosuggestions#enable-asynchronous-mode
+  ZSH_AUTOSUGGEST_USE_ASYNC=true
+  ZSH_AUTOSUGGEST_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS} \
+    key-right \
+    key-end \
+    key-end2 \
+  "
+  ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS="${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS} \
+    key-cright \
+    key-aright \
+  "
+fi
 
 fpath+=( ${PLUGINS_DIR}/github.com/zsh-users/zsh-completions/src )
 
-AUTOPAIR_INHIBIT_INIT=''
-. ${PLUGINS_DIR}/github.com/hlissner/zsh-autopair/autopair.zsh
-unset AUTOPAIR_INHIBIT_INIT
+if [ -r "${PLUGINS_DIR}/github.com/hlissner/zsh-autopair/autopair.zsh" ]; then
+  AUTOPAIR_INHIBIT_INIT=''
+  . ${PLUGINS_DIR}/github.com/hlissner/zsh-autopair/autopair.zsh
+  unset AUTOPAIR_INHIBIT_INIT
+fi
 
-. ${PLUGINS_DIR}/github.com/zdharma/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-FAST_HIGHLIGHT[whatis_chroma_type]=0
-FAST_HIGHLIGHT_STYLES[unknown-token]='fg=red'
+if [ -r "${PLUGINS_DIR}/github.com/z-shell/F-Sy-H/F-Sy-H.plugin.zsh" ]; then
+  . ${PLUGINS_DIR}/github.com/z-shell/F-Sy-H/F-Sy-H.plugin.zsh
+  FAST_HIGHLIGHT[whatis_chroma_type]=0
+  FAST_HIGHLIGHT_STYLES[unknown-token]='fg=red'
+fi
 
-. ${PLUGINS_DIR}/github.com/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh
-# bindkey "$terminfo[kcuu1]" history-substring-search-up
-# bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=black,bg=cyan'
-typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=white,bg=red'
+if [ -r "${PLUGINS_DIR}/github.com/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh" ]; then
+  . ${PLUGINS_DIR}/github.com/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh
+  # bindkey "$terminfo[kcuu1]" history-substring-search-up
+  # bindkey "$terminfo[kcud1]" history-substring-search-down
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=black,bg=cyan'
+  typeset -g HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=white,bg=red'
+fi
 
-if command -v docker > /dev/null; then
+if [ -r "${PLUGINS_DIR}/github.com/mnowotnik/extra-fzf-completions/zsh/docker-fzf-completion.zsh" ] && command -v docker > /dev/null; then
   . ${PLUGINS_DIR}/github.com/mnowotnik/extra-fzf-completions/zsh/docker-fzf-completion.zsh
   fpath+=( ${PLUGINS_DIR}/github.com/docker/cli/contrib/completion/zsh )
 fi

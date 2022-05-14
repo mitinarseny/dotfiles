@@ -373,6 +373,8 @@ else
 	curl -fsSL https://go.dev/dl/go$(GO_VERSION).$(KERNEL)-$(GOARCH).tar.gz | \
 		sudo tar -xzv -C /usr/local
 endif
+	@mkdir -p "$(HOME)/dev/go"
+	go env -w GOPATH="$(HOME)/dev/go"
 
 
 .PHONY: inputrc

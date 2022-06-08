@@ -1,0 +1,33 @@
+[submodule ".local/share/nvim/site/pack/plugins/opt/nord"]
+	path = .local/share/nvim/site/pack/plugins/opt/nord
+	url = https://github.com/arcticicestudio/nord-vim
+[submodule ".local/share/zsh/plugins/github.com/mafredri/zsh-async"]
+	path = .local/share/zsh/plugins/github.com/mafredri/zsh-async
+	url = https://github.com/mafredri/zsh-async
+[submodule ".local/share/zsh/plugins/github.com/sindresorhus/pure"]
+	path = .local/share/zsh/plugins/github.com/sindresorhus/pure
+	url = https://github.com/sindresorhus/pure
+[submodule ".local/share/zsh/plugins/github.com/Aloxaf/fzf-tab"]
+	path = .local/share/zsh/plugins/github.com/Aloxaf/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
+[submodule ".local/share/zsh/plugins/github.com/paulirish/git-open"]
+	path = .local/share/zsh/plugins/github.com/paulirish/git-open
+	url = https://github.com/paulirish/git-open
+[submodule ".local/share/zsh/plugins/github.com/zsh-users/zsh-autosuggestions"]
+	path = .local/share/zsh/plugins/github.com/zsh-users/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule ".local/share/zsh/plugins/github.com/zsh-users/zsh-completions"]
+	path = .local/share/zsh/plugins/github.com/zsh-users/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions
+[submodule ".local/share/zsh/plugins/github.com/hlissner/zsh-autopair"]
+	path = .local/share/zsh/plugins/github.com/hlissner/zsh-autopair
+	url = https://github.com/hlissner/zsh-autopair
+[submodule ".local/share/zsh/plugins/github.com/z-shell/F-Sy-H"]
+	path = .local/share/zsh/plugins/github.com/z-shell/F-Sy-H
+	url = https://github.com/z-shell/F-Sy-H
+[submodule ".local/share/zsh/plugins/github.com/zsh-users/zsh-history-substring-search"]
+	path = .local/share/zsh/plugins/github.com/zsh-users/zsh-history-substring-search
+	url = https://github.com/zsh-users/zsh-history-substring-search
+[submodule ".local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions"]
+	path = .local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions
+	url = https://github.com/mnowotnik/extra-fzf-completions

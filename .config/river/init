@@ -1,0 +1,202 @@
+#!/bin/sh
+
+mod="Mod4" # Super
+
+if command -v dbus-update-activation-environment > dev/null && [ -n "${DBUS_SESSION_BUS_ADDRESS}" ]; then
+  dbus-update-activation-environment WAYLAND_DISPLAY
+fi
+
+. ${XDG_CONFIG_HOME}/nord/colors.sh
+
+riverctl spawn pipewire
+riverctl spawn yambar
+riverctl spawn mako
+riverctl spawn kanshi
+riverctl spawn 'foot --server --log-no-syslog'
+
+. ${XDG_CONFIG_HOME}/wob/conf.sh
+[ ! -e "${WOBSOCK}" ] || rm -f "${WOBSOCK}"
+mkfifo "${WOBSOCK}"
+riverctl spawn "tail --follow=name '${WOBSOCK}' | wob \
+  --anchor bottom \
+  --margin 10 \
+  --offset 0 \
+  --padding 0 \
+  --border 2 \
+  --height 30 \
+  --width 400 \
+  --background-color '#ff${NORD0}' \
+  --border-color '#ff${NORD3}' \
+  --bar-color '#ff${NORD6}'"
+
+
+riverctl map normal $mod+Shift Return spawn foot
+
+riverctl float-filter-add app-id float
+riverctl map normal $mod Space spawn "footclient \
+  --app-id=float \
+  --title=Launch -o locked-title=true \
+  --window-size-chars=60x8 \
+  ${XDG_CONFIG_HOME}/fzr/launch"
+riverctl map normal $mod+Control Space spawn "footclient \
+  --app-id=float \
+  --title=FZR -o locked-title=true \
+  --window-size-chars=60x8 \
+  fzr"
+
+riverctl map normal $mod               Q close
+riverctl map normal $mod+Control+Shift Q exit
+
+riverctl map normal $mod L spawn waylock
+
+riverctl map normal $mod       Tab focus-view next
+riverctl map normal $mod+Shift Tab focus-view previous
+
+riverctl map normal $mod       grave focus-previous-tags
+riverctl map normal $mod+Shift grave send-to-previous-tags
+
+riverctl map normal $mod+Shift Period swap next
+riverctl map normal $mod+Shift Comma  swap previous
+
+riverctl map normal $mod BracketRight focus-output next
+riverctl map normal $mod BracketLeft  focus-output previous
+
+riverctl map normal $mod+Shift BracketRight send-to-output next
+riverctl map normal $mod+Shift BracketLeft  send-to-output previous
+
+riverctl map normal $mod Return zoom
+
+riverctl map normal $mod Equal mod-layout-value rivertile fixed main_factor +0.05
+riverctl map normal $mod Minus mod-layout-value rivertile fixed main_factor -0.05
+
+riverctl map normal $mod+Shift Equal mod-layout-value rivertile int main_count +1
+riverctl map normal $mod+Shift Minus mod-layout-value rivertile int main_count -1
+
+riverctl map normal $mod+Mod1 Left  move left  100
+riverctl map normal $mod+Mod1 Down  move down  100
+riverctl map normal $mod+Mod1 Up    move up    100
+riverctl map normal $mod+Mod1 Right move right 100
+
+# Mod+Alt+Control+{H,J,K,L} to snap views to screen edges
+riverctl map normal $mod+Mod1+Control Left  snap left
+riverctl map normal $mod+Mod1+Control Down  snap down
+riverctl map normal $mod+Mod1+Control Up    snap up
+riverctl map normal $mod+Mod1+Control Right snap right
+
+riverctl map normal $mod+Mod1+Shift Left  resize horizontal -100
+riverctl map normal $mod+Mod1+Shift Down  resize vertical    100
+riverctl map normal $mod+Mod1+Shift Up    resize vertical   -100
+riverctl map normal $mod+Mod1+Shift Right resize horizontal  100
+
+# Mod + Left Mouse Button to move views
+riverctl map-pointer normal $mod BTN_LEFT move-view
+
+# Mod + Right Mouse Button to resize views
+riverctl map-pointer normal $mod BTN_RIGHT resize-view
+
+ALL_TAGS=$(((1 << 32) - 1))
+STICKY_TAG=$((1 << 31))
+ALL_BUT_STICKY_TAG=$((ALL_TAGS ^ STICKY_TAG))
+
+riverctl spawn-tagmask ${ALL_BUT_STICKY_TAG}
+riverctl map normal $mod 0 set-focused-tags ${ALL_TAGS}
+riverctl map normal $mod+Shift 0 toggle-view-tags ${STICKY_TAG}
+
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # Mod+[1-9] to focus tag
+    riverctl map normal $mod $i set-focused-tags $((tags + STICKY_TAG))
+
+    # Mod+Shift+[1-9] to tag focused view
+    riverctl map normal $mod+Shift $i set-view-tags ${tags}
+
+    # Mod+Ctrl+[1-9] to toggle focus of tag
+    riverctl map normal $mod+Control $i toggle-focused-tags ${tags}
+
+    # Mod+Shift+Ctrl+[1-9] to toggle tag of focused view
+    riverctl map normal $mod+Shift+Control $i toggle-view-tags ${tags}
+done
+
+riverctl map normal $mod       F toggle-fullscreen
+riverctl map normal $mod+Shift F toggle-float
+
+# Mod+{Up,Right,Down,Left} to change layout orientation
+riverctl map normal $mod+Control Up    set-layout-value rivertile string main_location top
+riverctl map normal $mod+Control Right set-layout-value rivertile string main_location right
+riverctl map normal $mod+Control Down  set-layout-value rivertile string main_location bottom
+riverctl map normal $mod+Control Left  set-layout-value rivertile string main_location left
+
+
+# Various media key mapping examples for both normal and locked mode which do
+# not have a modifier
+for mode in normal locked
+do
+    # Eject the optical drive
+    riverctl map $mode None XF86Eject spawn eject -T
+
+    # ALSA
+    riverctl map $mode None XF86AudioRaiseVolume  spawn "
+      amixer sset Master 5%+ unmute \
+      | sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+      | head -1 > ${WOBSOCK}"
+    riverctl map $mode None XF86AudioLowerVolume  spawn "
+      amixer sset Master 5%- unmute \
+      | sed -En 's/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+      | head -1 > ${WOBSOCK}"
+    riverctl map $mode None XF86AudioMute         spawn "
+      amixer sset Master toggle \
+        | sed -En -e '/\[on\]/ s/.*\[([0-9]+)%\].*/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' \
+                -e '/\[off\]/ s/.*\[([0-9]+)%\].*/0 #${NORD0}ff #${NORD11}ff #${NORD6}ff/p' \
+        | head -1 > ${WOBSOCK}"
+
+    # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+    # riverctl map $mode None XF86AudioMedia spawn playerctl play-pause
+    # riverctl map $mode None XF86AudioPlay  spawn playerctl play-pause
+    # riverctl map $mode None XF86AudioPrev  spawn playerctl previous
+    # riverctl map $mode None XF86AudioNext  spawn playerctl next
+
+    # Control screen backlight brighness with light (https://github.com/haikarainen/light)
+    riverctl map $mode None XF86MonBrightnessUp   spawn "
+      light -A 5 && light -G \
+      | sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
+    riverctl map $mode None XF86MonBrightnessDown spawn "
+      light -U 5 && light -G \
+      | sed -En 's/([0-9]+)\.[0-9]{2}/\1 #${NORD0}ff #${NORD3}ff #${NORD6}ff/p' > ${WOBSOCK}"
+done
+
+# Set repeat rate
+riverctl set-repeat 50 300
+
+riverctl map normal None Print spawn "grim ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')"
+riverctl map normal Control Print spawn 'grim - | wl-copy'
+riverctl map normal $mod Print spawn "slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - ${HOME}/screenshots/screenshot_\$(date +'%Y-%m-%d_%H-%M-%S.png')"
+riverctl map normal $mod+Control Print spawn "slurp -b '#${NORD6}44' -c '#${NORD3}FF' | grim -g - - | wl-copy"
+
+# Set opacity and fade effect
+# riverctl opacity 1.0 0.75 0.0 0.1 20
+
+# Set and exec into the default layout generator, rivertile.
+# River will send the process group of the init executable SIGTERM on exit.
+riverctl default-layout rivertile
+
+riverctl attach-mode bottom
+riverctl border-width 2
+riverctl background-color       "0x${NORD0}"
+riverctl border-color-focused   "0x${NORD3}"
+riverctl border-color-unfocused "0x${NORD1}"
+
+if [ -d "${XDG_CONFIG_HOME}/river/autostart" ]; then
+  for f in ${XDG_CONFIG_HOME}/river/autostart/*; do
+    [ -x "${f}" ] || continue
+    riverctl spawn "${f}"
+  done
+fi
+
+LOCALRC=${XDG_CONFIG_HOME}/river/local
+if [ -r ${LOCALRC} ]; then
+  . ${LOCALRC}
+fi
+
+exec rivertile -outer-padding 1 -view-padding 1

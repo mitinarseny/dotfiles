@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+CONFIG_DIR=${XDG_CONFIG_HOME:-${HOME}/.config}/fzr
+
+COMMAND=$(find -L ${CONFIG_DIR} -type f -executable -printf '%P\n' \
+  | fzf --exit-0 --no-multi --cycle --layout=reverse --info=hidden)
+
+[ -n "${COMMAND}" ] || exit 1
+
+exec "${CONFIG_DIR}/${COMMAND}" </dev/tty

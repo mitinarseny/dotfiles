@@ -1,0 +1,421 @@
+#!/bin/sh
+
+usage() {
+  cat << EOF
+$(basename $0) [OPTIONS] { FILE | URL }...
+
+OPTIONS:
+  -n	Dry run mode: do not launch, just print the command.
+  -D	Ignore default applications, ask explicitly.
+  -h	Print this help message.
+EOF
+}
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+open() {
+  local NAME="$1"
+
+  local COMMAND
+  COMMAND="$(exec_by_name "${NAME}")" \
+    && launch ${COMMAND}
+}
+
+launch() {
+  printf '%s\n' "$*" >&2
+  setsid -f $@ >/dev/null 2>&1 </dev/null
+}
+
+exec_by_name() {
+  local NAME="$1"
+
+  local DESKTOP_FILE
+  DESKTOP_FILE=$(desktop_file_by_name "${NAME}") \
+    && desktop_entry_exec "${DESKTOP_FILE}" "${NAME}"
+}
+
+desktop_file_by_name() {
+  local NAME="$1"
+
+  local MIME_TYPE
+  MIME_TYPE="$(mime_type "${NAME}")" || return
+
+  local DESKTOP_FILE
+  if [ -n "${NO_DEFAULT_APPS}" ] || ! DESKTOP_FILE="$(default_mime_type_desktop_file "${MIME_TYPE}")"; then
+    DESKTOP_FILE="$(desktop_applications_by_mime_type "${MIME_TYPE}" | select_desktop_file "${MIME_TYPE}")" || return
+  fi
+  printf '%s\n' "${DESKTOP_FILE}"
+}
+
+mime_type() {
+  local NAME="$1"
+  if is_file "${NAME}"; then
+      local F="$(printf '%s' "${NAME}" | sed 's/^file:\/\///')"
+      [ -r "${F}" ] && file_mime_type "${F}"
+      return
+  fi
+  url_mime_type "${NAME}"
+}
+
+is_file() {
+  local NAME="$1"
+  printf '%s' "${NAME}" | grep -q '^file://' \
+    || printf '%s' "${NAME}" | grep -E -vq '^[[:alpha:]][[:alnum:]+\.\-]*:'
+}
+
+file_mime_type() {
+  /usr/bin/file --brief --dereference --mime-type "$1" 2>/dev/null
+}
+
+url_mime_type() {
+  local URL="$1"
+  printf '%s\n' "${URL}" | sed -n 's/\(^[[:alpha:]][[:alnum:]+\.\-]*\):.*/x-scheme-handler\/\1/p;tx;q1;:x'
+}
+
+default_mime_type_desktop_file() {
+  local MIME="$1"
+
+  local found=0
+  default_mime_type_file_ids "${MIME}" | (while read fid; do
+      desktop_file_by_id "${fid}" && found=1 && break
+    done
+    return $((!found))
+  )
+}
+
+default_mime_type_file_ids() {
+  local MIME="$1"
+
+  local DIRS="${XDG_CONFIG_HOME}"
+  if [ -n "${XDG_CONFIG_DIRS}" ]; then
+    DIRS="${DIRS}:${XDG_CONFIG_DIRS}"
+  fi
+
+  local IFS=':'
+  for d in ${XDG_DATA_DIRS}; do
+    DIRS="${DIRS}:${d}/applications"
+  done
+
+  for d in ${DIRS}; do
+    unset IFS
+    if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
+      local IFS=':'
+      for desktop in ${XDG_CURRENT_DESKTOP}; do
+        unset IFS
+        if [ -r "${d}/${desktop}-mimeapps.list" ]; then
+          cat "${d}/${desktop}-mimeapps.list"
+        fi
+      done
+    fi
+    if [ -r "${d}/mimeapps.list" ]; then
+      cat "${d}/mimeapps.list"
+    fi
+  done | awk -v mimetype="${MIME}" '
+      BEGIN{
+        FS="=";
+        remove=-1;
+      }
+      /^\[Default Applications\]$/ || /^\[Added Associations\]$/ {
+        remove=0;
+      }
+      /^\[Removed Associations\]$/ {
+        remove=1;
+      }
+      remove!=-1 && $1==mimetype && NF==2 {
+        sub(/;$/, "", $2);
+        new_apps_c=split($2, new_apps, ";");
+        for (i=1; i<=new_apps_c; i++) {
+          if (!remove)
+            apps[new_apps[i]]=1;
+          else {
+            delete apps[new_apps[i]];
+            removed_apps[new_apps[i]]=1;
+          }
+        }
+      }
+      END{
+        for (a in apps)
+          if (!(a in removed_apps))
+            printf("%s\n", a);
+      }
+    '
+}
+
+desktop_file_by_id() {
+  local FILE_ID="$1"
+
+  local DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
+  local IFS=':'
+  for d in ${DIRS}; do
+    search_down_desktop_file_by_id "${d}/applications/${FILE_ID}" && return
+  done
+  return 1
+}
+
+search_down_desktop_file_by_id() {
+  local DIR="$(dirname "$1")"
+  local FILE_ID="$(basename "$1")"
+
+  if [ -r "${DIR}/${FILE_ID}" ]; then
+    printf '%s\n' "${DIR}/${FILE_ID}"
+    return
+  fi
+
+  local i=0
+  while FILE_ID="$(printf '%s' "${FILE_ID}" | sed -n "s/-/\//$((i=i+1))p")" \
+    && [ -n "${FILE_ID}" ]; do
+    search_down_desktop_file_by_id "${DIR}/${FILE_ID}" && return
+  done
+  return 1
+}
+
+MIME_REGEX='\w+[a-zA-Z0-9-]*/\w+[a-zA-Z0-9\.+-]*'
+
+desktop_applications_by_mime_type() {
+  local MIME="$1"
+  desktop_applications_by_key_regex 'MimeType' "(${MIME_REGEX};)*${MIME};(${MIME_REGEX};)*"
+}
+
+desktop_applications_by_category() {
+  local CATEGORY="$1"
+  desktop_applications_by_key_regex 'Categories' "(\w+;)*${CATEGORY};(\w+;)*"
+}
+
+desktop_applications_by_key_regex() {
+  local KEY="$1"
+  local REGEX="$2"
+  desktop_applications_by_regex "^${KEY}=${REGEX}\$"
+}
+
+desktop_applications_by_regex() {
+  local REGEX="$1"
+
+  local DATA_DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
+
+  local IFS=':'
+  for d in ${DATA_DIRS}; do
+    grep -E --no-messages -R -l \
+      --include '*.desktop' "${REGEX}" \
+      "${d}/applications"
+  done | awk '{
+  i=index($0,"/applications/");
+  id=gensub(/\//, "-", "g", substr($0, i+length("/applications/")));
+  if (!seen[id])
+    print;
+  ++seen[id];
+  }' | while read DESKTOP_FILE; do
+    desktop_entry_is_application "${DESKTOP_FILE}" \
+      && printf '%s\n' "${DESKTOP_FILE}"
+  done
+}
+
+desktop_entry_name() {
+  local DESKTOP_FILE="$1"
+  desktop_entry_key "${DESKTOP_FILE}" 'Name'
+}
+
+desktop_entry_generic_name() {
+  local DESKTOP_FILE="$1"
+  desktop_entry_key "${DESKTOP_FILE}" 'GenericName'
+}
+
+desktop_entry_keywords() {
+  local DESKTOP_FILE="$1"
+  desktop_entry_key "${DESKTOP_FILE}" 'Keywords' | sed 's/;/ /g'
+}
+
+desktop_entry_is_application() {
+  local DESKTOP_FILE="$1"
+  grep -q '^Type=Application$' "${DESKTOP_FILE}"
+}
+
+desktop_entry_is_hidden() {
+  local DESKTOP_FILE="$1"
+  grep -q '^Hidden=true$' "${DESKTOP_FILE}"
+}
+
+desktop_entry_try_exec() {
+  local DESKTOP_FILE="$1"
+
+  local TRY_EXEC
+  TRY_EXEC="$(desktop_entry_key "${DESKTOP_FILE}" 'TryExec')" || return 0
+  local TRY_EXEC_PATH
+  TRY_EXEC_PATH="$(command -v "${TRY_EXEC}")" && [ -x "${TRY_EXEC_PATH}" ]
+}
+
+desktop_entry_exec() {
+  local DESKTOP_FILE="$1"
+  local NAME="$2"
+
+  local EXEC_COMMAND
+  EXEC_COMMAND="$(desktop_entry_key "${DESKTOP_FILE}" 'Exec')" || return
+
+  set -- ${EXEC_COMMAND}
+  EXEC_COMMAND="$1"
+  shift
+  while [ $# -gt 0 ]; do
+    case $1 in
+      %[fF])
+        if [ -n "${NAME}" ] && is_file "${NAME}"; then
+          EXEC_COMMAND="${EXEC_COMMAND} ${NAME}"
+        fi
+        ;;
+      %[uU])
+        if [ -n "${NAME}" ]; then
+          EXEC_COMMAND="${EXEC_COMMAND} ${NAME}"
+        fi
+        ;;
+      %i)
+        local ICON
+        if ICON="$(desktop_entry_icon "${DESKTOP_FILE}")"; then
+          EXEC_COMMAND="${EXEC_COMMAND} --icon ${ICON}"
+        fi
+        ;;
+      %k)
+        EXEC_COMMAND="${EXEC_COMMAND} ${DESKTOP_FILE}"
+        ;;
+      %[^%]*)
+        ;;
+      *)
+        EXEC_COMMAND="${EXEC_COMMAND} $1"
+    esac
+    shift
+  done
+
+  if desktop_entry_is_terminal "${DESKTOP_FILE}"; then
+    EXEC_COMMAND="$(terminal_exec) ${EXEC_COMMAND}" || return
+  fi
+  printf '%s\n' "${EXEC_COMMAND}"
+}
+
+desktop_entry_is_terminal() {
+  local DESKTOP_FILE="$1"
+  grep -q '^Terminal=true$' "${DESKTOP_FILE}"
+}
+
+readonly TERMINAL_MIME_TYPE='x-scheme-handler/terminal'
+
+terminal_exec() {
+  if [ -n "${TERMINAL_CMD}" ]; then
+    printf '%s\n' "${TERMINAL_CMD}"
+    return
+  fi
+
+  local TERMINAL_DESKTOP_FILE
+  if [ -n "${NO_DEFAULT_APPS}" ] || ! TERMINAL_DESKTOP_FILE="$(default_mime_type_desktop_file "${TERMINAL_MIME_TYPE}")"; then
+    TERMINAL_DESKTOP_FILE="$(desktop_applications_by_category 'TerminalEmulator' | select_desktop_file "${TERMINAL_MIME_TYPE}")" \
+    || return
+  fi
+  desktop_entry_exec "${TERMINAL_DESKTOP_FILE}"
+}
+
+desktop_entry_icon() {
+  local DESKTOP_FILE="$1"
+  desktop_entry_key "${DESKTOP_FILE}" 'Icon'
+}
+
+desktop_entry_check() {
+  local DESKTOP_FILE="$1"
+  ! desktop_entry_is_hidden "${DESKTOP_FILE}" \
+    && desktop_entry_try_exec "${DESKTOP_FILE}" \
+    && desktop_entry_show "${DESKTOP_FILE}"
+}
+
+desktop_entry_show() {
+  local DESKTOP_FILE="$1"
+
+  local ONLY_SHOW_IN
+  if ONLY_SHOW_IN="$(desktop_entry_key "${DESKTOP_FILE}" 'OnlyShowIn')"; then
+    desktop_entry_show_in "${ONLY_SHOW_IN}" || return
+  fi
+  
+  local NOT_SHOW_IN
+  if NOT_SHOW_IN="$(desktop_entry_key "${DESKTOP_FILE}" 'NotShowIn')"; then
+    desktop_entry_show_in "${NOT_SHOW_IN}" && return 1
+  fi
+
+  return 0
+}
+
+desktop_entry_show_in() {
+  [ -n "${XDG_CURRENT_DESKTOP}" ] || return
+
+  local SHOW_IN="$1"
+  printf '%s' "${SHOW_IN}" \
+    | grep -E -q \
+    "([a-zA-Z0-9-]+;)*$(printf '%s' "${XDG_CURRENT_DESKTOP}" | sed 's/:/|/g');([a-zA-Z0-9-]+;)*"
+}
+
+desktop_entry_key() {
+  local DESKTOP_FILE="$1"
+  local KEY="$2"
+  awk -v key="${KEY}" '
+    BEGIN{FS="="; entry=0; found=0;}
+    /^\[Desktop Entry\]$/{
+      entry=1;
+    }
+    $1==key && entry {
+      sub(key "=", "");
+      printf("%s\n", $0);
+      found=1;
+      exit;
+    }
+    /^\[/ && ! /^\[Desktop Entry\]$/{
+      exit 1;
+    }
+    END{exit !found;}
+  ' < "${DESKTOP_FILE}"
+}
+
+select_desktop_file() {
+  local MIME_TYPE="$1"
+  while read DESKTOP_FILE; do
+    local ENTRY_NAME
+    ENTRY_NAME="$(desktop_entry_name "${DESKTOP_FILE}")" || continue
+    desktop_entry_check "${DESKTOP_FILE}" || continue
+    printf '%s\n%s\0' "${DESKTOP_FILE}" "${ENTRY_NAME}"
+  done | fzf --no-multi --select-1 --exit-0 \
+    --with-nth 2.. --read0 --delimiter '\n' \
+    --cycle --layout=reverse --info=hidden --prompt="> " \
+    --header "MimeType: ${MIME_TYPE}" \
+    --bind 'change:first' \
+    --bind 'tab:down' \
+    --bind '?:toggle-preview' \
+    --preview 'printf "%s\n" {1}' \
+    --preview-window 'bottom,1,hidden,border-top,wrap' \
+    | head -n 1 | (read DESKTOP_FILE && printf '%s\n' "${DESKTOP_FILE}")
+}
+
+while getopts nDh f; do
+  case $f in
+    n) readonly DRYRUN=1;;
+    D) readonly NO_DEFAULT_APPS=1;;
+    h) usage; exit;;
+    \?) usage >&2; exit 1;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+  printf 'no files or URLs given\n' >&2
+  usage >&2
+  exit 1
+fi
+
+if [ ! -t 2 ]; then
+  TERMINAL_CMD="$(terminal_exec)" || return
+  launch ${TERMINAL_CMD} "$0" "$@"
+  return
+fi
+
+while [ $# -gt 0 ]; do
+  NAME="$1"
+  shift
+  if [ -n "${DRYRUN}" ]; then
+    exec_by_name "${NAME}"
+  else
+    open "${NAME}"
+  fi || exit
+done

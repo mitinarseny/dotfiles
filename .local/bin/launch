@@ -1,0 +1,83 @@
+#!/bin/sh
+
+usage() {
+  cat <<EOF
+$(basename $0) [OPTIONS] [--] FILE_ID[:ACTION] [ FILE | URL ]...
+
+OPTIONS:
+  -a ACTION    Action name.
+  -n           Dry-run mode: do not launch anything, just print the commend.
+  -h           Show this help message.
+EOF
+}
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+desktop_file_by_id() {
+  local FILE_ID="$1"
+
+  local DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
+  local IFS=':'
+  for d in ${DIRS}; do
+    search_down_desktop_file_by_id "${d}/applications/${FILE_ID}" && return
+  done
+  return 1
+}
+
+search_down_desktop_file_by_id() {
+  local DIR="$(dirname "$1")"
+  local FILE_ID="$(basename "$1")"
+
+  if [ -r "${DIR}/${FILE_ID}" ]; then
+    printf '%s\n' "${DIR}/${FILE_ID}"
+    return
+  fi
+
+  local i=0
+  while FILE_ID="$(printf '%s' "${FILE_ID}" | sed -n "s/-/\//$((i=i+1))p")" \
+    && [ -n "${FILE_ID}" ]; do
+    search_down_desktop_file_by_id "${DIR}/${FILE_ID}" && return
+  done
+  return 1
+}
+
+
+while getopts hn o; do
+  case $o in
+    h) usage; exit;;
+    n) readonly DRYRUN=1;;
+    \?) usage >&2; exit 1;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+ printf 'no FILE_ID given\n' >&2
+ exit 1
+fi
+
+OLDIFS="${IFS}"
+IFS=':'
+set -- "$0"
+if [ $# -gt 2 ]; then
+  usage >&2
+  exit 1
+fi
+readonly FILE_ID=$1
+readonly ACTION=$2
+IFS="${OLDIFS}"
+unset -v OLDIFS
+shift
+
+DESKTOP_FILE="$(desktop_file_by_id "${FILE_ID}")" || exit
+COMMAND="$(desktop_entry_exec "${DESKTOP_FILE}" "${ACTION}")"
+
+if [ -n "${DRYRUN}" ]; then
+  printf '%s\n' "${COMMAND}"
+  exit
+fi
+
+printf '%s\n' "${COMMAND}" >&2
+setsid -f ${COMMAND} >/dev/null 2>&1 </dev/null

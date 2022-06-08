@@ -1,6 +1,3 @@
-[submodule ".local/share/nvim/site/pack/plugins/opt/nord"]
-	path = .local/share/nvim/site/pack/plugins/opt/nord
-	url = https://github.com/arcticicestudio/nord-vim
 [submodule ".local/share/zsh/plugins/github.com/mafredri/zsh-async"]
 	path = .local/share/zsh/plugins/github.com/mafredri/zsh-async
 	url = https://github.com/mafredri/zsh-async
@@ -31,3 +28,60 @@
 [submodule ".local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions"]
 	path = .local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions
 	url = https://github.com/mnowotnik/extra-fzf-completions
+[submodule ".config/nvim/pack/plugins/opt/nord"]
+	path = .config/nvim/pack/plugins/opt/nord
+	url = https://github.com/arcticicestudio/nord-vim
+[submodule ".config/nvim/pack/plugins/start/polyglot"]
+	path = .config/nvim/pack/plugins/start/polyglot
+	url = https://github.com/sheerun/vim-polyglot
+[submodule ".config/nvim/pack/plugins/start/bracketed-paste"]
+	path = .config/nvim/pack/plugins/start/bracketed-paste
+	url = https://github.com/ConradIrwin/vim-bracketed-paste
+[submodule ".config/nvim/pack/plugins/start/tcomment"]
+	path = .config/nvim/pack/plugins/start/tcomment
+	url = https://github.com/tomtom/tcomment_vim
+[submodule ".config/nvim/pack/plugins/start/colorizer"]
+	path = .config/nvim/pack/plugins/start/colorizer
+	url = https://github.com/chrisbra/Colorizer
+[submodule ".config/nvim/pack/plugins/opt/indent-blankline"]
+	path = .config/nvim/pack/plugins/opt/indent-blankline
+	url = https://github.com/lukas-reineke/indent-blankline.nvim
+[submodule ".config/nvim/pack/plugins/start/gitsigns"]
+	path = .config/nvim/pack/plugins/start/gitsigns
+	url = https://github.com/lewis6991/gitsigns.nvim
+[submodule ".config/nvim/pack/plugins/start/feline"]
+	path = .config/nvim/pack/plugins/start/feline
+	url = https://github.com/feline-nvim/feline.nvim
+[submodule ".config/nvim/pack/plugins/start/lspconfig"]
+	path = .config/nvim/pack/plugins/start/lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule ".config/nvim/pack/plugins/start/lsp_entensions"]
+	path = .config/nvim/pack/plugins/start/lsp_entensions
+	url = https://github.com/nvim-lua/lsp_extensions.nvim
+[submodule ".config/nvim/pack/plugins/start/cmp-nvim-lsp"]
+	path = .config/nvim/pack/plugins/start/cmp-nvim-lsp
+	url = https://github.com/hrsh7th/cmp-nvim-lsp
+[submodule ".config/nvim/pack/plugins/start/cmp-buffer"]
+	path = .config/nvim/pack/plugins/start/cmp-buffer
+	url = https://github.com/hrsh7th/cmp-buffer
+[submodule ".config/nvim/pack/plugins/start/cmp-path"]
+	path = .config/nvim/pack/plugins/start/cmp-path
+	url = https://github.com/hrsh7th/cmp-path
+[submodule ".config/nvim/pack/plugins/start/cmp-cmdline"]
+	path = .config/nvim/pack/plugins/start/cmp-cmdline
+	url = https://github.com/hrsh7th/cmp-cmdline
+[submodule ".config/nvim/pack/plugins/start/nvim-cmp"]
+	path = .config/nvim/pack/plugins/start/nvim-cmp
+	url = https://github.com/hrsh7th/nvim-cmp
+[submodule ".config/nvim/pack/plugins/start/cmp-vsnip"]
+	path = .config/nvim/pack/plugins/start/cmp-vsnip
+	url = https://github.com/hrsh7th/cmp-vsnip
+[submodule ".config/nvim/pack/plugins/start/vim-vsnip"]
+	path = .config/nvim/pack/plugins/start/vim-vsnip
+	url = https://github.com/hrsh7th/vim-vsnip
+[submodule ".config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help"]
+	path = .config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help
+	url = https://github.com/hrsh7th/cmp-nvim-lsp-signature-help
+[submodule ".config/nvim/pack/plugins/start/rust-tools"]
+	path = .config/nvim/pack/plugins/start/rust-tools
+	url = https://github.com/simrat39/rust-tools.nvim

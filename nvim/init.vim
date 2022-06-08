@@ -15,7 +15,7 @@ set clipboard+=unnamedplus
 "do not unload buffer when it is abandoned
 set hidden
 
-" enable mouse everywhene
+" enable mouse everywhere
 set mouse=a
 
 " enable syntax highlighting if terminal supports colors
@@ -222,4 +222,4 @@ if has('nvim')
   augroup END
 endif
 
-lua require('plugins')
+" lua require('plugins')

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+fatal() {
+  printf '%s\n' "$@" >&2
+  exit 1
+}
+
+if [ ! -t 2 ]; then
+  [ -n "${XDG_RUNTIME_DIR}" ] || fatal '$XDG_RUNTIME_DIR is not set'
+  [ -n "${WAYLAND_DISPLAY}" ] || fatal 'Only Wayland is supported'
+
+  FOOT_CMD='foot'
+  if [ -S "${XDG_RUNTIME_DIR}/foot-${WAYLAND_DISPLAY}.sock" ]; then
+    FOOT_CMD='footclient'
+  fi
+
+  exec "${FOOT_CMD}" --app-id 'menu' \
+    --title 'fzmenu' -o 'locked-title=true' \
+    --window-size-chars '60x8' \
+    /bin/sh \
+      -c "exec $0 \"\$@\" < /proc/$$/fd/0 > /proc/$$/fd/1" \
+      -- "$@" 2>/dev/null
+fi
+
+exec fzf \
+  --read0 --delimiter '\n' --with-nth -1 \
+  --no-multi --exit-0 \
+  --cycle --layout reverse --info hidden \
+  --prompt '> ' \
+  --bind 'change:first' \
+  --bind 'tab:down' \
+  "$@"

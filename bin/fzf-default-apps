@@ -1,0 +1,32 @@
+#!/bin/sh
+
+usage() {
+  cat << EOF
+$0 MIME_TYPE
+$0 MIME_TYPE [[-d] FILE_ID]...
+EOF
+}
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+
+DEFAULT_FILE="${XDG_CONFIG_HOME}/mimeapps.list"
+
+add_default() {
+  local MIME_TYPE="$1"
+  local FILE_ID="$2"
+
+  awk -v mimetype="${MIME_TYPE}" '
+  BEGIN{FS="="; added=-1}
+  /^\[Added Associations\]$/{
+    added=1;
+  }
+  /^\[Removed Associations\]$/{
+    added=0;
+  }
+  $1==mimetype && NF==2 {
+    
+  }
+  print $0
+  ' < "${DEFAULT_FILE}" > "${DEFAULT_FILE}.new" \
+    && mv "${DEFAULT_FILE}.new" "${DEFAULT_FILE}"
+}

@@ -1,0 +1,258 @@
+#!/bin/sh -e
+
+usage() {
+  cat << EOF
+$(basename $0) [OPTIONS] DESKTOP_FILE_ID { FILE | URL }...
+
+
+OPTIONS:
+  -n	Dry run mode: do not launch, just print the command.
+  -D	Ignore default terminal application, ask explicitly.
+  -h	Print this help message.
+EOF
+}
+
+launch() {
+  printf '%s\n' "$*" >&2
+  setsid -f $@ >/dev/null 2>&1 </dev/null
+}
+
+terminal_exec() {
+  if [ -n "${TERMINAL_CMD}" ]; then
+    printf '%s\n' "${TERMINAL_CMD}"
+    return
+  fi
+
+  local TERMINAL_DESKTOP_FILE
+  if [ -n "${NO_DEFAULT_APPS}" ] || ! TERMINAL_DESKTOP_FILE="$(default_mime_type_desktop_file "${TERMINAL_MIME_TYPE}")"; then
+    TERMINAL_DESKTOP_FILE="$(desktop_applications_by_category 'TerminalEmulator' | select_desktop_file "${TERMINAL_MIME_TYPE}")" \
+    || return
+  fi
+  desktop_entry_exec "${TERMINAL_DESKTOP_FILE}"
+}
+
+default_mime_type_desktop_file() {
+  local MIME="$1"
+
+  local found=0
+  default_mime_type_file_ids "${MIME}" | (while read fid; do
+      desktop_file_by_id "${fid}" && found=1 && break
+    done
+    return $((!found))
+  )
+}
+
+default_mime_type_file_ids() {
+  local MIME="$1"
+
+  local DIRS="${XDG_CONFIG_HOME}"
+  if [ -n "${XDG_CONFIG_DIRS}" ]; then
+    DIRS="${DIRS}:${XDG_CONFIG_DIRS}"
+  fi
+
+  local IFS=':'
+  for d in ${XDG_DATA_DIRS}; do
+    DIRS="${DIRS}:${d}/applications"
+  done
+
+  for d in ${DIRS}; do
+    unset IFS
+    if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
+      local IFS=':'
+      for desktop in ${XDG_CURRENT_DESKTOP}; do
+        unset IFS
+        if [ -r "${d}/${desktop}-mimeapps.list" ]; then
+          cat "${d}/${desktop}-mimeapps.list"
+        fi
+      done
+    fi
+    if [ -r "${d}/mimeapps.list" ]; then
+      cat "${d}/mimeapps.list"
+    fi
+  done | awk -v mimetype="${MIME}" '
+      BEGIN{
+        FS="=";
+        remove=-1;
+      }
+      /^\[Default Applications\]$/ || /^\[Added Associations\]$/ {
+        remove=0;
+      }
+      /^\[Removed Associations\]$/ {
+        remove=1;
+      }
+      remove!=-1 && $1==mimetype && NF==2 {
+        sub(/;$/, "", $2);
+        new_apps_c=split($2, new_apps, ";");
+        for (i=1; i<=new_apps_c; i++) {
+          if (!remove)
+            apps[new_apps[i]]=1;
+          else {
+            delete apps[new_apps[i]];
+            removed_apps[new_apps[i]]=1;
+          }
+        }
+      }
+      END{
+        for (a in apps)
+          if (!(a in removed_apps))
+            printf("%s\n", a);
+      }
+    '
+}
+
+desktop_file_by_id() {
+  local FILE_ID="$1"
+
+  local DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
+  local IFS=':'
+  for d in ${DIRS}; do
+    search_down_desktop_file_by_id "${d}/applications/${FILE_ID}" && return
+  done
+  return 1
+}
+
+search_down_desktop_file_by_id() {
+  local DIR="$(dirname "$1")"
+  local FILE_ID="$(basename "$1")"
+
+  if [ -r "${DIR}/${FILE_ID}" ]; then
+    printf '%s\n' "${DIR}/${FILE_ID}"
+    return
+  fi
+
+  local i=0
+  while FILE_ID="$(printf '%s' "${FILE_ID}" | sed -n "s/-/\//$((i=i+1))p")" \
+    && [ -n "${FILE_ID}" ]; do
+    search_down_desktop_file_by_id "${DIR}/${FILE_ID}" && return
+  done
+  return 1
+}
+
+desktop_files() {
+  local DATA_DIRS="${XDG_DATA_HOME:-${HOME}/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+  local IFS=':'
+  for d in ${DATA_DIRS}; do
+    [ -d "${d}/applications" ] && [ -x "${d}/applications" ] || continue
+    find -L "${d}/applications" -type f -name '*.desktop' -perm /444 -printf '%p %P\n'
+  done | sort -usk 2 | cut -d' ' -f 1
+}
+
+action_commands() {
+  awk -v terminal_cmd="${TERMINAL_CMD}" '
+    BEGIN{FS="="; action=-1}
+    function expandExec(e){
+      gsub(/%[[:alpha:]]/, "", e);
+      if (terminal)
+        e=sprintf("%s %s", terminal_cmd, e);
+      if (path)
+        e=sprintf("env -C %s %s", path, e);
+      return e;
+    }
+    /^#/{next}
+    /^\[Desktop Entry\]$/{
+      action=0;
+    }
+    $1=="Type" && $2!="Application"{
+      exit;
+    }
+    $1=="Path" && NF==2{
+      path=$2;
+    }
+    $1=="Terminal" && $2=="true"{
+      terminal=1;
+    }
+    $1=="NoDisplay" && $3=="true"{
+      hidden=1;
+    }
+    /^\[Desktop Action \w+\]$/{
+      sub(/^\[Desktop Action /,"");
+      sub(/\]$/,"");
+      action=1;
+      ac++;
+    }
+    $1=="Name" && NF==2{
+      switch (action) {
+      case 0:
+        name=$2;
+      case 1:
+        actions[ac,"name"]=$2
+      }
+    }
+    $1=="Exec"{
+      sub(/^Exec=/, "");
+      switch (action) {
+      case 0:
+        exec=$0;
+      case 1:
+        actions[ac,"exec"]=$0;
+      }
+    }
+    END{
+      if (!name || !exec || hidden)
+        exit;
+      printf("%s\n%s%c", expandExec(exec), name, 0);
+      for (i=1; i<=ac; i++) {
+        if (!actions[i,"exec"] || !actions[i,"name"])
+          continue;
+        printf("%s\n%s (%s)%c", expandExec(actions[i,"exec"]), name, actions[i,"name"], 0);
+      }
+    }'
+}
+
+select_desktop_file() {
+  while read DESKTOP_FILE; do
+    local ENTRY_NAME
+    ENTRY_NAME="$(desktop_entry_name "${DESKTOP_FILE}")" || continue
+    desktop_entry_check "${DESKTOP_FILE}" || continue
+    printf '%s\n%s\0' "${DESKTOP_FILE}" "${ENTRY_NAME}"
+  done | fzf --no-multi --select-1 --exit-0 \
+    --with-nth 2.. --read0 --delimiter '\n' \
+    --cycle --layout=reverse --info=hidden --prompt="> " \
+    --bind 'change:first' \
+    --bind 'tab:down' \
+    --bind '?:toggle-preview' \
+    --preview 'printf "%s\n" {1}' \
+    --preview-window 'bottom,1,hidden,border-top,wrap' \
+    | head -n 1 | (read DESKTOP_FILE && printf '%s\n' "${DESKTOP_FILE}")
+}
+
+desktop_files | while read -r f; do
+  action_commands < "${f}"
+done | fzf --no-multi --with-nth 2.. --read0 --delimiter '\n' \
+  --cycle --layout=reverse --info=hidden --prompt='> ' \
+  --bind 'change:first' \
+  --bind 'tab:down' \
+  --bind '?:toggle-preview' \
+  --preview 'printf "%s\n" {1}' \
+  --preview-window 'bottom,1,hidden,border-top,wrap' \
+  | head -n 1 | (
+read COMMAND
+printf '%s\n' "${COMMAND}"
+exec setsid -f ${COMMAND} >/dev/null 2>&1 </dev/null
+)
+return
+
+
+while getopts nDh f; do
+  case $f in
+    n) readonly DRYRUN=1;;
+    D) readonly NO_DEFAULT_APPS=1;;
+    h) usage; exit;;
+    \?) usage >&2; exit 1;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+  
+fi
+
+while [ $# -gt 0 ]; do
+  FILE_ID="$1"
+  shift
+  if [ -n "${DRYRUN}" ]; then
+  else
+    launch 
+  fi
+done

@@ -8,6 +8,7 @@ require('packer').startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
   use {
     'airblade/vim-rooter',
+    commit = '0415be8b5989e56f6c9e382a04906b7f719cfb38',
     setup = function()
       vim.g.rooter_targets = '*'
       vim.g.rooter_silent_chdir = true
@@ -15,21 +16,24 @@ require('packer').startup(function(use)
       vim.g.rooter_resolve_links = true
     end
   }
-
   use {'sheerun/vim-polyglot'}
+  -- TODO: https://github.com/windwp/nvim-autopairs
+  -- use {
+  --   'jiangmiao/auto-pairs',
+  --   as = 'auto-pairs',
+  --   setup = function()
+  --     vim.g.AutoPairsMapBS = false
+  --     vim.g.AutoPairsCenterLine = false
+  --   end
+  -- }
   use {
-    'jiangmiao/auto-pairs',
-    as = 'auto-pairs',
-    setup = function()
-      vim.g.AutoPairsMapBS = false
-      vim.g.AutoPairsCenterLine = false
-    end
+    'ConradIrwin/vim-bracketed-paste',
+    commit = '45411da73cc159e4fc2138d930553d247bbfbcdc',
   }
-  use {'ConradIrwin/vim-bracketed-paste'}
   use {'tomtom/tcomment_vim'}
-
   use {
     'arcticicestudio/nord-vim',
+    tag = '0.19.0',
     as = 'nord',
     setup = function()
       vim.g.nord_bold_vertical_split_line = true
@@ -62,25 +66,23 @@ require('packer').startup(function(use)
   -- }
   use {
     'lukas-reineke/indent-blankline.nvim',
+    tag = 'v2.18.4',
     config = function()
       require('indent_blankline').setup({
         char = '|',
-        buftype_exclude = {
-          'terminal',
-        },
         show_first_indent_level        = false,
         show_trailing_blankline_indent = false,
       })
-      vim.api.nvim_exec('autocmd CursorMoved,CursorMovedI * IndentBlanklineRefresh', true)
+      -- vim.api.nvim_create_autocmd({''})
+      -- TODO
+      -- vim.api.nvim_exec('autocmd CursorMoved,CursorMovedI * IndentBlanklineRefresh', true)
     end,
   }
 
   use {
     'lewis6991/gitsigns.nvim',
+    -- commit = '27aeb2e715c32cbb99aa0b326b31739464b61644',
     as = 'gitsigns',
-    requires = {
-      'nvim-lua/plenary.nvim'
-    },
     config = function()
       require('gitsigns').setup({
         signs = {
@@ -94,11 +96,15 @@ require('packer').startup(function(use)
         numhl      = false,
         linehl     = false,
       })
+      vim.api.nvim_set_keymap('n', '<Leader>g?',
+        "<Cmd>lua require('gitsigns').toggle_current_line_blame()<CR>",
+        {noremap = true, silent=true})
     end
   }
 
   use {
-    'famiu/feline.nvim',
+    'feline-nvim/feline.nvim',
+    tag = 'v1.1.3',
     after = {
       'nord',
       'gitsigns',
@@ -196,6 +202,19 @@ require('packer').startup(function(use)
                   colored_icon = false,
                   file_modified_icon = '*',
                   file_readonly_icon = '[RO]',
+                },
+              }, {
+                provider = function()
+                  return vim.b.gitsigns_status
+                end,
+                enabled = function()
+                  return vim.b.gitsigns_status ~= nil
+                end,
+                left_sep = {
+                  str = ' (',
+                },
+                right_sep = {
+                  str = ') ',
                 },
               },
             }, -- end(left)
@@ -411,9 +430,7 @@ require('packer').startup(function(use)
         }
       })
 
-      local map = function(mode, key, value, opts)
-        vim.api.nvim_set_keymap(mode, key, value, opts)
-      end
+      local map = vim.api.nvim_set_keymap
 
       map('n', '<Leader>ff', "<Cmd>lua require('telescope.builtin').find_files()<CR>",               {noremap = true, silent = true})
       map('n', '<Leader>fg', "<Cmd>lua require('telescope.builtin').live_grep()<CR>",                {noremap = true, silent = true})
@@ -563,7 +580,18 @@ require('packer').startup(function(use)
         clangd = {
           cmd = { 'clangd', '--background-index', '--enable-config' },
         },
-        gopls = {},
+        gopls = {
+          settings = {
+            gopls = {
+              analyses = {
+                fieldalignment = true,
+                nilness        = true,
+                unusedparams   = true,
+                unusedwrite    = true,
+              },
+            },
+          },
+        },
         pyright = {},
         rust_analyzer = {
           settings = {

@@ -2,8 +2,12 @@
 
 usage() {
   cat << EOF
-$0 [ -n ] { file | URL }
-$0 [ -m ]
+$(basename $0) [OPTIONS] { FILE | URL }...
+
+OPTIONS:
+  -n	Dry run mode: do not launch, just print the command.
+  -D	Ignore default applications, ask explicitly.
+  -h	Print this help message.
 EOF
 }
 
@@ -15,9 +19,8 @@ open() {
   local NAME="$1"
 
   local COMMAND
-  COMMAND="$(exec_by_name "${NAME}")" || return
-
-  launch ${COMMAND} 
+  COMMAND="$(exec_by_name "${NAME}")" \
+    && launch ${COMMAND}
 }
 
 launch() {
@@ -29,9 +32,8 @@ exec_by_name() {
   local NAME="$1"
 
   local DESKTOP_FILE
-  DESKTOP_FILE=$(desktop_file_by_name "${NAME}") || return
-
-  desktop_entry_exec "${DESKTOP_FILE}" "${NAME}"
+  DESKTOP_FILE=$(desktop_file_by_name "${NAME}") \
+    && desktop_entry_exec "${DESKTOP_FILE}" "${NAME}"
 }
 
 desktop_file_by_name() {
@@ -41,8 +43,8 @@ desktop_file_by_name() {
   MIME_TYPE="$(mime_type "${NAME}")" || return
 
   local DESKTOP_FILE
-  if ! DESKTOP_FILE="$(default_mime_type_desktop_file "${MIME_TYPE}")"; then
-    DESKTOP_FILE="$(desktop_applications_by_mime_type "${MIME_TYPE}" | select_desktop_file)" || return
+  if [ -n "${NO_DEFAULT_APPS}" ] || ! DESKTOP_FILE="$(default_mime_type_desktop_file "${MIME_TYPE}")"; then
+    DESKTOP_FILE="$(desktop_applications_by_mime_type "${MIME_TYPE}" | select_desktop_file "${MIME_TYPE}")" || return
   fi
   printf '%s\n' "${DESKTOP_FILE}"
 }
@@ -204,8 +206,8 @@ desktop_applications_by_regex() {
     print;
   ++seen[id];
   }' | while read DESKTOP_FILE; do
-    desktop_entry_is_application "${DESKTOP_FILE}" || continue
-    printf '%s\n' "${DESKTOP_FILE}"
+    desktop_entry_is_application "${DESKTOP_FILE}" \
+      && printf '%s\n' "${DESKTOP_FILE}"
   done
 }
 
@@ -293,6 +295,8 @@ desktop_entry_is_terminal() {
   grep -q '^Terminal=true$' "${DESKTOP_FILE}"
 }
 
+readonly TERMINAL_MIME_TYPE='x-scheme-handler/terminal'
+
 terminal_exec() {
   if [ -n "${TERMINAL_CMD}" ]; then
     printf '%s\n' "${TERMINAL_CMD}"
@@ -300,8 +304,8 @@ terminal_exec() {
   fi
 
   local TERMINAL_DESKTOP_FILE
-  if ! TERMINAL_DESKTOP_FILE="$(default_mime_type_desktop_file 'x-scheme-handler/terminal')"; then
-    TERMINAL_DESKTOP_FILE="$(desktop_applications_by_category 'TerminalEmulator' | select_desktop_file)" \
+  if [ -n "${NO_DEFAULT_APPS}" ] || ! TERMINAL_DESKTOP_FILE="$(default_mime_type_desktop_file "${TERMINAL_MIME_TYPE}")"; then
+    TERMINAL_DESKTOP_FILE="$(desktop_applications_by_category 'TerminalEmulator' | select_desktop_file "${TERMINAL_MIME_TYPE}")" \
     || return
   fi
   desktop_entry_exec "${TERMINAL_DESKTOP_FILE}"
@@ -366,6 +370,7 @@ desktop_entry_key() {
 }
 
 select_desktop_file() {
+  local MIME_TYPE="$1"
   while read DESKTOP_FILE; do
     local ENTRY_NAME
     ENTRY_NAME="$(desktop_entry_name "${DESKTOP_FILE}")" || continue
@@ -373,7 +378,8 @@ select_desktop_file() {
     printf '%s\n%s\0' "${DESKTOP_FILE}" "${ENTRY_NAME}"
   done | fzf --no-multi --select-1 --exit-0 \
     --with-nth 2.. --read0 --delimiter '\n' \
-    --cycle --layout=reverse --info=hidden --prompt='> ' \
+    --cycle --layout=reverse --info=hidden --prompt="> " \
+    --header "MimeType: ${MIME_TYPE}" \
     --bind 'change:first' \
     --bind 'tab:down' \
     --bind '?:toggle-preview' \
@@ -382,10 +388,10 @@ select_desktop_file() {
     | head -n 1 | (read DESKTOP_FILE && printf '%s\n' "${DESKTOP_FILE}")
 }
 
-while getopts mnh f; do
+while getopts nDh f; do
   case $f in
-    m) ONLY_MIME=1;;
-    n) DRYRUN=1;;
+    n) readonly DRYRUN=1;;
+    D) readonly NO_DEFAULT_APPS=1;;
     h) usage; exit;;
     \?) usage >&2; exit 1;;
   esac
@@ -409,8 +415,6 @@ while [ $# -gt 0 ]; do
   shift
   if [ -n "${DRYRUN}" ]; then
     exec_by_name "${NAME}"
-  elif [ -n "${ONLY_MIME}" ]; then
-    mime_type "${NAME}"
   else
     open "${NAME}"
   fi || exit

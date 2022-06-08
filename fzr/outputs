@@ -1,10 +1,23 @@
 #!/bin/sh
 
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+MAGENTA="$(tput setaf 5)"
+CYAN="$(tput setaf 6)"
+BOLD="$(tput bold)"
+NORMAL="$(tput sgr0)"
+
 wlr-randr \
   | awk 'BEGIN{FS=" "} /^[^[:space:]$]/{print $1}' \
   | fzf --no-multi --exit-0 \
     --cycle --layout=reverse --info=hidden \
-    --header='toggle (A+Enter) scale up/down/1 (A+=/-/0) rotate (A[+S]+arrows)' \
+    --header '
+Alt + Enter                  toggle
+Alt + { + | - | 0 }          scale up/down/1
+Alt + [ Shift + ] <arrows>   rotate (flipped)
+
+' \
     --bind 'alt-enter:execute-silent:wlr-randr --output {} | grep -qx "  Enabled: yes" && wlr-randr --output {} --off || wlr-randr --output {} --on' \
     --bind 'alt-0:execute-silent:wlr-randr --output {} --scale 1' \
     --bind 'alt-=:execute-silent:wlr-randr --output {} --scale $(($(wlr-randr --output {} | sed -En "s/^  Scale: ([0-9]+(\.[0-9]+))$/\1/p") * 1.1))' \

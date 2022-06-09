@@ -62,8 +62,8 @@ alias tb='nc termbin.com 9999' 2>/dev/null
 
 if [ -d "${HOME}/.dotfiles" ] \
   && command -v git > /dev/null \
-  && [ "$(git -C "${HOME}/.dotfiles" rev-parse --is-bare-repositiry)" = 'true' ]; then
-  alias dots="git --git-dir=${HOME}/.dotfiles --work-tree=${HOME}"
+  && [ "$(git -C ~/.dotfiles rev-parse --is-bare-repository 2>/dev/null)" = 'true' ]; then
+  alias dots="git --git-dir=~/.dotfiles --work-tree=~"
 fi
 
 if [ -d ${XDG_DATA_HOME}/zsh/site-functions ] && [ -x ${XDG_DATA_HOME}/zsh/site-functions ]; then

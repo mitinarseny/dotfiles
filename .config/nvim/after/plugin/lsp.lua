@@ -81,14 +81,13 @@ local on_lsp_attach = function(client, bufnr)
     vim.keymap.set(mode, l, r, opts)
   end
 
-  -- vim.keymap.set('n', '<C-]>', require('telescope.builtin').lsp_definitions,
-  --   {noremap = true, silent = true})
-  -- vim.keymap.set('n', '<Leader>lu', require('telescope.builtin').lsp_references(),
-  --   {noremap = true, silent = true})
-  -- vim.keymap.set('n', '<Leader>li', "<Cmd>lua require('telescope.builtin').lsp_implementations()<CR>", {noremap = true, silent = true})
-  -- vim.keymap.set('n', '<Leader>la', "<Cmd>lua require('telescope.builtin').lsp_code_actions()<CR>",    {noremap = true, silent = true})
-  -- vim.keymap.set('n', '<Leader>lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',                               {noremap = true, silent = true})
-  -- vim.keymap.set('n', '<Leader>lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                                {noremap = true, silent = true})
+  local tb = require('telescope.builtin')
+  map('n', '<C-]>', tb.lsp_definitions, {noremap = true, silent = true})
+  map('n', '<Leader>lt', tb.lsp_type_definitions, {noremap = true, silent = true})
+  map('n', '<Leader>lu', tb.lsp_references, {noremap = true, silent = true})
+  map('n', '<Leader>li', tb.lsp_implementations, {noremap = true, silent = true})
+  map('n', '<Leader>lr', vim.lsp.buf.rename, {noremap = true, silent = true})
+  map('n', '<Leader>la', vim.lsp.buf.code_action, {noremap = true, silent = true})
 
   if client.resolved_capabilities.document_formatting then
     map('n', '<Leader>lf', vim.lsp.buf.formatting, {noremap = true, silent = true})

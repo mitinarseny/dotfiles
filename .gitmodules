@@ -85,3 +85,15 @@
 [submodule ".config/nvim/pack/plugins/start/rust-tools"]
 	path = .config/nvim/pack/plugins/start/rust-tools
 	url = https://github.com/simrat39/rust-tools.nvim
+[submodule ".config/nvim/pack/plugins/start/plenary"]
+	path = .config/nvim/pack/plugins/start/plenary
+	url = https://github.com/nvim-lua/plenary.nvim
+[submodule ".config/nvim/pack/plugins/start/telescope"]
+	path = .config/nvim/pack/plugins/start/telescope
+	url = https://github.com/nvim-telescope/telescope.nvim
+[submodule ".config/nvim/pack/plugins/start/telescope-file-browser"]
+	path = .config/nvim/pack/plugins/start/telescope-file-browser
+	url = https://github.com/nvim-telescope/telescope-file-browser.nvim
+[submodule ".config/nvim/pack/plugins/start/dap"]
+	path = .config/nvim/pack/plugins/start/dap
+	url = https://github.com/mfussenegger/nvim-dap

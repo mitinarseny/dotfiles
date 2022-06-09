@@ -6,12 +6,18 @@ require('gitsigns').setup({
     topdelte      = {text = '‾'},
     chandedelete  = {text = '≈'},
   },
-  signcolumn = true,
-  numhl      = false,
+  signcolumn = false,
+  numhl      = true,
   linehl     = false,
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'right_align',
+    delay = 1000,
+  },
+  current_line_blame_formatter_opts = {
+    relative_time = true,
+  },
   on_attach = function(bufnr)
-    vim.wo.signcolumn = 'yes'
-
     local gs = package.loaded.gitsigns
 
     local function map(mode, l, r, opts)
@@ -21,5 +27,6 @@ require('gitsigns').setup({
     end
 
     map('n', '<Leader>g?', gs.toggle_current_line_blame, {noremap = true})
+    map('n', '<Leader>gd', gs.toggle_deleted, {noremap = true})
   end,
 })

@@ -1,6 +1,3 @@
-vim.o.exrc = true -- execure local .vimrc
-vim.o.secure = true -- do not allow autocmd, shell and write commands in local .vimrc
-
 vim.o.hidden = true -- do not unload buffer when it is abandoned
 
 vim.o.autoread = true -- read changes outside of vim

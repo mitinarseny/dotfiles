@@ -6,7 +6,6 @@ vim.o.lazyredraw = true
 vim.o.mouse = 'a' -- enable mouse everywhere
 
 vim.o.number = true
-vim.o.signcolumn = 'number'
 vim.opt.listchars = {
   tab = '| ',
   trail = '-',

@@ -9,6 +9,17 @@ require('gitsigns').setup({
   signcolumn = true,
   numhl      = false,
   linehl     = false,
+  on_attach = function(bufnr)
+    vim.wo.signcolumn = 'yes'
+
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    map('n', '<Leader>g?', gs.toggle_current_line_blame, {noremap = true})
+  end,
 })
-vim.keymap.set('n', '<Leader>g?', "<Cmd>lua require('gitsigns').toggle_current_line_blame()<CR>",
-  {noremap = true, silent = true})

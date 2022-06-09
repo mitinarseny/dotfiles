@@ -26,30 +26,36 @@ cmp.setup({
       else
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function()
+    end, { 'i', 'v' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif vim.fn['vsnip#jumpable'](-1) == 1 then
         feedkey('<Plug>(vsnip-jump-prev)', '')
+      else
+        fallback()
       end
-    end, { 'i', 's' }),
+    end, { 'i', 'v' }),
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = "nvim_lsp_signature_help" },
     { name = 'vsnip' },
-    { name = 'path' },
   }, {
     { name = 'buffer' },
+    { name = 'path' },
   }),
-  format = function(entry, vim_item)
-    vim_item.menu = ({
-      buffer = '[Buffer]',
-      nvim_lsp = '[LSP]',
-    })[entry.source.name]
-  return vim_item
-  end,
+  formatting = {
+    format = function(entry, vim_item)
+      vim_item.menu = ({
+        buffer = '[Buffer]',
+        nvim_lsp = '[LSP]',
+        vsnip = '[Snip]',
+        path = '[Path]',
+      })[entry.source.name]
+      return vim_item
+    end,
+  }
 })
 cmp.setup.cmdline('/', {
   view = {
@@ -69,37 +75,36 @@ local on_lsp_attach = function(client, bufnr)
 
   vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-  vim.keymap.set('n', '<C-]>', "<Cmd>lua require('telescope.builtin').lsp_definitions()<CR>",
-    {noremap = true, silent = true})
-  vim.keymap.set('n', '<Leader>lu', "<Cmd>lua require('telescope.builtin').lsp_references()<CR>",      {noremap = true, silent = true})
-  vim.keymap.set('n', '<Leader>li', "<Cmd>lua require('telescope.builtin').lsp_implementations()<CR>", {noremap = true, silent = true})
-  vim.keymap.set('n', '<Leader>la', "<Cmd>lua require('telescope.builtin').lsp_code_actions()<CR>",    {noremap = true, silent = true})
-  vim.keymap.set('n', '<Leader>lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',                               {noremap = true, silent = true})
-  vim.keymap.set('n', '<Leader>lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                                {noremap = true, silent = true})
+  local function map(mode, l, r, opts)
+    opts = opts or {}
+    opts.buffer = bufnr
+    vim.keymap.set(mode, l, r, opts)
+  end
+
+  -- vim.keymap.set('n', '<C-]>', require('telescope.builtin').lsp_definitions,
+  --   {noremap = true, silent = true})
+  -- vim.keymap.set('n', '<Leader>lu', require('telescope.builtin').lsp_references(),
+  --   {noremap = true, silent = true})
+  -- vim.keymap.set('n', '<Leader>li', "<Cmd>lua require('telescope.builtin').lsp_implementations()<CR>", {noremap = true, silent = true})
+  -- vim.keymap.set('n', '<Leader>la', "<Cmd>lua require('telescope.builtin').lsp_code_actions()<CR>",    {noremap = true, silent = true})
+  -- vim.keymap.set('n', '<Leader>lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',                               {noremap = true, silent = true})
+  -- vim.keymap.set('n', '<Leader>lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                                {noremap = true, silent = true})
 
   if client.resolved_capabilities.document_formatting then
-    vim.keymap.set('n', '<Leader>lf', '<Cmd>lua vim.lsp.buf.formatting()<CR>', {noremap = true, silent = true})
+    map('n', '<Leader>lf', vim.lsp.buf.formatting, {noremap = true, silent = true})
   end
   if client.resolved_capabilities.document_range_formatting then
-    vim.keymap.set('v', '<Leader>lf', '<Cmd>lua vim.lsp.buf.range_formatting()<CR>', {noremap = true, silent = true})
+    map('v', '<Leader>lf', vim.lsp.buf.range_formatting, {noremap = true, silent = true})
   end
 
-  -- TODO: map to highlight references
-  -- if client.resolved_capabilities.document_highlight then
-  --   vim.api.nvim_exec([[
-  --     autocmd CursorHold,CursorHoldI   <buffer> lua vim.lsp.buf.document_highlight()
-  --     autocmd CursorMoved,CursorMovedI <buffer> lua vim.lsp.buf.clear_references()
-  --   ]], true)
-  -- end
-
-  -- vim.keymap.set('i', '<Tab>',   'v:lua.tab_complete()',   {expr = true, silent = true})
-  -- vim.keymap.set('s', '<Tab>',   'v:lua.tab_complete()',   {expr = true, silent = true})
-  -- vim.keymap.set('i', '<S-Tab>', 'v:lua.s_tab_complete()', {expr = true, silent = true})
-  -- vim.keymap.set('s', '<-STab>', 'v:lua.s_tab_complete()', {expr = true, silent = true})
-
-  -- vim.keymap.set('i', '<CR>',      'compe#confirm("<CR>")', {expr = true, silent = true})
-  -- vim.keymap.set('i', '<C-Space>', 'compe#complete()',      {expr = true, silent = true})
-  -- vim.keymap.set('i', '<C-e>',     'compe#close("<C-e>")',  {expr = true, silent = true})
+  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+    buffer = bufnr,
+    callback = vim.lsp.buf.document_highlight,
+  })
+  vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+    buffer = bufnr,
+    callback = vim.lsp.buf.clear_references,
+  })
 end
 
 local servers = {

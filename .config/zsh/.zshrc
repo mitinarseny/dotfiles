@@ -60,6 +60,12 @@ alias tm='tmux new-session -A -s main' 2>/dev/null
 
 alias tb='nc termbin.com 9999' 2>/dev/null
 
+if [ -d "${HOME}/.dotfiles" ] \
+  && command -v git > /dev/null \
+  && [ "$(git -C "${HOME}/.dotfiles" rev-parse --is-bare-repositiry)" = 'true' ]; then
+  alias dots="git --git-dir=${HOME}/.dotfiles --work-tree=${HOME}"
+fi
+
 if [ -d ${XDG_DATA_HOME}/zsh/site-functions ] && [ -x ${XDG_DATA_HOME}/zsh/site-functions ]; then
   fpath+=( ${XDG_DATA_HOME}/zsh/site-functions )
   autoload -Uz ${XDG_DATA_HOME}/zsh/site-functions/*

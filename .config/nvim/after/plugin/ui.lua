@@ -9,6 +9,7 @@ for _,g in ipairs({'DiffAdd', 'DiffChange', 'DiffDelete'}) do
   vim.highlight.create(g, {ctermbg='NONE', guibg='NONE'}, false)
 end
 
+local dap = require('dap')
 local vi_mode = require('feline.providers.vi_mode')
 
 local cursor = {}
@@ -123,6 +124,17 @@ require('feline').setup({
       }, -- end(left)
       { -- right
         {
+          provider = function()
+            return 'DAP: '..dap.status()
+          end,
+          enabled = function()
+            return dap.session() ~= nil
+          end,
+          right_sep = {
+            str = ' ',
+            hl = {bg = 'nord7'},
+          },
+        }, {
           provider = function() return 'i' ..
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO}) end,
           enabled =  function() return

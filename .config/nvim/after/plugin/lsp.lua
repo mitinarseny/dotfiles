@@ -81,11 +81,10 @@ local on_lsp_attach = function(client, bufnr)
     vim.keymap.set(mode, l, r, opts)
   end
 
-  local tb = require('telescope.builtin')
-  map('n', '<C-]>', tb.lsp_definitions, {noremap = true, silent = true})
-  map('n', '<Leader>lt', tb.lsp_type_definitions, {noremap = true, silent = true})
-  map('n', '<Leader>lu', tb.lsp_references, {noremap = true, silent = true})
-  map('n', '<Leader>li', tb.lsp_implementations, {noremap = true, silent = true})
+  map('n', '<C-]>', vim.lsp.buf.definition, {noremap = true, silent = true})
+  map('n', '<Leader>lt', vim.lsp.buf.type_definition, {noremap = true, silent = true})
+  map('n', '<Leader>lu', vim.lsp.buf.references, {noremap = true, silent = true})
+  map('n', '<Leader>li', vim.lsp.buf.implementation, {noremap = true, silent = true})
   map('n', '<Leader>lr', vim.lsp.buf.rename, {noremap = true, silent = true})
   map('n', '<Leader>la', vim.lsp.buf.code_action, {noremap = true, silent = true})
 
@@ -100,7 +99,11 @@ local on_lsp_attach = function(client, bufnr)
     buffer = bufnr,
     callback = vim.lsp.buf.document_highlight,
   })
-  vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+  vim.api.nvim_create_autocmd({
+    'CursorMoved', 'CursorMovedI',
+    'InsertLeavePre',
+    'TextChanged', 'TextChangedI',
+  }, {
     buffer = bufnr,
     callback = vim.lsp.buf.clear_references,
   })

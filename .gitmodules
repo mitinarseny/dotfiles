@@ -97,3 +97,15 @@
 [submodule ".config/nvim/pack/plugins/start/dap"]
 	path = .config/nvim/pack/plugins/start/dap
 	url = https://github.com/mfussenegger/nvim-dap
+[submodule ".config/nvim/pack/plugins/start/dap-go"]
+	path = .config/nvim/pack/plugins/start/dap-go
+	url = https://github.com/leoluz/nvim-dap-go
+[submodule "/home/mitinarseny/.config/nvim/pack/plugins/start/telescope-dap"]
+	path = /home/mitinarseny/.config/nvim/pack/plugins/start/telescope-dap
+	url = https://github.com/nvim-telescope/telescope-dap.nvim
+[submodule "/home/mitinarseny/.config/nvim/pack/plugins/start/telescope-lsp-handlers"]
+	path = /home/mitinarseny/.config/nvim/pack/plugins/start/telescope-lsp-handlers
+	url = https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim
+[submodule "/home/mitinarseny/.config/nvim/pack/plugins/start/neoclip"]
+	path = /home/mitinarseny/.config/nvim/pack/plugins/start/neoclip
+	url = https://github.com/AckslD/nvim-neoclip.lua

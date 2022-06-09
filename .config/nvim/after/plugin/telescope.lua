@@ -65,3 +65,7 @@ vim.keymap.set('n', '<Leader>gb', function()
     vim.notify(string.format('Not a Git repository: %s', vim.fn.getcwd()), vim.log.levels.WARN)
   end
 end, {noremap = true})
+
+vim.keymap.set('n', '<Leader>dv', t.extensions.dap.variables, {noremap = true})
+vim.keymap.set('n', '<Leader>df', t.extensions.dap.frames, {noremap = true})
+

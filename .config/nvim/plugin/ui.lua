@@ -14,7 +14,7 @@ vim.opt.listchars = {
 
 vim.o.breakindent = true
 vim.o.breakindentopt = 'sbr'
-vim.g.showbreak = '~> '
+vim.o.showbreak = '~> '
 
 vim.o.splitright = true
 vim.o.splitbelow = true

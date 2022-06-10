@@ -1,5 +1,4 @@
 local dap = require('dap')
-require('dap-go').setup()
 
 vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
   {noremap = true, silent = true, desc = 'DAP: Toggle breakpoint'})
@@ -24,3 +23,26 @@ vim.keymap.set('n', '<Leader>d<Up>', dap.up,
 vim.keymap.set('n', '<Leader>d<Down>', dap.run_to_cursor,
   {noremap = true, silent = true, desc = 'DAP: Go down'})
 
+require('dap-go').setup()
+
+local lldb_vscode_executable = vim.fn.exepath('lldb-vscode')
+if lldb_vscode_executable ~= '' then
+  dap.adapters.lldb = {
+    type = 'executable',
+    command = lldb_vscode_executable,
+    name = 'lldb',
+  }
+  dap.configurations.cpp = {
+    name = 'Launch',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+    args = {},
+  }
+  dap.configurations.c = dap.configurations.cpp
+  dap.configurations.rust = dap.configurations.cpp
+end

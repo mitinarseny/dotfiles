@@ -109,3 +109,9 @@
 [submodule ".config/nvim/pack/plugins/start/neoclip"]
 	path = .config/nvim/pack/plugins/start/neoclip
 	url = https://github.com/AckslD/nvim-neoclip.lua
+[submodule ".config/nvim/pack/plugins/start/notify"]
+	path = .config/nvim/pack/plugins/start/notify
+	url = https://github.com/rcarriga/nvim-notify
+[submodule ".config/nvim/pack/plugins/start/telescope-ui-select"]
+	path = .config/nvim/pack/plugins/start/telescope-ui-select
+	url = https://github.com/nvim-telescope/telescope-ui-select.nvim

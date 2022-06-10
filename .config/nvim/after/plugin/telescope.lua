@@ -1,6 +1,18 @@
 local t = require('telescope')
 local ta = require('telescope.actions')
 local tb = require('telescope.builtin')
+local tt = require('telescope.themes')
+local tp = require('telescope.previewers')
+
+local function limit_size_preview_maker(filepath, bufnr, opts)
+  opts = opts or {}
+
+  filepath = vim.fn.expand(filepath)
+  vim.loop.fs_stat(filepath, function(_, stat)
+    if not stat or stat.size > 100000 then return end
+    tp.buffer_previewer_maker(filepath, bufnr, opts)
+  end)
+end
 
 t.setup({
   defaults = {
@@ -15,6 +27,7 @@ t.setup({
       prompt_position = 'top',
     },
     color_devicons = false,
+    buffer_previewer_maker = limit_size_preview_maker,
     vimgrep_arguments = {
       'rg',
       '--color=never',
@@ -27,10 +40,15 @@ t.setup({
     },
   },
   extensions = {
+    ['ui-select'] = {
+      tt.get_cursor()
+    },
     file_browser = {
       grouped = true,
+      hidden = true,
       dir_icon = '',
       hijack_netrw = true,
+      -- TODO: clear empty prompt -> up
     },
   },
 })
@@ -39,6 +57,7 @@ require('neoclip').setup({
   content_spec_column = true,
 })
 for _, e in ipairs({
+  'ui-select',
   'file_browser',
   'neoclip',
   'lsp_handlers',

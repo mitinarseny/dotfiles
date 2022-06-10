@@ -1,14 +1,3 @@
-vim.g.nord_bold_vertical_split_line = false
-vim.g.nord_uniform_diff_background  = true
-
-vim.cmd('packadd! nord')
-
-vim.cmd('colorscheme nord')
--- fix: remove background highlighting of Diff* groups
-for _,g in ipairs({'DiffAdd', 'DiffChange', 'DiffDelete'}) do
-  vim.highlight.create(g, {ctermbg='NONE', guibg='NONE'}, false)
-end
-
 local dap = require('dap')
 local vi_mode = require('feline.providers.vi_mode')
 
@@ -20,7 +9,7 @@ function cursor.line_percentage()
   local cur = vim.fn.line('.')
   local total = vim.fn.line('$')
 
-  return string.format('%2d%%%%', vim.fn.round(cur / total * 100))
+  return string.format('%3d%%%%', vim.fn.round(cur / total * 100))
 end
 
 local file = {}
@@ -46,6 +35,8 @@ function mode.short_name()
     return 'I'
   elseif mode == 'VISUAL' then
     return 'V'
+  elseif mode == 'SELECT' then
+    return 'S'
   elseif mode == 'REPLACE' then
     return 'R'
   elseif mode == 'COMMAND' then
@@ -64,24 +55,16 @@ end
 
 vim.o.showmode = false
 vim.o.termguicolors = true
+
+local lsp_status = require('lsp-status')
 -- vim.cmd('packadd! nord')
 -- local nord_colors = vim.fn['NordPalette']()
 require('feline').setup({
-  preset = 'noicon',
   components = {
     active = {
       { -- left
         {
           provider = mode.short_name,
-          --hl = mode.hl,
-          left_sep = {
-            str = ' ',
-            --hl = mode.hl,
-          },
-          right_sep = {
-            str = ' ',
-            --hl = mode.hl,
-          },
         }, {
           provider = function()
             return vim.b.gitsigns_head
@@ -89,15 +72,9 @@ require('feline').setup({
           enabled = function()
             return vim.b.gitsigns_head ~= nil
           end,
-          left_sep = {
-            str = '[',
-            hl = {},
-          },
-          right_sep = {
-            str = '] ',
-            hl = {},
-          },
-          hl = {},
+          hl = 'Comment',
+          left_sep = {{str = ' ', hl = {}},{str = '[', hl = 'Comment'}},
+          right_sep = {str = ']', hl = 'Comment'},
         }, {
           provider = 'file_info',
           icon = '',
@@ -107,89 +84,85 @@ require('feline').setup({
             file_modified_icon = '*',
             file_readonly_icon = '[RO]',
           },
+          left_sep = {str = ' ', hl = {}},
         }, {
           provider = function()
-            return vim.b.gitsigns_status
+            return '+'..(vim.b.gitsigns_status_dict or {}).added
           end,
           enabled = function()
-            return vim.b.gitsigns_status ~= nil
+            return ((vim.b.gitsigns_status_dict or {}).added or 0) > 0
           end,
-          left_sep = {
-            str = ' (',
-          },
-          right_sep = {
-            str = ') ',
-          },
+          hl = 'GitSignsAdd',
+          left_sep = {str = ' ', hl = 'GitSignsAdd'},
+        }, {
+          provider = function()
+            return '~'..(vim.b.gitsigns_status_dict or {}).changed
+          end,
+          enabled = function()
+            return ((vim.b.gitsigns_status_dict or {}).changed or 0) > 0
+          end,
+          hl = 'GitSignsChange',
+          left_sep = {str = ' ', hl = 'GitSignsChange'},
+        }, {
+          provider = function()
+            return '-'..(vim.b.gitsigns_status_dict or {}).removed
+          end,
+          enabled = function()
+            return ((vim.b.gitsigns_status_dict or {}).removed or 0) > 0
+          end,
+          hl = 'GitSignsDelete',
+          left_sep = {str = ' ', hl = 'GitSignsDelete'},
         },
       }, -- end(left)
-      { -- right
+      { -- center
         {
-          provider = function()
-            return 'DAP: '..dap.status()
-          end,
+          provider = dap.status,
           enabled = function()
             return dap.session() ~= nil
           end,
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord7'},
-          },
-        }, {
+          hl = 'ErrorMsg',
+          left_sep = {str = ' ', hl = 'ErrorMsg'},
+          right_sep = {str = ' ', hl = 'ErrorMsg'},
+        },
+        {hl = {}},
+      }, -- end(center)
+      { -- right
+        {
           provider = function() return 'i' ..
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO}) end,
+          update = {'DiagnosticChanged'},
           enabled =  function() return
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO}) > 0 end,
-          left_sep = {
-            str = ' ',
-            hl = {bg = 'nord7'},
-          },
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord7'},
-          },
-          hl = {bg = 'nord7', fg = 'nord0'},
+          hl = 'DiagnosticSignInfo',
+          left_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
+          right_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
         }, {
           provider = function() return 'H' ..
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.HINT}) end,
+          update = {'DiagnosticChanged'},
           enabled =  function() return
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.HINT}) > 0 end,
-          left_sep = {
-            str = ' ',
-            hl = {bg = 'nord8'},
-          },
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord8'},
-          },
-          hl = {bg = 'nord8', fg = 'nord0'},
+          hl = 'DiagnosticSignHint',
+          left_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
+          right_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
         }, {
           provider = function() return 'W' ..
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.WARN}) end,
+          update = {'DiagnosticChanged'},
           enabled =  function() return
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.WARN}) > 0 end,
-          left_sep = {
-            str = ' ',
-            hl = {bg = 'nord13'},
-          },
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord13'},
-          },
-          hl = {bg = 'nord13', fg = 'nord0'},
+          hl = 'DiagnosticSignWarn',          
+          left_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
+          right_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
         }, {
           provider = function() return 'E' ..
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR}) end,
+          update = {'DiagnosticChanged'},
           enabled =  function() return
             #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR}) > 0 end,
-          left_sep = {
-            str = ' ',
-            hl = {bg = 'nord11'},
-          },
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord11'},
-          },
-          hl = {bg = 'nord11'},
+          hl = 'DiagnosticSignError',
+          left_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
+          right_sep = {str = ' ', hl = 'DiagnosticSignInfo'},
         }, {
           provider = function ()
             local names = {}
@@ -198,32 +171,21 @@ require('feline').setup({
             end
             return table.concat(names, ', ')
           end,
+          -- TODO: LspAttach, LspDetach
+          update = {'LspProgressUpdate', 'LspRequest'},
           enabled = lsp.is_attached,
-          left_sep = {
-            str = ' ',
-            hl = {bg = 'nord3'},
-          },
-          right_sep = {
-            str = ' ',
-            hl = {bg = 'nord3'},
-          },
-          hl = {bg = 'nord3'},
-        }, {
-          provider = file.file_encoding,
-          left_sep = '(',
-          right_sep = ')',
+          left_sep = {str = ' ', hl = {}},
         }, {
           provider = cursor.position,
-          left_sep = ' ',
-          right_sep = ' ',
+          right_sep = {str = ' ', hl = 'StatusLineNC'},
+          hl = 'StatusLineNC',
         }, {
           provider = cursor.line_percentage,
-          left_sep = ' ',
-          right_sep = ' ',
+          right_sep = {str = ' ', hl = 'StatusLineNC'},
+          hl = 'StatusLineNC',
         }, {
           provider = 'scroll_bar',
-          left_sep = ' ',
-          hl = {},
+          hl = 'StatusLineNC',
         },
       }, -- end(right)
     },
@@ -237,47 +199,23 @@ require('feline').setup({
             colored_icon = false,
             file_modified_icon = '*',
             file_readonly_icon = '[RO]',
-            hl = {bg = 'nord0', fg = 'nord3'},
           },
+          left_sep = {str = ' ', hl = {}},
         },
       }, -- end(left)
       { -- right
         {
           provider = cursor.position,
-          left_sep = ' ',
-          right_sep = ' ',
+          right_sep = {str = ' ', hl = 'StatusLineNC'},
         }, {
           provider = cursor.line_percentage,
-          left_sep = ' ',
-          right_sep = ' ',
+          right_sep = {str = ' ', hl = 'StatusLineNC'},
         }, {
           provider = 'scroll_bar',
-          left_sep = ' ',
-          hl = {},
+          hl = 'StatusLineNC',
         },
       }, -- end(right)
     },
   },
-  theme = {
-    bg = '',
-    fg = '',
-    -- bg     = nord_colors['nord1'],
-    -- fg     = nord_colors['nord6'],
-    -- nord0  = nord_colors['nord0'],
-    -- nord1  = nord_colors['nord1'],
-    -- nord2  = nord_colors['nord2'],
-    -- nord3  = nord_colors['nord3'],
-    -- nord4  = nord_colors['nord4'],
-    -- nord5  = nord_colors['nord5'],
-    -- nord6  = nord_colors['nord6'],
-    -- nord7  = nord_colors['nord7'],
-    -- nord8  = nord_colors['nord8'],
-    -- nord9  = nord_colors['nord9'],
-    -- nord10 = nord_colors['nord10'],
-    -- nord11 = nord_colors['nord11'],
-    -- nord12 = nord_colors['nord12'],
-    -- nord13 = nord_colors['nord13'],
-    -- nord14 = nord_colors['nord14'],
-    -- nord15 = nord_colors['nord15'],
-  },
+  theme = { bg = '', fg = '' }, -- inherit
 })

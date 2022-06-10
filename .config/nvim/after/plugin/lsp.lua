@@ -1,9 +1,9 @@
-local has_words_before = function()
+local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local feedkey = function(key, mode)
+local function feedkey(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
@@ -65,53 +65,13 @@ cmp.setup.cmdline('/', {
 
 vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'preview'}
 
-local on_lsp_attach = function(client, bufnr)
-  vim.api.nvim_exec('highlight LspReferenceText cterm=underline gui=underline', true)
-
-  local root = vim.lsp.buf.list_workspace_folders()[1]
-  if root ~= nil then
-    vim.api.nvim_exec('lcd '..root, true)
-  end
-
-  vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-  local function map(mode, l, r, opts)
-    opts = opts or {}
-    opts.buffer = bufnr
-    vim.keymap.set(mode, l, r, opts)
-  end
-
-  map('n', '<C-]>', vim.lsp.buf.definition, {noremap = true, silent = true})
-  map('n', '<Leader>lt', vim.lsp.buf.type_definition, {noremap = true, silent = true})
-  map('n', '<Leader>lu', vim.lsp.buf.references, {noremap = true, silent = true})
-  map('n', '<Leader>li', vim.lsp.buf.implementation, {noremap = true, silent = true})
-  map('n', '<Leader>lr', vim.lsp.buf.rename, {noremap = true, silent = true})
-  map('n', '<Leader>la', vim.lsp.buf.code_action, {noremap = true, silent = true})
-
-  if client.resolved_capabilities.document_formatting then
-    map('n', '<Leader>lf', vim.lsp.buf.formatting, {noremap = true, silent = true})
-  end
-  if client.resolved_capabilities.document_range_formatting then
-    map('v', '<Leader>lf', vim.lsp.buf.range_formatting, {noremap = true, silent = true})
-  end
-
-  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-    buffer = bufnr,
-    callback = vim.lsp.buf.document_highlight,
-  })
-  vim.api.nvim_create_autocmd({
-    'CursorMoved', 'CursorMovedI',
-    'InsertLeavePre',
-    'TextChanged', 'TextChangedI',
-  }, {
-    buffer = bufnr,
-    callback = vim.lsp.buf.clear_references,
-  })
-end
-
 local servers = {
   clangd = {
     cmd = { 'clangd', '--background-index', '--enable-config' },
+    -- handlers = lsp_status.extensions.clangd.setup(),
+    init_options = {
+      clangdFileStatus = true,
+    },
   },
   gopls = {
     settings = {
@@ -142,12 +102,64 @@ local servers = {
   },
 }
 
+local function mapf(...)
+  local fs = {...}
+  return function(...)
+    for _, f in ipairs(fs) do
+      f(...)
+    end
+  end
+end
+
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.completion.completionItem.snippetSupport = true
 for s, cfg in pairs(servers) do
-  cfg.on_attach = on_lsp_attach
-  cfg.capabilities = capabilities
+  cfg.capabilities = vim.tbl_extend('keep', cfg.capabilities or {}, capabilities)
+  cfg.on_attach = mapf(function(client, bufnr)
+    local root = vim.lsp.buf.list_workspace_folders()[1]
+    if root ~= nil then
+      vim.api.nvim_exec('lcd '..root, true)
+    end
+
+    vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
+    vim.wo.signcolumn = 'yes'
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    map('n', '<C-]>', vim.lsp.buf.definition, {noremap = true, silent = true})
+    map('n', '<Leader>lt', vim.lsp.buf.type_definition, {noremap = true, silent = true})
+    map('n', '<Leader>lu', function()
+      vim.lsp.buf.references({ includeDeclaration = false })
+    end, {noremap = true, silent = true})
+    map('n', '<Leader>li', vim.lsp.buf.implementation, {noremap = true, silent = true})
+    map('n', '<Leader>lr', vim.lsp.buf.rename, {noremap = true, silent = true})
+    map('n', '<Leader>la', vim.lsp.buf.code_action, {noremap = true, silent = true})
+
+    if client.resolved_capabilities.document_formatting then
+      map('n', '<Leader>lf', vim.lsp.buf.formatting, {noremap = true, silent = true})
+    end
+    if client.resolved_capabilities.document_range_formatting then
+      map('v', '<Leader>lf', vim.lsp.buf.range_formatting, {noremap = true, silent = true})
+    end
+
+    vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+      buffer = bufnr,
+      callback = vim.lsp.buf.document_highlight,
+    })
+    vim.api.nvim_create_autocmd({
+      'CursorMoved', 'CursorMovedI',
+      'InsertLeavePre',
+      'TextChanged', 'TextChangedI',
+    }, {
+      buffer = bufnr,
+      callback = vim.lsp.buf.clear_references,
+    })
+  end, cfg.on_attach or function()
+  end)
   lspconfig[s].setup(cfg)
 end
 

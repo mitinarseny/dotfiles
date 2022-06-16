@@ -17,9 +17,10 @@ vim.keymap.set('n', '<A-x>', '"+ddgV', {noremap = true, desc = 'Cut current line
 vim.keymap.set('', '<A-v>', 'gP', {noremap = true, desc = 'Paste'})
 vim.keymap.set('!', '<A-v>', '<C-R><C-O>+', {noremap = true, desc = 'Paste'})
 
--- undo and changes
 vim.keymap.set('n', '<A-z>', 'u', {noremap = true, desc = 'Undo'})
 vim.keymap.set('n', '<A-Z>', '<C-R>', {noremap = true, desc = 'Redo'})
+
+vim.keymap.set('n', '<A-s>', '<Cmd>update<CR>', {noremap = true, desc = 'Save'})
 
 vim.keymap.set('i', '<S-Up>', function()
   if vim.fn.wincol() == 1 then

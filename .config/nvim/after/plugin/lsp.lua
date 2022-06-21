@@ -116,11 +116,6 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 for s, cfg in pairs(servers) do
   cfg.capabilities = vim.tbl_extend('keep', cfg.capabilities or {}, capabilities)
   cfg.on_attach = mapf(function(client, bufnr)
-    local root = vim.lsp.buf.list_workspace_folders()[1]
-    if root ~= nil then
-      vim.api.nvim_exec('lcd '..root, true)
-    end
-
     vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
     vim.wo.signcolumn = 'yes'
 
@@ -171,3 +166,87 @@ require('lsp_extensions').inlay_hints({
     'ParameterHint',
   },
 })
+
+local client_notifs = {}
+
+local function get_notif_data(client_id, token)
+ if not client_notifs[client_id] then
+   client_notifs[client_id] = {}
+ end
+
+ if not client_notifs[client_id][token] then
+   client_notifs[client_id][token] = {}
+ end
+
+ return client_notifs[client_id][token]
+end
+
+
+local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+
+local function update_spinner(client_id, token)
+ local notif_data = get_notif_data(client_id, token)
+
+ if notif_data.spinner then
+   local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+   notif_data.spinner = new_spinner
+
+   notif_data.notification = vim.notify(nil, nil, {
+     hide_from_history = true,
+     icon = spinner_frames[new_spinner],
+     replace = notif_data.notification,
+   })
+
+   vim.defer_fn(function()
+     update_spinner(client_id, token)
+   end, 100)
+ end
+end
+
+local function format_title(title, client_name)
+ return client_name .. (#title > 0 and ": " .. title or "")
+end
+
+local function format_message(message, percentage)
+ return (percentage and percentage .. "%\t" or "") .. (message or "")
+end
+
+vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+ local client_id = ctx.client_id
+
+ local val = result.value
+
+ if not val.kind then
+   return
+ end
+
+ local notif_data = get_notif_data(client_id, result.token)
+
+ if val.kind == "begin" then
+   local message = format_message(val.message, val.percentage)
+
+   notif_data.notification = vim.notify(message, vim.log.levels.INFO, {
+     title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+     icon = spinner_frames[1],
+     timeout = false,
+     hide_from_history = false,
+   })
+
+   notif_data.spinner = 1
+   update_spinner(client_id, result.token)
+ elseif val.kind == "report" and notif_data then
+   notif_data.notification = vim.notify(format_message(val.message, val.percentage), vim.log.levels.INFO, {
+     replace = notif_data.notification,
+     hide_from_history = false,
+   })
+ elseif val.kind == "end" and notif_data then
+   notif_data.notification =
+     vim.notify(val.message and format_message(val.message) or "Complete", vim.log.levels.INFO, {
+       icon = "",
+       replace = notif_data.notification,
+       timeout = 3000,
+     })
+
+   notif_data.spinner = nil
+ end
+end

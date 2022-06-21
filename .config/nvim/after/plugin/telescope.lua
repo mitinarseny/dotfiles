@@ -49,6 +49,7 @@ t.setup({
       dir_icon = '',
       hijack_netrw = true,
       -- TODO: clear empty prompt -> up
+      -- TODO: map to change cwd
     },
   },
 })
@@ -60,6 +61,7 @@ for _, e in ipairs({
   'ui-select',
   'file_browser',
   'neoclip',
+  'notify',
   'lsp_handlers',
   'dap',
 }) do

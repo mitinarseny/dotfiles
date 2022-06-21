@@ -1,3 +1,4 @@
+--[[
 vim.g.nord_bold_vertical_split_line = false
 vim.g.nord_uniform_diff_background  = true
 
@@ -8,3 +9,4 @@ vim.cmd('colorscheme nord')
 for _,g in ipairs({'DiffAdd', 'DiffChange', 'DiffDelete'}) do
   vim.highlight.create(g, {ctermbg='NONE', guibg='NONE'}, false)
 end
+--]]

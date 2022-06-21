@@ -28,9 +28,6 @@
 [submodule ".local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions"]
 	path = .local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions
 	url = https://github.com/mnowotnik/extra-fzf-completions
-[submodule ".config/nvim/pack/plugins/opt/nord"]
-	path = .config/nvim/pack/plugins/opt/nord
-	url = https://github.com/arcticicestudio/nord-vim
 [submodule ".config/nvim/pack/plugins/start/polyglot"]
 	path = .config/nvim/pack/plugins/start/polyglot
 	url = https://github.com/sheerun/vim-polyglot
@@ -49,9 +46,6 @@
 [submodule ".config/nvim/pack/plugins/start/gitsigns"]
 	path = .config/nvim/pack/plugins/start/gitsigns
 	url = https://github.com/lewis6991/gitsigns.nvim
-[submodule ".config/nvim/pack/plugins/start/feline"]
-	path = .config/nvim/pack/plugins/start/feline
-	url = https://github.com/feline-nvim/feline.nvim
 [submodule ".config/nvim/pack/plugins/start/lspconfig"]
 	path = .config/nvim/pack/plugins/start/lspconfig
 	url = https://github.com/neovim/nvim-lspconfig

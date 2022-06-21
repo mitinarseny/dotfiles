@@ -8,6 +8,8 @@ end, {noremap = true, silent = true, desc = 'DAP: Set breakpoint condition'})
 vim.keymap.set('n', '<Leader>dl', function()
   dap.set_breakpoint(nil, nil, vim.fn.input('Log breakpoint message: '))
 end, {noremap = true, silent = true, desc = 'DAP: Set log point'})
+
+-- TODO: ask for command-line arguments
 vim.keymap.set('n', '<Leader>dc', dap.continue,
   {noremap = true, silent = true, desc = 'DAP: Continue'})
 vim.keymap.set('n', '<Leader>ds', dap.step_over,

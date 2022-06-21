@@ -8,13 +8,16 @@ vim.opt.whichwrap = {
   [']'] = true,
 } -- allow arrow keys to move to next/previous line
 vim.opt.keymodel = {'startsel', 'stopsel'} -- shifted cursor keys selects, unshifted - deselects
-vim.o.selection = 'old' -- do not include newline when selecting
+vim.g.virtualedit = 'onemore'
+vim.go.selection = 'inclusive' -- do not include newline when selecting
 vim.opt.selectmode = {'mouse', 'key'} -- go to select mode, instead of visual
 vim.keymap.set('v', '<A-c>', '"+y', {noremap = true, desc = 'Copy'})
 vim.keymap.set('n', '<A-c>', '"+yy', {noremap = true, desc = 'Copy current line'})
 vim.keymap.set('v', '<A-x>', '"+dgV', {noremap = true, desc = 'Cut'})
 vim.keymap.set('n', '<A-x>', '"+ddgV', {noremap = true, desc = 'Cut current line'})
-vim.keymap.set('', '<A-v>', 'gP', {noremap = true, desc = 'Paste'})
+vim.keymap.set('', '<A-v>', function()
+  return 'gP'..(vim.fn.getregtype('+') == 'V' and '$' or '')
+end, {expr = true, noremap = true, desc = 'Paste'})
 vim.keymap.set('!', '<A-v>', '<C-R><C-O>+', {noremap = true, desc = 'Paste'})
 
 vim.keymap.set('n', '<A-z>', 'u', {noremap = true, desc = 'Undo'})

@@ -128,6 +128,13 @@ hi('DiagnosticHint',  {ctermfg = 4})
 hi('DiagnosticWarn',  {ctermfg = 3})
 hi('DiagnosticError', {ctermfg = 1})
 
+local function hi_status(group, opts, ...)
+  if not opts.ctermbg then
+    opts.ctermbg = 0 -- from StatusLine
+  end
+  return hi(group, opts, ...)
+end
+
 hi_link('StatusModeN', 'StatusLine', true)
 hi_link('StatusMode', 'StatusModeN', true)
 hi('StatusModeV', {ctermbg = 8})
@@ -142,18 +149,42 @@ hi_clear('StatusModeC')
 hi('StatusModeEx', {ctermbg = 2})
 hi_link('StatusModeT', 'StatusModeI', true)
 
-hi('StatusGitHead',    {ctermbg = 0, ctermfg = 8})
-hi('StatusGitAdded',   {ctermbg = 0, ctermfg = 2})
-hi('StatusGitChanged', {ctermbg = 0, ctermfg = 3})
-hi('StatusGitRemoved', {ctermbg = 0, ctermfg = 1})
+for c, ctermfg in pairs({
+  Head    = 8,
+  Added   = 2,
+  Changed = 3,
+  Removed = 1,
+}) do
+  hi_status(string.format('StatusGit%s', c), {ctermfg = ctermfg})
+end
 
 hi_link('StatusDAP', 'ErrorMsg', true)
 
-hi('StatusDiagnosticsInfo',  {ctermbg = 0, ctermfg = 6})
-hi('StatusDiagnosticsHint',  {ctermbg = 0, ctermfg = 4})
-hi('StatusDiagnosticsWarn',  {ctermbg = 0, ctermfg = 3})
-hi('StatusDiagnosticsError', {ctermbg = 0, ctermfg = 1})
+for c, ctermfg in pairs({
+  Info  = 6,
+  Hint  = 4,
+  Warn  = 3,
+  Error = 1,
+}) do
+  hi_status(string.format('StatusDiagnostics%s', c), {ctermfg = ctermfg})
+end
 
-hi('GitSignsAddNr',    {ctermbg = 'NONE', ctermfg = 2})
-hi('GitSignsChangeNr', {ctermbg = 'NONE', ctermfg = 3})
-hi('GitSignsDeleteNr', {ctermbg = 'NONE', ctermfg = 1})
+for c, ctermfg in pairs({
+  Add    = 2,
+  Change = 3,
+  Delete = 1,
+}) do
+  hi(string.format('GitSigns%sNr', c), {ctermbg = 'NONE', ctermfg = ctermfg})
+end
+
+for lvl, ctermfg in pairs({
+  ERROR = 1,
+  WARN  = 3,
+  INFO  = 4,
+  DEBUG = 1,
+  TRACE = 1,
+}) do
+  hi(string.format('Notify%sIcon', lvl), {ctermfg = ctermfg})
+  hi_link(string.format('Notify%sBorder', lvl), string.format('Notify%sIcon', lvl))
+  hi_link(string.format('Notify%sTitle', lvl), string.format('Notify%sIcon', lvl))
+end

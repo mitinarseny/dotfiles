@@ -5,7 +5,7 @@ notify.setup({
   background_colour = 'Normal',
   icons = {
     TRACE = '⇣',
-    DEBUG = '⁇',
+    DEBUG = '🐞',
     INFO  = '🛈',
     WARN  = '⚠',
     ERROR = '',

@@ -64,7 +64,13 @@ end
 
 
 local function hi(group, text)
-  return string.format('%%#%s#%s%%*', group, text)
+  return string.format('%%#Status%s#%s%%*', group, text)
+end
+
+local function hify(group, ...)
+  return map(function(s)
+    return hi(group, s)
+  end, ...)
 end
 
 local mode_hi = {
@@ -83,12 +89,16 @@ local mode_hi = {
 }
 
 local function mode()
-  return hi(string.format('StatusMode%s', mode_hi[vim.fn.mode()] or ''), ' ')
+  return hi(string.format('Mode%s', mode_hi[vim.fn.mode()] or ''), ' ')
+end
+
+local function filename()
+  return hi('FileName', '%t')
 end
 
 local function git_head()
   local h = vim.b.gitsigns_head
-  return h and hi('StatusGitHead', string.format('[%s]', h) or '')
+  return h and hi('GitHead', string.format('[%s]', h) or '')
 end
 
 local function git_stats()
@@ -99,7 +109,7 @@ local function git_stats()
   local function count(typ, sign, hl)
     local c = gs[typ]
     if (c or 0) > 0 then
-      return hi(string.format('StatusGit%s', hl), string.format('%s%d', sign, c))
+      return hi(string.format('Git%s', hl), string.format('%s%d', sign, c))
     end
   end
   return join(' ', ipairs({
@@ -113,43 +123,61 @@ local function dap_status()
   if not dap.session() then
     return
   end
-  return hi('StatusDAP', string.format(' %s ', dap.status()))
+  return hi('DAP', string.format(' %s ', dap.status()))
 end
 
-local function diagnostics(severity, sign, hl)
+local function diagnostic(severity, sign, hl)
   local c = #vim.diagnostic.get(0, {severity = severity})
   if c == 0 then
     return ''
   end
-  return hi(string.format('StatusDiagnostics%s', hl), string.format('%s%d', sign, c))
+  return hi(string.format('Diagnostics%s', hl), string.format('%s%d', sign, c))
+end
+
+local function diagnostic_counts()
+  return join(' ', ipairs({
+    diagnostic(vim.diagnostic.severity.INFO,  '🛈 ', 'Info'),
+    diagnostic(vim.diagnostic.severity.HINT,  '🛈 ', 'Hint'),
+    diagnostic(vim.diagnostic.severity.WARN,  '⚠ ', 'Warn'),
+    diagnostic(vim.diagnostic.severity.ERROR, ' ', 'Error'),
+  }))
+end
+
+local function lsp_clients()
+  return join(hi('LSPSeparator', ', '), hify('LSPName', map(function(c)
+    return c.name
+  end, ipairs(vim.lsp.buf_get_clients(0)))))
+end
+
+local function cursor_position()
+  return hi('CursorPosition', join(':', ipairs({'%3l', '%-2c'})))
+end
+
+local function percentage()
+  return hi('Percentage', '%3p%%')
 end
 
 local scroll_bar_blocks = { '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█' }
-
 local function scroll_bar()
   local cl = vim.api.nvim_win_get_cursor(0)[1]
   local tl = vim.api.nvim_buf_line_count(0)
-  return string.rep(scroll_bar_blocks[math.floor(cl/tl * 7) + 1], 2)
+  return hi('ScrollBar', string.rep(scroll_bar_blocks[math.floor(cl/tl * 7) + 1], 2))
 end
 
 return function()
   return align(ipairs({
-    join(' ', ipairs({
+    join(hi('Separator', ' '), ipairs({
       mode,
       git_head,
-      '%t',
+      filename,
       git_stats,
     })),
     dap_status,
-    join(' ', ipairs({
-      join(' ', ipairs({
-        diagnostics(vim.diagnostic.severity.INFO,  '🛈 ', 'Info'),
-        diagnostics(vim.diagnostic.severity.HINT,  '🛈 ', 'Hint'),
-        diagnostics(vim.diagnostic.severity.WARN,  '⚠ ', 'Warn'),
-        diagnostics(vim.diagnostic.severity.ERROR, ' ', 'Error'),
-      })),
-      join(':', ipairs({'%3l', '%-2c'})),
-      '%3p%%',
+    join(hi('Separator', ' '), ipairs({
+      diagnostic_counts,
+      lsp_clients,
+      cursor_position,
+      percentage,
       scroll_bar,
     }))
   }))

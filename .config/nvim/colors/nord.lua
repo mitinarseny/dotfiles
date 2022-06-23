@@ -132,8 +132,10 @@ local function hi_status(group, opts, ...)
   if not opts.ctermbg then
     opts.ctermbg = 0 -- from StatusLine
   end
-  return hi(group, opts, ...)
+  return hi(string.format('Status%s', group), opts, ...)
 end
+
+hi_link('StatusSeparator', 'StatusLine', true)
 
 hi_link('StatusModeN', 'StatusLine', true)
 hi_link('StatusMode', 'StatusModeN', true)
@@ -149,16 +151,24 @@ hi_clear('StatusModeC')
 hi('StatusModeEx', {ctermbg = 2})
 hi_link('StatusModeT', 'StatusModeI', true)
 
+hi_link('StatusFileName', 'StatusLine', true)
+hi_link('StatusCursorPosition', 'StatusLine', true)
+hi_link('StatusPercentage', 'StatusLine', true)
+hi_link('StatusScrollBar', 'StatusLine', true)
+
 for c, ctermfg in pairs({
   Head    = 8,
   Added   = 2,
   Changed = 3,
   Removed = 1,
 }) do
-  hi_status(string.format('StatusGit%s', c), {ctermfg = ctermfg})
+  hi_status(string.format('Git%s', c), {ctermfg = ctermfg})
 end
 
 hi_link('StatusDAP', 'ErrorMsg', true)
+
+hi_link('StatusLSPName', 'StatusLine', true)
+hi_link('StatusLSPSeparator', 'StatusSeparator', true)
 
 for c, ctermfg in pairs({
   Info  = 6,
@@ -166,7 +176,7 @@ for c, ctermfg in pairs({
   Warn  = 3,
   Error = 1,
 }) do
-  hi_status(string.format('StatusDiagnostics%s', c), {ctermfg = ctermfg})
+  hi_status(string.format('Diagnostics%s', c), {ctermfg = ctermfg})
 end
 
 for c, ctermfg in pairs({
@@ -176,6 +186,9 @@ for c, ctermfg in pairs({
 }) do
   hi(string.format('GitSigns%sNr', c), {ctermbg = 'NONE', ctermfg = ctermfg})
 end
+
+hi_link('TelescopeBorder', 'Comment', true)
+hi_link('TelescopeTitle', 'TelescopeNormal', true)
 
 for lvl, ctermfg in pairs({
   ERROR = 1,

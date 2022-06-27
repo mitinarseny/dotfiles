@@ -28,9 +28,6 @@
 [submodule ".local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions"]
 	path = .local/share/zsh/plugins/github.com/mnowotnik/extra-fzf-completions
 	url = https://github.com/mnowotnik/extra-fzf-completions
-[submodule ".config/nvim/pack/plugins/start/polyglot"]
-	path = .config/nvim/pack/plugins/start/polyglot
-	url = https://github.com/sheerun/vim-polyglot
 [submodule ".config/nvim/pack/plugins/start/bracketed-paste"]
 	path = .config/nvim/pack/plugins/start/bracketed-paste
 	url = https://github.com/ConradIrwin/vim-bracketed-paste
@@ -112,3 +109,6 @@
 [submodule ".config/nvim/pack/plugins/start/treesitter"]
 	path = .config/nvim/pack/plugins/start/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
+[submodule ".config/nvim/pack/plugins/start/polyglot"]
+	path = .config/nvim/pack/plugins/start/polyglot
+	url = https://github.com/sheerun/vim-polyglot

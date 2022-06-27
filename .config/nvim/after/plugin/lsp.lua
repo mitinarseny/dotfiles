@@ -1,71 +1,86 @@
-local function has_words_before()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+vim.api.nvim_create_autocmd('InsertEnter', {
+  once = true,
+  callback = function()
+    local function has_words_before()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  end
+
+  local function feedkey(key, mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+  end
+
+  local cmp = require('cmp')
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn['vsnip#anonymous'](args.body)
+      end,
+    },
+    mapping = {
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif vim.fn['vsnip#available'](1) == 1 then
+          feedkey('<Plug>(vsnip-expand-or-jump)', '')
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        end
+      end, { 'i', 'v' }),
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif vim.fn['vsnip#jumpable'](-1) == 1 then
+          feedkey('<Plug>(vsnip-jump-prev)', '')
+        else
+          fallback()
+        end
+      end, { 'i', 'v' }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = "nvim_lsp_signature_help" },
+      { name = 'vsnip' },
+    }, {
+      { name = 'buffer' },
+      { name = 'path' },
+    }),
+    formatting = {
+      format = function(entry, vim_item)
+        vim_item.menu = ({
+          buffer = '[Buffer]',
+          nvim_lsp = '[LSP]',
+          vsnip = '[Snip]',
+          path = '[Path]',
+        })[entry.source.name]
+        return vim_item
+      end,
+    }
+  })
+  cmp.setup.cmdline('/', {
+    view = {
+      entries = { name = 'wildmenu', separator = '|' },
+    },
+  })
+  vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'preview'}
+  end,
+})
+
+local function mapf(...)
+  local fs = {...}
+  return function(...)
+    for _, f in ipairs(fs) do
+      f(...)
+    end
+  end
 end
 
-local function feedkey(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
-
-local cmp = require('cmp')
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      vim.fn['vsnip#anonymous'](args.body)
-    end,
-  },
-  mapping = {
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif vim.fn['vsnip#available'](1) == 1 then
-        feedkey('<Plug>(vsnip-expand-or-jump)', '')
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-      end
-    end, { 'i', 'v' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-        feedkey('<Plug>(vsnip-jump-prev)', '')
-      else
-        fallback()
-      end
-    end, { 'i', 'v' }),
-  },
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = "nvim_lsp_signature_help" },
-    { name = 'vsnip' },
-  }, {
-    { name = 'buffer' },
-    { name = 'path' },
-  }),
-  formatting = {
-    format = function(entry, vim_item)
-      vim_item.menu = ({
-        buffer = '[Buffer]',
-        nvim_lsp = '[LSP]',
-        vsnip = '[Snip]',
-        path = '[Path]',
-      })[entry.source.name]
-      return vim_item
-    end,
-  }
-})
-cmp.setup.cmdline('/', {
-  view = {
-    entries = { name = 'wildmenu', separator = '|' },
-  },
-})
-
-vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'preview'}
-
-local servers = {
+local lspconfig = require('lspconfig')
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+for s, cfg in pairs({
   clangd = {
     cmd = { 'clangd', '--background-index', '--enable-config' },
     -- handlers = lsp_status.extensions.clangd.setup(),
@@ -100,20 +115,7 @@ local servers = {
       },
     },
   },
-}
-
-local function mapf(...)
-  local fs = {...}
-  return function(...)
-    for _, f in ipairs(fs) do
-      f(...)
-    end
-  end
-end
-
-local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-for s, cfg in pairs(servers) do
+}) do
   cfg.capabilities = vim.tbl_extend('keep', cfg.capabilities or {}, capabilities)
   cfg.on_attach = mapf(function(client, bufnr)
     vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
@@ -167,86 +169,91 @@ require('lsp_extensions').inlay_hints({
   },
 })
 
-local client_notifs = {}
+vim.api.nvim_create_autocmd('UIEnter', {
+  once = true,
+  callback = function()
+    local client_notifs = {}
 
-local function get_notif_data(client_id, token)
- if not client_notifs[client_id] then
-   client_notifs[client_id] = {}
- end
+    local function get_notif_data(client_id, token)
+     if not client_notifs[client_id] then
+       client_notifs[client_id] = {}
+     end
 
- if not client_notifs[client_id][token] then
-   client_notifs[client_id][token] = {}
- end
+     if not client_notifs[client_id][token] then
+       client_notifs[client_id][token] = {}
+     end
 
- return client_notifs[client_id][token]
-end
+     return client_notifs[client_id][token]
+    end
 
 
-local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+    local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
 
-local function update_spinner(client_id, token)
- local notif_data = get_notif_data(client_id, token)
+    local function update_spinner(client_id, token)
+     local notif_data = get_notif_data(client_id, token)
 
- if notif_data.spinner then
-    local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-    notif_data.spinner = new_spinner
+     if notif_data.spinner then
+        local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+        notif_data.spinner = new_spinner
 
-    notif_data.notification = vim.notify(nil, nil, {
-      hide_from_history = true,
-      icon = spinner_frames[new_spinner],
-      replace = notif_data.notification,
-    })
+        notif_data.notification = vim.notify(nil, nil, {
+          hide_from_history = true,
+          icon = spinner_frames[new_spinner],
+          replace = notif_data.notification,
+        })
 
-    vim.defer_fn(function()
-      update_spinner(client_id, token)
-    end, 100)
- end
-end
+        vim.defer_fn(function()
+          update_spinner(client_id, token)
+        end, 100)
+     end
+    end
 
-local function format_title(title, client_name)
- return client_name .. (#title > 0 and ": " .. title or "")
-end
+    local function format_title(title, client_name)
+     return client_name .. (#title > 0 and ": " .. title or "")
+    end
 
-local function format_message(message, percentage)
- return (percentage and percentage .. "%\t" or "") .. (message or "")
-end
+    local function format_message(message, percentage)
+     return (percentage and percentage .. "%\t" or "") .. (message or "")
+    end
 
-vim.lsp.handlers["$/progress"] = function(_, result, ctx)
- local client_id = ctx.client_id
+    vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+     local client_id = ctx.client_id
 
- local val = result.value
+     local val = result.value
 
- if not val.kind then
-   return
- end
+     if not val.kind then
+       return
+     end
 
- local notif_data = get_notif_data(client_id, result.token)
+     local notif_data = get_notif_data(client_id, result.token)
 
- if val.kind == "begin" then
-   local message = format_message(val.message, val.percentage)
+     if val.kind == "begin" then
+       local message = format_message(val.message, val.percentage)
 
-   notif_data.notification = vim.notify(message, vim.log.levels.INFO, {
-     title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-     icon = spinner_frames[1],
-     timeout = false,
-     hide_from_history = false,
-   })
+       notif_data.notification = vim.notify(message, vim.log.levels.INFO, {
+         title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+         icon = spinner_frames[1],
+         timeout = false,
+         hide_from_history = false,
+       })
 
-   notif_data.spinner = 1
-   update_spinner(client_id, result.token)
- elseif val.kind == "report" and notif_data then
-   notif_data.notification = vim.notify(format_message(val.message, val.percentage), vim.log.levels.INFO, {
-     replace = notif_data.notification,
-     hide_from_history = false,
-   })
- elseif val.kind == "end" and notif_data then
-   notif_data.notification =
-     vim.notify(val.message and format_message(val.message) or "Complete", vim.log.levels.INFO, {
-       icon = "",
-       replace = notif_data.notification,
-       timeout = 3000,
-     })
+       notif_data.spinner = 1
+       update_spinner(client_id, result.token)
+     elseif val.kind == "report" and notif_data then
+       notif_data.notification = vim.notify(format_message(val.message, val.percentage), vim.log.levels.INFO, {
+         replace = notif_data.notification,
+         hide_from_history = false,
+       })
+     elseif val.kind == "end" and notif_data then
+       notif_data.notification =
+         vim.notify(val.message and format_message(val.message) or "Complete", vim.log.levels.INFO, {
+           icon = "",
+           replace = notif_data.notification,
+           timeout = 3000,
+         })
 
-   notif_data.spinner = nil
- end
-end
+       notif_data.spinner = nil
+     end
+    end
+  end,
+})

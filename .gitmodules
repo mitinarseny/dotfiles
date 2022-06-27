@@ -109,3 +109,6 @@
 [submodule ".config/nvim/pack/plugins/start/telescope-ui-select"]
 	path = .config/nvim/pack/plugins/start/telescope-ui-select
 	url = https://github.com/nvim-telescope/telescope-ui-select.nvim
+[submodule ".config/nvim/pack/plugins/start/treesitter"]
+	path = .config/nvim/pack/plugins/start/treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter

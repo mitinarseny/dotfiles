@@ -1,47 +1,21 @@
+local fun = require('fun')
 local dap = require('dap')
 
-local function map(f, gen, ...)
-  return function(...)
-    local param, v = gen(...)
-    if param then
-      return param, v and f(v)
-    end
-  end, ...
-end
-
-local function filter(f, gen, ...)
-  return function(state, param)
-    local v
-    repeat
-      param, v = gen(state, param)
-    until not param or f(param, v)
-    return param, v
-  end, ...
-end
-
-local function collect(...)
-  local t = {}
-  for _, tt in ... do
-    if tt then
-      table.insert(t, tt)
-    end
-  end
-  return t
-end
-
 local function non_empty(...)
-  return filter(function(_, v)
+  return fun.filter(function(_, v)
     return v and v ~= ''
   end, ...)
 end
 
-local function stringify(...)
-  return map(tostring, ...)
+function stringify(...)
+  return fun.map(function(_, v)
+    return tostring(v)
+  end, ...)
 end
 
 local function formatify(f, ...)
-  return map(function(...)
-    return string.format(f, ...)
+  return fun.map(function(_, v)
+    return string.format(f, v)
   end, ...)
 end
 
@@ -49,26 +23,30 @@ local function groupify(...)
   return formatify('%%1(%s%%)', ...)
 end
 
-local function join(sep, ...)
-  return table.concat(collect(groupify(non_empty(map(function(v)
+
+local function value(...)
+  return non_empty(fun.map(function(_, v)
     if type(v) == 'function' then
       return v()
     end
     return v
-  end, ...)))), sep)
+  end, ...))
+end
+
+local function join(sep, ...)
+  return table.concat(fun.icollect(value(...)), sep)
 end
 
 local function align(...)
-  return join('%=', ...)
+  return table.concat(fun.icollect(groupify(value(...))), '%=')
 end
-
 
 local function hi(group, text)
   return string.format('%%#Status%s#%s%%*', group, text)
 end
 
 local function hify(group, ...)
-  return map(function(s)
+  return fun.map(function(_, s)
     return hi(group, s)
   end, ...)
 end
@@ -126,26 +104,31 @@ local function dap_status()
   return hi('DAP', string.format(' %s ', dap.status()))
 end
 
-local function diagnostic(severity, sign, hl)
+local function diagnostic(name, severity)
   local c = #vim.diagnostic.get(0, {severity = severity})
   if c == 0 then
     return ''
   end
-  return hi(string.format('Diagnostics%s', hl), string.format('%s%d', sign, c))
+  return hi(string.format('Diagnostics%s', name), string.format('%s%d',
+    (vim.fn.sign_getdefined(string.format('DiagnosticSign%s', name))[1] or {}).text or '', c))
 end
 
 local function diagnostic_counts()
   return join(' ', ipairs({
-    diagnostic(vim.diagnostic.severity.INFO,  '🛈 ', 'Info'),
-    diagnostic(vim.diagnostic.severity.HINT,  '🛈 ', 'Hint'),
-    diagnostic(vim.diagnostic.severity.WARN,  '⚠ ', 'Warn'),
-    diagnostic(vim.diagnostic.severity.ERROR, ' ', 'Error'),
+    diagnostic('Info',  vim.diagnostic.severity.INFO),
+    diagnostic('Hint',  vim.diagnostic.severity.HINT),
+    diagnostic('Warn',  vim.diagnostic.severity.WARN),
+    diagnostic('Error', vim.diagnostic.severity.ERROR),
   }))
 end
 
 local function lsp_clients()
-  return join(hi('LSPSeparator', ', '), hify('LSPName', map(function(c)
+  return join(hi('Separator', ' '), hify('LSPName', fun.map(function(_, c)
     return c.name
+    -- TODO
+    -- return string.format('%s %s',
+    --   hi('LSPIndicator'..(next(c.requests) ~= nil and 'Working' or ''), '⚡'),
+    --   hi('LSPName', c.name))
   end, ipairs(vim.lsp.buf_get_clients(0)))))
 end
 
@@ -164,9 +147,10 @@ local function scroll_bar()
   return hi('ScrollBar', string.rep(scroll_bar_blocks[math.floor(cl/tl * 7) + 1], 2))
 end
 
+-- TODO: conditional
 return function()
   return align(ipairs({
-    join(hi('Separator', ' '), ipairs({
+    join(hi('Separator', ' '), ipairs({ -- TODO
       mode,
       git_head,
       filename,

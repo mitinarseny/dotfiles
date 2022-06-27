@@ -188,18 +188,18 @@ local function update_spinner(client_id, token)
  local notif_data = get_notif_data(client_id, token)
 
  if notif_data.spinner then
-   local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-   notif_data.spinner = new_spinner
+    local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+    notif_data.spinner = new_spinner
 
-   notif_data.notification = vim.notify(nil, nil, {
-     hide_from_history = true,
-     icon = spinner_frames[new_spinner],
-     replace = notif_data.notification,
-   })
+    notif_data.notification = vim.notify(nil, nil, {
+      hide_from_history = true,
+      icon = spinner_frames[new_spinner],
+      replace = notif_data.notification,
+    })
 
-   vim.defer_fn(function()
-     update_spinner(client_id, token)
-   end, 100)
+    vim.defer_fn(function()
+      update_spinner(client_id, token)
+    end, 100)
  end
 end
 

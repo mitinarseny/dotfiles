@@ -1,5 +1,11 @@
 local dap = require('dap')
 
+vim.fn.sign_define({
+  {name = 'DapBreakpoint',          text = '⬤', texthl = 'Debug'},
+  {name = 'DapBreakpointCondition', text = '🞉', texthl = 'Debug'},
+  {name = 'DapBreakpointRejected',  text = '☇', texthl = ''},
+})
+
 vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
   {noremap = true, silent = true, desc = 'DAP: Toggle breakpoint'})
 vim.keymap.set('n', '<Leader>dB', function()

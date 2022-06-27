@@ -1,3 +1,8 @@
+-- TODO
+-- local function hi(...)
+--   return vim.api.nvim_set_hl(0, ...)
+-- end
+
 local function hi(group, opts, default, force)
   local options = {}
   for i, k in ipairs(opts) do
@@ -128,6 +133,8 @@ hi('DiagnosticHint',  {ctermfg = 4})
 hi('DiagnosticWarn',  {ctermfg = 3})
 hi('DiagnosticError', {ctermfg = 1})
 
+hi('LspReferenceText', {ctermbg = 0})
+
 local function hi_status(group, opts, ...)
   if not opts.ctermbg then
     opts.ctermbg = 0 -- from StatusLine
@@ -147,7 +154,7 @@ hi_link('StatusModeSL', 'StatusModeS', true)
 hi_link('StatusModeSB', 'StatusModeS', true)
 hi('StatusModeI', {ctermbg = 6})
 hi('StatusModeR', {ctermbg = 11})
-hi_clear('StatusModeC')
+hi_link('StatusModeC', 'StatusModeN', true)
 hi('StatusModeEx', {ctermbg = 2})
 hi_link('StatusModeT', 'StatusModeI', true)
 
@@ -168,7 +175,8 @@ end
 hi_link('StatusDAP', 'ErrorMsg', true)
 
 hi_link('StatusLSPName', 'StatusLine', true)
-hi_link('StatusLSPSeparator', 'StatusSeparator', true)
+hi_link('StatusLSPIndicatorOK', 'StatusLine', true)
+hi_status('StatusLSPIndicatorWorking', {ctermfg = 2})
 
 for c, ctermfg in pairs({
   Info  = 6,
@@ -189,6 +197,7 @@ end
 
 hi_link('TelescopeBorder', 'Comment', true)
 hi_link('TelescopeTitle', 'TelescopeNormal', true)
+hi_link('TelescopeMatching', 'String', true)
 
 for lvl, ctermfg in pairs({
   ERROR = 1,

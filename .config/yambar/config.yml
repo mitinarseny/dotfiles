@@ -124,7 +124,7 @@ bar:
                           - string: {text: '', font: *awesome}
                           - string: {text: '', font: *awesome}
                     charging:
-                      string: &charging {text: '', font: *awesome}
+                      string: &charging {text: '⚡', font: *awesome}
                     full:
                       string: {<<: *charging, foreground: *nord14}
               - string: {text: '{capacity}%'}

@@ -130,6 +130,7 @@ for s, cfg in pairs({
     map('n', '<C-]>', vim.lsp.buf.definition, {noremap = true, silent = true})
     map('n', '<Leader>lt', vim.lsp.buf.type_definition, {noremap = true, silent = true})
     map('n', '<Leader>lu', function()
+      -- TODO: trim results
       vim.lsp.buf.references({ includeDeclaration = false })
     end, {noremap = true, silent = true})
     map('n', '<Leader>li', vim.lsp.buf.implementation, {noremap = true, silent = true})

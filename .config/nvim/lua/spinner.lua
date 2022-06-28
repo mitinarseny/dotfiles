@@ -1,70 +1,54 @@
-local client_notifs = {}
+local notify = require('notify')
 
 local Spinner = {}
-
-function Spinner:_get(id, token)
-  if not self[id] then
-    self[id] = {}
-  end
-  if not self[id][token] then
-    self[id][token] = {}
-  end
-end
-
-function Spinner:redraw(id, token)
-  
-end
-
-local function new()
-  
-end
-
-local M = {}
-
-M.new = function()
-
-end
-
-local function get_notif_data(client_id, token)
- if not client_notifs[client_id] then
-   client_notifs[client_id] = {}
- end
-
- if not client_notifs[client_id][token] then
-   client_notifs[client_id][token] = {}
- end
-
- return client_notifs[client_id][token]
-end
-
+Spinner.__index = Spinner
+setmetatable(Spinner, {
+  __call = function(cls, ...)
+    return cls.new(...)
+  end,
+})
 
 local spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' }
 
-local function update_spinner(client_id, token)
- local notif_data = get_notif_data(client_id, token)
+function Spinner.new(msg, lvl, opts)
+  local self = setmetatable({}, Spinner)
 
- if notif_data.spinner then
-   local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-   notif_data.spinner = new_spinner
+  opts = opts or {}
+  opts.timeout = false
+  self:_spin(msg, lvl, opts)
 
-   notif_data.notification = vim.notify(nil, nil, {
-     hide_from_history = true,
-     icon = spinner_frames[new_spinner],
-     replace = notif_data.notification,
-   })
+  self.timer = vim.loop.new_timer()
+  self.timer:start(0, 1000/#spinner_frames, vim.schedule_wrap(function()
+    self:_spin()
+  end))
 
-   vim.defer_fn(function()
-     update_spinner(client_id, token)
-   end, 100)
- end
+  return self
 end
 
-local function format_title(title, client_name)
- return client_name .. (#title > 0 and ': ' .. title or '')
+function Spinner:update(msg, lvl, opts)
+  opts = opts or {}
+  opts.replace = self.id
+  opts.hide_from_history = true
+  self.id = notify(msg, lvl, opts)
+  vim.api.nvim_command('redraw')
 end
 
-local function format_message(message, percentage)
- return (percentage and percentage .. '%\t' or '') .. (message or '')
+function Spinner:_spin(msg, lvl, opts)
+  opts = opts or {}
+  if opts.icon == nil then
+    self.frame = (self.frame or 0) % #spinner_frames + 1
+    opts.icon = spinner_frames[self.frame]
+  end
+  return self:update(msg, lvl, opts)
 end
 
-return M
+function Spinner:done(msg, lvl, opts)
+  self.timer:close()
+  opts = opts or {}
+  if opts.timeout == nil then
+    opts.timeout = 3000
+  end
+  return self:update(msg, lvl, opts)
+end
+
+return Spinner

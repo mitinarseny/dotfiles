@@ -1,7 +1,5 @@
 vim.schedule(function()
   -- TODO: :help vmenu
-  vim.g.mapleader = ' '
-
   vim.opt.whichwrap = {
     ['<'] = true,
     ['>'] = true,

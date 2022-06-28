@@ -10,6 +10,7 @@ vim.o.swapfile = false
 vim.opt.clipboard:append({'unnamedplus'}) -- use system clipboard
 
 -- TODO: set updatetime=500
+vim.g.mapleader = ' '
 
 vim.o.ignorecase = true -- ignore case in search patterns
 -- enable command-line completion

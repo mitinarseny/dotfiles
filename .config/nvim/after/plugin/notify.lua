@@ -4,7 +4,6 @@ vim.api.nvim_create_autocmd('UIEnter', {
     notify = require('notify')
     notify.setup({
       level = vim.log.levels.INFO,
-      timeout = 5000,
       background_colour = 'Normal',
       icons = {
         TRACE = '⇣',
@@ -15,6 +14,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
       },
       render = 'default',
       stages = 'static',
+      timeout = 3000,
     })
     vim.notify = notify
 

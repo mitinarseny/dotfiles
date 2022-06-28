@@ -6,30 +6,38 @@ vim.fn.sign_define({
   {name = 'DapBreakpointRejected',  text = '☇', texthl = ''},
 })
 
-vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
-  {noremap = true, silent = true, desc = 'DAP: Toggle breakpoint'})
-vim.keymap.set('n', '<Leader>dB', function()
-  dap.set_breakpoint(vim.fn.input('Breakpoint condition: '))
-end, {noremap = true, silent = true, desc = 'DAP: Set breakpoint condition'})
-vim.keymap.set('n', '<Leader>dl', function()
-  dap.set_breakpoint(nil, nil, vim.fn.input('Log breakpoint message: '))
-end, {noremap = true, silent = true, desc = 'DAP: Set log point'})
+vim.api.nvim_create_autocmd('UIEnter', {
+  once = true,
+  callback = function()
+    local wk = require('which-key')
 
--- TODO: ask for command-line arguments
-vim.keymap.set('n', '<Leader>dc', dap.continue,
-  {noremap = true, silent = true, desc = 'DAP: Continue'})
-vim.keymap.set('n', '<Leader>ds', dap.step_over,
-  {noremap = true, silent = true, desc = 'DAP: Step over'})
-vim.keymap.set('n', '<Leader>di', dap.step_into,
-  {noremap = true, silent = true, desc = 'DAP: Step into'})
-vim.keymap.set('n', '<Leader>do', dap.step_out,
-  {noremap = true, silent = true, desc = 'DAP: Step out'})
-vim.keymap.set('n', '<Leader>d.', dap.run_to_cursor,
-  {noremap = true, silent = true, desc = 'DAP: Run to cursor'})
-vim.keymap.set('n', '<Leader>d<Up>', dap.up,
-  {noremap = true, silent = true, desc = 'DAP: Go up'})
-vim.keymap.set('n', '<Leader>d<Down>', dap.run_to_cursor,
-  {noremap = true, silent = true, desc = 'DAP: Go down'})
+    wk.register({['<Leader>d'] = {name = 'DAP'}})
+    vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
+      {noremap = true, silent = true, desc = 'Toggle breakpoint'})
+    vim.keymap.set('n', '<Leader>dB', function()
+      dap.set_breakpoint(vim.fn.input('Breakpoint condition: '))
+    end, {noremap = true, silent = true, desc = 'Set breakpoint condition'})
+    vim.keymap.set('n', '<Leader>dl', function()
+      dap.set_breakpoint(nil, nil, vim.fn.input('Log breakpoint message: '))
+    end, {noremap = true, silent = true, desc = 'Set log point'})
+
+    -- TODO: ask for command-line arguments
+    vim.keymap.set('n', '<Leader>dc', dap.continue,
+      {noremap = true, silent = true, desc = 'Continue'})
+    vim.keymap.set('n', '<Leader>ds', dap.step_over,
+      {noremap = true, silent = true, desc = 'Step over'})
+    vim.keymap.set('n', '<Leader>di', dap.step_into,
+      {noremap = true, silent = true, desc = 'Step into'})
+    vim.keymap.set('n', '<Leader>do', dap.step_out,
+      {noremap = true, silent = true, desc = 'Step out'})
+    vim.keymap.set('n', '<Leader>d.', dap.run_to_cursor,
+      {noremap = true, silent = true, desc = 'Run to cursor'})
+    vim.keymap.set('n', '<Leader>d<Up>', dap.up,
+      {noremap = true, silent = true, desc = 'Go up'})
+    vim.keymap.set('n', '<Leader>d<Down>', dap.run_to_cursor,
+      {noremap = true, silent = true, desc = 'Go down'})
+  end,
+})
 
 require('dap-go').setup()
 

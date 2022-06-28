@@ -26,7 +26,9 @@ require('gitsigns').setup({
       vim.keymap.set(mode, l, r, opts)
     end
 
-    map('n', '<Leader>g?', gs.toggle_current_line_blame, {noremap = true})
-    map('n', '<Leader>gd', gs.toggle_deleted, {noremap = true})
+    map('n', '<Leader>g?', gs.toggle_current_line_blame,
+      {noremap = true, desc = 'Toggle current line blame'})
+    map('n', '<Leader>gd', gs.toggle_deleted,
+      {noremap = true, desc = 'Toggle deleted'})
   end,
 })

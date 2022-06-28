@@ -112,3 +112,6 @@
 [submodule ".config/nvim/pack/plugins/start/polyglot"]
 	path = .config/nvim/pack/plugins/start/polyglot
 	url = https://github.com/sheerun/vim-polyglot
+[submodule ".config/nvim/pack/plugins/start/which-key"]
+	path = .config/nvim/pack/plugins/start/which-key
+	url = https://github.com/folke/which-key.nvim

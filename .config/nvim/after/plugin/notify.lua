@@ -1,7 +1,8 @@
 vim.api.nvim_create_autocmd('UIEnter', {
   once = true,
   callback = function()
-    notify = require('notify')
+    local notify = require('notify')
+    local wk = require('which-key')
     notify.setup({
       level = vim.log.levels.INFO,
       background_colour = 'Normal',
@@ -18,6 +19,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
     })
     vim.notify = notify
 
+    wk.register({['<Leader>n'] = {name = 'notify'}})
     vim.keymap.set('n', '<Leader>nn', function()
       notify.dismiss({
         pending = true,

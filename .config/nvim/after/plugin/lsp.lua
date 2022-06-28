@@ -127,21 +127,31 @@ for s, cfg in pairs({
       vim.keymap.set(mode, l, r, opts)
     end
 
-    map('n', '<C-]>', vim.lsp.buf.definition, {noremap = true, silent = true})
-    map('n', '<Leader>lt', vim.lsp.buf.type_definition, {noremap = true, silent = true})
+    local wk = require('which-key')
+
+    wk.register({['<Leader>l'] = {name = 'LSP'}}, {buffer = bufnr})
+    map('n', '<C-]>', vim.lsp.buf.definition,
+      {noremap = true, silent = true, desc = 'Definition'})
+    map('n', '<Leader>lt', vim.lsp.buf.type_definition,
+      {noremap = true, silent = true, desc = 'Type definition'})
     map('n', '<Leader>lu', function()
       -- TODO: trim results
       vim.lsp.buf.references({ includeDeclaration = false })
-    end, {noremap = true, silent = true})
-    map('n', '<Leader>li', vim.lsp.buf.implementation, {noremap = true, silent = true})
-    map('n', '<Leader>lr', vim.lsp.buf.rename, {noremap = true, silent = true})
-    map('n', '<Leader>la', vim.lsp.buf.code_action, {noremap = true, silent = true})
+    end, {noremap = true, silent = true, desc = 'References'})
+    map('n', '<Leader>li', vim.lsp.buf.implementation,
+      {noremap = true, silent = true, desc = 'Implementation'})
+    map('n', '<Leader>lr', vim.lsp.buf.rename,
+      {noremap = true, silent = true, desc = 'Rename'})
+    map('n', '<Leader>la', vim.lsp.buf.code_action,
+      {noremap = true, silent = true, desc = 'Code actions'})
 
     if client.resolved_capabilities.document_formatting then
-      map('n', '<Leader>lf', vim.lsp.buf.formatting, {noremap = true, silent = true})
+      map('n', '<Leader>lf', vim.lsp.buf.formatting,
+        {noremap = true, silent = true, desc = 'Format'})
     end
     if client.resolved_capabilities.document_range_formatting then
-      map('v', '<Leader>lf', vim.lsp.buf.range_formatting, {noremap = true, silent = true})
+      map('v', '<Leader>lf', vim.lsp.buf.range_formatting,
+        {noremap = true, silent = true, desc = 'Format'})
     end
 
     vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {

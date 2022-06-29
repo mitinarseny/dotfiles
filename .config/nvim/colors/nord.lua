@@ -1,33 +1,5 @@
--- TODO
--- local function hi(...)
---   return vim.api.nvim_set_hl(0, ...)
--- end
-
-local function hi(group, opts, default, force)
-  local options = {}
-  for i, k in ipairs(opts) do
-    table.insert(options, tostring(k))
-    table.remove(opts, i)
-  end
-  for k, v in pairs(opts) do
-    table.insert(options, string.format('%s=%s', k, v))
-  end
-  vim.cmd(string.format('highlight%s%s %s %s',
-    force and '!' or '',
-    default and ' default' or '',
-    group,
-    table.concat(options, ' ')))
-end
-
-local function hi_clear(group)
-  vim.cmd(string.format('highlight clear %s', group))
-end
-
-local function hi_link(from, to, force, default)
-  vim.cmd(string.format('highlight%s%s link %s %s',
-    force and '!' or '',
-    default and ' default' or '',
-    from, to))
+local function hi(name, opts)
+  return vim.api.nvim_set_hl(0, name, opts)
 end
 
 vim.go.background = 'dark'
@@ -36,177 +8,176 @@ vim.g.colors_name = 'nord'
 
 vim.cmd([[highlight! clear]])
 
-hi('Normal',         {ctermfg = 7})
-hi('ColorColumn',    {ctermbg = 0})
-hi('Conceal',        {ctermbg = 'NONE', ctermfg = 6})
-hi('Cursor',         {ctermbg = 'NONE', ctermfg = 'NONE', cterm = 'reverse'})
-hi('CursorColumn',   {ctermbg = 0})
-hi('CursorLine',     {ctermbg = 0, cterm = 'NONE'})
-hi('Directory',      {ctermfg = 12})
-hi('DiffAdd',        {ctermbg = 2, ctermfg = 0})
-hi('DiffChange',     {ctermbg = 11, ctermfg = 0})
-hi('DiffDelete',     {ctermbg = 1, ctermfg = 0})
-hi('DiffText',       {ctermbg = 11, ctermfg = 0, cterm = 'bold'})
-hi('TermCursor',     {cterm = 'reverse'})
-hi_clear('TermCursorNC')
-hi('ErrorMsg',       {ctermbg = 1, ctermfg = 15})
-hi('VertSplit',      {ctermbg = 'NONE', ctermfg = 8, cterm = 'NONE'})
-hi_link('WinSeparator', 'VertSplit', true) -- TODO
-hi('Folded',         {ctermbg = 0, ctermfg = 6, cterm = 'bold'})
-hi_link('FoldColumn', 'SignColumn', true)
-hi_link('SignColumn', 'LineNr', true)
-hi('IncSearch',      {ctermbg = 13, ctermfg = 0, cterm = 'NONE'})
-hi('Substitute',     {ctermbg = 11, ctermfg = 0})
-hi('LineNr',         {ctermfg = 8, cterm = 'NONE'})
-hi_link('LineNrAbove', 'LineNr', true)
-hi_link('LineNrBelow', 'LineNr', true)
-hi('CursorLineNr',   {ctermbg = 'NONE', ctermfg = 7, cterm = 'NONE'}) -- TODO
-hi('CursorLineSign', {ctermbg = 'NONE', ctermfg = 7, cterm = 'NONE'})
-hi('CursorLineFold', {ctermbg = 'NONE', ctermfg = 7, cterm = 'NONE'})
-hi('MatchParen',     {ctermbg = 'NONE', ctermfg = 'NONE', cterm = 'bold'}) -- TODO
-hi('NonText',        {ctermfg = 8})
-hi_link('NormalFloat', 'Pmenu', true)
-hi('Pmenu',          {ctermbg = 0, ctermfg = 'NONE'})
-hi('PmenuSel',       {ctermbg = 8, ctermfg = 15})
-hi('PmenuSbar',      {ctermbg = 0, ctermfg = 'NONE'})
-hi('PmenuThumb',     {ctermbg = 8, ctermfg = 8})
-hi('Question',       {ctermfg = 10, cterm = 'bold'})
-hi('Search',         {ctermbg = 'NONE', ctermfg = 'NONE', cterm = 'reverse'}) -- TODO
-hi('SpecialKey',     {ctermfg = 4})
-hi('SpellBad',       {ctermbg = 'NONE', ctermfg = 1, cterm = 'italic,undercurl'})
-hi('SpellCap',       {ctermbg = 'NONE', ctermfg = 3, cterm = 'italic,undercurl'})
-hi('SpellLocal',     {ctermbg = 'NONE', ctermfg = 6, cterm = 'italic,undercurl'})
-hi('SpellRare',      {ctermbg = 'NONE', ctermfg = 4, cterm = 'italic,undercurl'})
-hi('StatusLine',     {ctermbg = 0, ctermfg = 'NONE', cterm = 'NONE'})
-hi('StatusLineNC',   {ctermbg = 0, ctermfg = 'NONE', cterm = 'NONE'})
-hi('TabLine',        {ctermbg = 0, ctermfg = 'NONE', cterm = 'NONE'})
-hi('TabLineFill',    {ctermbg = 'NONE', ctermfg = 'NONE', cterm = 'NONE'})
-hi('TabLineSel',     {ctermbg = 8, ctermfg = 'NONE', cterm = 'NONE'})
-hi('Title',          {ctermbg = 'NONE', ctermfg = 2, cterm = 'bold'})
-hi('Visual',         {ctermbg = 0})
-hi_link('VisualNOS', 'Visual', true)
-hi('WarningMsg',     {ctermfg = 11})
-hi_link('Whitespace', 'NonText', true)
+for g, opts in pairs({
+  Normal = {ctermfg = 7},
+  ColorColumn = {ctermbg = 0},
+  Conceal = {ctermbg = 'NONE', ctermfg = 6},
+  Cursor = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {reverse = true}},
+  CursorColumn = {ctermbg = 0},
+  CursorLine = {ctermbg = 0},
+  Directory = {ctermfg = 12},
+  DiffAdd = {ctermbg = 2, ctermfg = 0},
+  DiffChange = {ctermbg = 11, ctermfg = 0},
+  DiffDelete = {ctermbg = 1, ctermfg = 0},
+  DiffText = {ctermbg = 11, ctermfg = 0, cterm = {bold = true}},
+  TermCursor = {cterm = {reverse = true}},
+  TermCursorNC = {},
+  ErrorMsg = {ctermbg = 1, ctermfg = 15},
+  VertSplit = {ctermbg = 'NONE', ctermfg = 8},
+  WinSeparator = {link = 'VertSplit'},
+  Folded = {ctermbg = 0, ctermfg = 6, cterm = {bold = true}},
+  FoldColumn = {link = 'SignColumn'},
+  SignColumn = {link = 'LineNr'},
+  IncSearch = {ctermbg = 13, ctermfg = 0},
+  Substitute = {ctermbg = 11, ctermfg = 0},
+  LineNr = {ctermfg = 8},
+  LineNrAbove = {link = 'LineNr'},
+  LineNrBelow = {link = 'LineNr'},
+  CursorLineNr = {ctermbg = 'NONE', ctermfg = 7}, -- TODO
+  CursorLineSign = {ctermbg = 'NONE', ctermfg = 7},
+  CursorLineFold = {ctermbg = 'NONE', ctermfg = 7},
+  MatchParen = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {bold = true}}, -- TODO
+  NonText = {ctermfg = 8},
+  NormalFloat = {link = 'Pmenu'},
+  Pmenu = {ctermbg = 0, ctermfg = 'NONE'},
+  PmenuSel = {ctermbg = 8, ctermfg = 15},
+  PmenuSbar = {ctermbg = 0, ctermfg = 'NONE'},
+  PmenuThumb = {ctermbg = 8, ctermfg = 8},
+  Question = {ctermfg = 10, cterm = {bold = true}},
+  Search = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {reverse = true}}, -- TODO
+  SpecialKey = {ctermfg = 4},
+  SpellBad = {ctermbg = 'NONE', ctermfg = 1, cterm = {italic = true, undercurl = true}},
+  SpellCap = {ctermbg = 'NONE', ctermfg = 3, cterm = {italic = true, undercurl = true}},
+  SpellLocal = {ctermbg = 'NONE', ctermfg = 6, cterm = {italic = true, undercurl = true}},
+  SpellRare = {ctermbg = 'NONE', ctermfg = 4, cterm = {italic = true, undercurl = true}},
+  StatusLine = {ctermbg = 0, ctermfg = 'NONE'},
+  StatusLineNC = {ctermbg = 'NONE', ctermfg = 'NONE'},
+  TabLine = {ctermbg = 0, ctermfg = 'NONE'},
+  TabLineFill = {ctermbg = 'NONE', ctermfg = 'NONE'},
+  TabLineSel = {ctermbg = 8, ctermfg = 'NONE'},
+  Title = {ctermbg = 'NONE', ctermfg = 2, cterm = {bold = true}},
+  Visual = {ctermbg = 0},
+  VisualNOS = {link = 'Visual'},
+  WarningMsg = {ctermfg = 11},
+  Whitespace = {link = 'NonText'},
 
-hi('Comment',  {ctermfg = 8})
-hi('Constant', {ctermfg = 'NONE'})
-hi('String',   {ctermfg = 2})
-hi_link('Character', 'String', true)
-hi('Number',   {ctermfg = 5})
-hi('Boolean',  {ctermfg = 4})
-hi_link('Float', 'Number', true)
+  Comment = {ctermfg = 8},
+  Constant = {ctermfg = 'NONE'},
+  String = {ctermfg = 2},
+  Character = {link = 'String'},
+  Number = {ctermfg = 5},
+  Boolean = {ctermfg = 4},
+  Float = {link = 'Number'},
 
-hi('Identifier', {ctermfg = 4, cterm = 'NONE'})
-hi('Function',   {ctermfg = 6, cterm = 'NONE'})
+  Identifier = {ctermfg = 4},
+  Function = {ctermfg = 6},
 
-hi('Statement',   {ctermfg = 4, cterm = 'NONE'})
-hi('Conditional', {ctermfg = 4, cterm = 'bold'})
-hi('Repeat',      {ctermfg = 4, cterm = 'bold'})
-hi('Label',       {ctermfg = 4, cterm = 'bold'})
-hi_link('Operator', 'Statement', true)
-hi('Keyword',     {ctermfg = 4, cterm = 'bold'})
-hi('Exception',   {ctermfg = 4, cterm = 'bold'})
+  Statement = {ctermfg = 4},
+  Conditional = {ctermfg = 4, cterm = {bold = true}},
+  Repeat = {ctermfg = 4, cterm = {bold = true}},
+  Label = {ctermfg = 4, cterm = {bold = true}},
+  Operator = {link = 'Statement'},
+  Keyword = {ctermfg = 4, cterm = {bold = true}},
+  Exception = {ctermfg = 4, cterm = {bold = true}},
 
-hi('PreProc', {ctermfg = 6, cterm = 'NONE'})
-hi_link('Include', 'PreProc', true)
-hi_link('Define', 'PreProc', true)
-hi_link('Macro', 'PreProc', true)
-hi_link('PreCondit', 'PreProc', true)
+  PreProc = {ctermfg = 6},
+  Include = {link = 'PreProc'},
+  Define = {link = 'PreProc'},
+  Macro = {link = 'PreProc'},
+  PreCondit = {link = 'PreProc'},
 
-hi('Type',         {ctermfg = 4, cterm = 'bold'})
-hi('StorageClass', {ctermfg = 4, cterm = 'bold,italic'})
---
-hi('Special',     {ctermfg = 'NONE'})
-hi('SpecialChar', {ctermfg = 11})
-hi('Delimiter',   {ctermfg = 15})
-hi('SpecialComment', {ctermfg = 6})
-hi('Debug', {ctermfg = 1})
+  Type = {ctermfg = 4, cterm = {bold = true}},
+  StorageClass = {ctermfg = 4, cterm = {bold = true, italic = true}},
+  --
+  Special = {ctermfg = 'NONE'},
+  SpecialChar = {ctermfg = 11},
+  Delimiter = {ctermfg = 15},
+  SpecialComment = {ctermfg = 6},
+  Debug = {ctermfg = 1},
 
-hi('Underlined', {ctermfg = 2, cterm = 'underline'})
+  Underlined = {ctermfg = 2, cterm = {underline = true}},
 
-hi('Error', {ctermbg = 'NONE', ctermfg = 1, cterm = 'bold,underline'})
+  Error = {ctermbg = 'NONE', ctermfg = 1, cterm = {bold = true, underline = true}},
 
-hi('Todo', {ctermbg = 'NONE', ctermfg = 11})
+  Todo = {ctermbg = 'NONE', ctermfg = 11},
 
-hi('DiagnosticInfo',  {ctermfg = 6})
-hi('DiagnosticHint',  {ctermfg = 4})
-hi('DiagnosticWarn',  {ctermfg = 3})
-hi('DiagnosticError', {ctermfg = 1})
+  DiagnosticInfo = {ctermfg = 6},
+  DiagnosticHint = {ctermfg = 4},
+  DiagnosticWarn = {ctermfg = 3},
+  DiagnosticError = {ctermfg = 1},
 
-hi('LspReferenceText', {ctermbg = 0})
+  LspReferenceText = {ctermbg = 0},
 
-local function hi_status(group, opts, ...)
-  if not opts.ctermbg then
+  GitSignsAddNr    = {ctermfg = 2},
+  GitSignsChangeNr = {ctermfg = 3},
+  GitSignsDeleteNr = {ctermfg = 1},
+
+  TelescopeBorder   = {link = 'Comment'},
+  TelescopeTitle    = {link = 'Normal'},
+  TelescopeMatching = {link = 'String'},
+
+  NotifyERRORIcon   = {ctermfg = 1},
+  NotifyERRORBorder = {link = 'NotifyERRORIcon'},
+  NotifyERRORTitle  = {link = 'NotifyERRORIcon'},
+  NotifyWARNIcon    = {ctermfg = 3},
+  NotifyWARNBorder  = {link = 'NotifyWARNIcon'},
+  NotifyWARNTitle   = {link = 'NotifyWARNIcon'},
+  NotifyINFOIcon    = {ctermfg = 4},
+  NotifyINFOBorder  = {link = 'NotifyINFOIcon'},
+  NotifyINFOTitle   = {link = 'NotifyINFOIcon'},
+  NotifyDEBUGIcon   = {ctermfg = 1},
+  NotifyDEBUGBorder = {link = 'NotifyDEBUGIcon'},
+  NotifyDEBUGTitle  = {link = 'NotifyDEBUGIcon'},
+  NotifyTRACEIcon   = {ctermfg = 1},
+  NotifyTRACEBorder = {link = 'NotifyTRACEIcon'},
+  NotifyTRACETitle  = {link = 'NotifyTRACEIcon'},
+}) do
+  hi(g, opts)
+end
+
+for g, opts in pairs({
+  Separator = {},
+
+  ModeN  = {},
+  Mode   = {link = 'StatusModeN'},
+  ModeV  = {ctermbg = 8},
+  ModeVL = {link = 'StatusModeV'},
+  ModeVB = {link = 'StatusModeV'},
+  ModeS  = {ctermbg = 4},
+  ModeSL = {link = 'StatusModeS'},
+  ModeSB = {link = 'StatusModeS'},
+  ModeI  = {ctermbg = 6},
+  ModeR  = {ctermbg = 11},
+  ModeC  = {link = 'StatusModeN'},
+  ModeEx = {ctermbg = 2},
+  ModeT  = {link = 'StatusModeI'},
+
+  FileName       = {},
+  CursorPosition = {},
+  Percentage     = {},
+  ScrollBar      = {},
+
+  GitHead    = {ctermfg = 8},
+  GitAdded   = {ctermfg = 2},
+  GitChanged = {ctermfg = 3},
+  GitRemoved = {ctermfg = 1},
+
+  DAP = {link = 'ErrorMsg'},
+
+  LSPName             = {},
+  LspIndicatorOK      = {},
+  LspIndicatorWorking = {ctermfg = 2},
+
+  DiagnosticsInfo  = {ctermfg = 6},
+  DiagnosticsHint  = {ctermfg = 4},
+  DiagnosticsWarn  = {ctermfg = 3},
+  DiagnosticsError = {ctermfg = 1},
+}) do
+  opts = opts or {}
+  if next(opts) == nil then
+    opts.link = 'StatusLine'
+  elseif not opts.ctermbg then
     opts.ctermbg = 0 -- from StatusLine
   end
-  return hi(string.format('Status%s', group), opts, ...)
-end
-
-hi_link('StatusSeparator', 'StatusLine', true)
-
-hi_link('StatusModeN', 'StatusLine', true)
-hi_link('StatusMode', 'StatusModeN', true)
-hi('StatusModeV', {ctermbg = 8})
-hi_link('StatusModeVL', 'StatusModeV', true)
-hi_link('StatusModeVB', 'StatusModeV', true)
-hi('StatusModeS', {ctermbg = 4})
-hi_link('StatusModeSL', 'StatusModeS', true)
-hi_link('StatusModeSB', 'StatusModeS', true)
-hi('StatusModeI', {ctermbg = 6})
-hi('StatusModeR', {ctermbg = 11})
-hi_link('StatusModeC', 'StatusModeN', true)
-hi('StatusModeEx', {ctermbg = 2})
-hi_link('StatusModeT', 'StatusModeI', true)
-
-hi_link('StatusFileName', 'StatusLine', true)
-hi_link('StatusCursorPosition', 'StatusLine', true)
-hi_link('StatusPercentage', 'StatusLine', true)
-hi_link('StatusScrollBar', 'StatusLine', true)
-
-for c, ctermfg in pairs({
-  Head    = 8,
-  Added   = 2,
-  Changed = 3,
-  Removed = 1,
-}) do
-  hi_status(string.format('Git%s', c), {ctermfg = ctermfg})
-end
-
-hi_link('StatusDAP', 'ErrorMsg', true)
-
-hi_link('StatusLSPName', 'StatusLine', true)
-hi_link('StatusLSPIndicatorOK', 'StatusLine', true)
-hi_status('StatusLSPIndicatorWorking', {ctermfg = 2})
-
-for c, ctermfg in pairs({
-  Info  = 6,
-  Hint  = 4,
-  Warn  = 3,
-  Error = 1,
-}) do
-  hi_status(string.format('Diagnostics%s', c), {ctermfg = ctermfg})
-end
-
-for c, ctermfg in pairs({
-  Add    = 2,
-  Change = 3,
-  Delete = 1,
-}) do
-  hi(string.format('GitSigns%sNr', c), {ctermbg = 'NONE', ctermfg = ctermfg})
-end
-
-hi_link('TelescopeBorder', 'Comment', true)
-hi_link('TelescopeTitle', 'TelescopeNormal', true)
-hi_link('TelescopeMatching', 'String', true)
-
-for lvl, ctermfg in pairs({
-  ERROR = 1,
-  WARN  = 3,
-  INFO  = 4,
-  DEBUG = 1,
-  TRACE = 1,
-}) do
-  hi(string.format('Notify%sIcon', lvl), {ctermfg = ctermfg})
-  hi_link(string.format('Notify%sBorder', lvl), string.format('Notify%sIcon', lvl))
-  hi_link(string.format('Notify%sTitle', lvl), string.format('Notify%sIcon', lvl))
+  hi('Status'..g, opts)
 end

@@ -207,7 +207,10 @@ local function format_title(title, client_name)
 end
 
 local function format_message(message, percentage)
- return (percentage and percentage .. "%\t" or "") .. (message or "")
+  if not percentage then
+    return message or ''
+  end
+  return string.format('%2d%%\t%s', percentage, message or '')
 end
 
 vim.lsp.handlers['$/progress'] = function(_, result, ctx)

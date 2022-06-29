@@ -17,6 +17,10 @@ vim.api.nvim_create_autocmd('UIEnter', {
       trail = '-',
       multispace = '.',
     }
+    vim.opt.fillchars = {
+      stl = ' ',
+      stlnc = ' ',
+    }
 
     vim.o.breakindent = true
     vim.o.breakindentopt = 'sbr'

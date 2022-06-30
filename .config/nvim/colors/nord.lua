@@ -1,4 +1,14 @@
 local function hi(name, opts)
+  local inherit = opts.inherit
+  opts.inherit = nil
+  if inherit ~= nil then
+    local inh = vim.api.nvim_get_hl_by_name(inherit, false)
+    opts.ctermbg = opts.ctermbg or inh.background
+    inh.background = nil
+    opts.ctermfg = opts.ctermfg or inh.foreground
+    inh.foreground = nil
+    opts.cterm = vim.tbl_extend('keep', opts.cterm or {}, inh)
+  end
   return vim.api.nvim_set_hl(0, name, opts)
 end
 
@@ -11,8 +21,8 @@ vim.cmd([[highlight! clear]])
 for g, opts in pairs({
   Normal = {ctermfg = 7},
   ColorColumn = {ctermbg = 0},
-  Conceal = {ctermbg = 'NONE', ctermfg = 6},
-  Cursor = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {reverse = true}},
+  Conceal = {ctermfg = 6},
+  Cursor = {cterm = {reverse = true}},
   CursorColumn = {ctermbg = 0},
   CursorLine = {ctermbg = 0},
   Directory = {ctermfg = 12},
@@ -23,7 +33,7 @@ for g, opts in pairs({
   TermCursor = {cterm = {reverse = true}},
   TermCursorNC = {},
   ErrorMsg = {ctermbg = 1, ctermfg = 15},
-  VertSplit = {ctermbg = 'NONE', ctermfg = 8},
+  VertSplit = {ctermfg = 8},
   WinSeparator = {link = 'VertSplit'},
   Folded = {ctermbg = 0, ctermfg = 6, cterm = {bold = true}},
   FoldColumn = {link = 'SignColumn'},
@@ -33,36 +43,36 @@ for g, opts in pairs({
   LineNr = {ctermfg = 8},
   LineNrAbove = {link = 'LineNr'},
   LineNrBelow = {link = 'LineNr'},
-  CursorLineNr = {ctermbg = 'NONE', ctermfg = 7}, -- TODO
-  CursorLineSign = {ctermbg = 'NONE', ctermfg = 7},
-  CursorLineFold = {ctermbg = 'NONE', ctermfg = 7},
-  MatchParen = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {bold = true}}, -- TODO
+  CursorLineNr = {ctermfg = 7}, -- TODO
+  CursorLineSign = {ctermfg = 7},
+  CursorLineFold = {ctermfg = 7},
+  MatchParen = {cterm = {bold = true}}, -- TODO
   NonText = {ctermfg = 8},
   NormalFloat = {link = 'Pmenu'},
-  Pmenu = {ctermbg = 0, ctermfg = 'NONE'},
+  Pmenu = {ctermbg = 0, },
   PmenuSel = {ctermbg = 8, ctermfg = 15},
-  PmenuSbar = {ctermbg = 0, ctermfg = 'NONE'},
+  PmenuSbar = {ctermbg = 0, },
   PmenuThumb = {ctermbg = 8, ctermfg = 8},
   Question = {ctermfg = 10, cterm = {bold = true}},
-  Search = {ctermbg = 'NONE', ctermfg = 'NONE', cterm = {reverse = true}}, -- TODO
+  Search = {cterm = {reverse = true}}, -- TODO
   SpecialKey = {ctermfg = 4},
-  SpellBad = {ctermbg = 'NONE', ctermfg = 1, cterm = {italic = true, undercurl = true}},
-  SpellCap = {ctermbg = 'NONE', ctermfg = 3, cterm = {italic = true, undercurl = true}},
-  SpellLocal = {ctermbg = 'NONE', ctermfg = 6, cterm = {italic = true, undercurl = true}},
-  SpellRare = {ctermbg = 'NONE', ctermfg = 4, cterm = {italic = true, undercurl = true}},
-  StatusLine = {ctermbg = 0, ctermfg = 'NONE'},
-  StatusLineNC = {ctermbg = 'NONE', ctermfg = 'NONE'},
-  TabLine = {ctermbg = 0, ctermfg = 'NONE'},
-  TabLineFill = {ctermbg = 'NONE', ctermfg = 'NONE'},
-  TabLineSel = {ctermbg = 8, ctermfg = 'NONE'},
-  Title = {ctermbg = 'NONE', ctermfg = 2, cterm = {bold = true}},
+  SpellBad = {ctermfg = 1, cterm = {italic = true, undercurl = true}},
+  SpellCap = {ctermfg = 3, cterm = {italic = true, undercurl = true}},
+  SpellLocal = {ctermfg = 6, cterm = {italic = true, undercurl = true}},
+  SpellRare = {ctermfg = 4, cterm = {italic = true, undercurl = true}},
+  StatusLine = {ctermbg = 0},
+  StatusLineNC = {},
+  TabLine = {ctermbg = 0},
+  TabLineFill = {},
+  TabLineSel = {ctermbg = 8},
+  Title = {ctermfg = 2, cterm = {bold = true}},
   Visual = {ctermbg = 0},
   VisualNOS = {link = 'Visual'},
   WarningMsg = {ctermfg = 11},
   Whitespace = {link = 'NonText'},
 
   Comment = {ctermfg = 8},
-  Constant = {ctermfg = 'NONE'},
+  Constant = {},
   String = {ctermfg = 2},
   Character = {link = 'String'},
   Number = {ctermfg = 5},
@@ -89,7 +99,7 @@ for g, opts in pairs({
   Type = {ctermfg = 4, cterm = {bold = true}},
   StorageClass = {ctermfg = 4, cterm = {bold = true, italic = true}},
   --
-  Special = {ctermfg = 'NONE'},
+  Special = {},
   SpecialChar = {ctermfg = 11},
   Delimiter = {ctermfg = 15},
   SpecialComment = {ctermfg = 6},
@@ -97,9 +107,9 @@ for g, opts in pairs({
 
   Underlined = {ctermfg = 2, cterm = {underline = true}},
 
-  Error = {ctermbg = 'NONE', ctermfg = 1, cterm = {bold = true, underline = true}},
+  Error = {ctermfg = 1, cterm = {bold = true, underline = true}},
 
-  Todo = {ctermbg = 'NONE', ctermfg = 11},
+  Todo = {ctermfg = 11},
 
   DiagnosticInfo = {ctermfg = 6},
   DiagnosticHint = {ctermfg = 4},
@@ -172,11 +182,5 @@ for g, opts in pairs({
   DiagnosticsWarn  = {ctermfg = 3},
   DiagnosticsError = {ctermfg = 1},
 }) do
-  opts = opts or {}
-  if next(opts) == nil then
-    opts.link = 'StatusLine'
-  elseif not opts.ctermbg then
-    opts.ctermbg = 0 -- from StatusLine
-  end
-  hi('Status'..g, opts)
+  hi('Status'..g, vim.tbl_extend('keep', opts or {}, {inherit = 'StatusLine'}))
 end

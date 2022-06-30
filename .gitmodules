@@ -112,3 +112,6 @@
 [submodule ".config/nvim/pack/plugins/start/which-key"]
 	path = .config/nvim/pack/plugins/start/which-key
 	url = https://github.com/folke/which-key.nvim
+[submodule ".config/nvim/pack/plugins/start/autopairs"]
+	path = .config/nvim/pack/plugins/start/autopairs
+	url = https://github.com/windwp/nvim-autopairs

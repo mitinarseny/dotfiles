@@ -13,21 +13,37 @@ local spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' 
 function Spinner.new(msg, lvl, opts)
   local self = setmetatable({}, Spinner)
 
-  opts = opts or {}
-  opts.timeout = false
-  self:_spin(msg, lvl, opts)
+  self.msg = msg
+  self.lvl = lvl
+  self.opts = opts or {}
+  self.opts.timeout = false
+
+  self:_spin()
 
   return self
 end
 
-function Spinner:update(msg, lvl, opts)
+function Spinner:_update(msg, lvl, opts)
+  -- TODO: debounce
   opts = opts or {}
   opts.replace = self.id
   opts.hide_from_history = true
   self.id = notify(msg, lvl, opts)
 end
 
-function Spinner:_spin(msg, lvl, opts)
+function Spinner:update(msg, lvl, opts)
+  if msg ~= nil then
+    self.msg = msg
+  end
+  if lvl ~= nil then
+    self.lvl = lvl
+  end
+  if opts ~= nil then
+    self.opts = opts
+  end
+end
+
+function Spinner:_spin()
   if self.timer then
     if self.timer:is_closing() then
       return
@@ -35,12 +51,15 @@ function Spinner:_spin(msg, lvl, opts)
     self.timer:close()
   end
 
-  opts = opts or {}
+  local opts = self.opts or {}
   if opts.icon == nil then
     self.frame = (self.frame or 0) % #spinner_frames + 1
     opts.icon = spinner_frames[self.frame]
   end
-  self:update(msg, lvl, opts)
+  self:_update(self.msg, self.lvl, opts)
+  self.msg = nil
+  self.lvl = nil
+  self.opts = nil
 
   self.timer = vim.loop.new_timer()
   self.timer:start(1000/#spinner_frames, 0, vim.schedule_wrap(function()
@@ -58,7 +77,7 @@ function Spinner:done(msg, lvl, opts)
     opts.timeout = 3000
   end
 
-  self:update(msg, lvl, opts)
+  self:_update(msg, lvl, opts)
 end
 
 return Spinner

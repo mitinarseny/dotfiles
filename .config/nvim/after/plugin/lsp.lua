@@ -166,6 +166,8 @@ for s, cfg in pairs({
       buffer = bufnr,
       callback = vim.lsp.buf.clear_references,
     })
+
+  
   end, cfg.on_attach or function()
   end)
   lspconfig[s].setup(cfg)
@@ -180,65 +182,51 @@ require('lsp_extensions').inlay_hints({
   },
 })
 
-local Spinner = require('spinner')
+vim.api.nvim_create_autocmd({'UIEnter'}, {
+  once = true,
+  callback = function()
+    local Spinner = require('spinner')
+    local spinners = {}
 
-local spinners = {}
-
-local function new_spinner(client_id, token, s)
-  if not spinners[client_id] then
-    spinners[client_id] = {}
-  end
-  spinners[client_id][token] = s
-end
-
-local function get_spinner(client_id, token)
-  return (spinners[client_id] or {})[token]
-end
-
-local function delete_spinner(client_id, token)
-  if not spinners[client_id] then
-    return
-  end
-  spinners[client_id][token] = nil
-end
-
-local function format_title(title, client_name)
- return client_name .. (#title > 0 and ": " .. title or "")
-end
-
-local function format_message(message, percentage)
-  if not percentage then
-    return message or ''
-  end
-  return string.format('%2d%%\t%s', percentage, message or '')
-end
-
-vim.lsp.handlers['$/progress'] = function(_, result, ctx)
-  local client_id = ctx.client_id
-  local val = result.value
-  if not val.kind then
-   return
-  end
-
-  if val.kind == 'begin' then
-    new_spinner(client_id, result.token, Spinner(
-      format_message(val.message, val.percentage),
-      vim.log.levels.INFO, {
-        title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-      }))
-  else
-    local s = get_spinner(client_id, result.token)
-    if not s then
-      return
+    local function format_msg(msg, percentage)
+      msg = msg or ''
+      if not percentage then
+        return msg
+      end
+      return string.format('%2d%%\t%s', percentage, msg)
     end
-    if val.kind == 'report' then
-      -- TODO: cancellable
-      s:update(format_message(val.message, val.percentage))
-    elseif val.kind == 'end' then
-      s:done(val.message or 'Complete', nil, {
-        icon = '',
-      })
-      delete_spinner(client_id, result.token)
+
+    local function update_spinners()
+      for _, c in ipairs(vim.lsp.get_active_clients()) do
+        for token, ctx in pairs(c.messages.progress) do
+          if not spinners[c.id] then
+            spinners[c.id] = {}
+          end
+          local s = spinners[c.id][token]
+          if not ctx.done then
+            if not s then
+              spinners[c.id][token] = Spinner(
+                format_msg(ctx.message, ctx.percentage),
+                vim.log.levels.INFO, {
+                  title = ctx.title and string.format('%s: %s', c.name, ctx.title) or c.name
+                })
+            else
+              s:update(format_msg(ctx.message, ctx.percentage))
+            end
+          elseif s then
+            s:done(ctx.message or 'Complete', nil, {
+              icon = '',
+            })
+            spinners[c.id][token] = nil
+          end
+        end
+      end
     end
-  end
-end
+
+    vim.api.nvim_create_autocmd({'User'}, {
+      pattern = {'LspProgressUpdate'},
+      callback = update_spinners,
+    })
+  end,
+})
+

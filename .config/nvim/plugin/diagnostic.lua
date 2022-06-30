@@ -10,7 +10,7 @@ vim.diagnostic.config({
 })
 
 for name, sign in pairs({
-  Error = '⮾',
+  Error = '⮿',
   Warn  = '⚠',
   Info  = '🛈',
   Hint  = '🛈',

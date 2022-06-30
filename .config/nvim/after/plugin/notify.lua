@@ -15,6 +15,9 @@ vim.api.nvim_create_autocmd('UIEnter', {
       },
       render = 'default',
       stages = 'static',
+      max_width = function()
+        return vim.go.columns / 2
+      end,
       timeout = 3000,
     })
     vim.notify = notify

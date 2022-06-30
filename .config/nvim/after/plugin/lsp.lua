@@ -134,16 +134,17 @@ for s, cfg in pairs({
       {noremap = true, silent = true, desc = 'Definition'})
     map('n', '<Leader>lt', vim.lsp.buf.type_definition,
       {noremap = true, silent = true, desc = 'Type definition'})
-    map('n', '<Leader>lu', function()
-      -- TODO: trim results
-      vim.lsp.buf.references({ includeDeclaration = false })
-    end, {noremap = true, silent = true, desc = 'References'})
+    map('n', '<Leader>lu', vim.lsp.with(
+        vim.lsp.buf.references, {includeDeclaration = false}), -- TODO: trim results
+      {noremap = true, silent = true, desc = 'References'})
     map('n', '<Leader>li', vim.lsp.buf.implementation,
       {noremap = true, silent = true, desc = 'Implementation'})
     map('n', '<Leader>lr', vim.lsp.buf.rename,
       {noremap = true, silent = true, desc = 'Rename'})
     map('n', '<Leader>la', vim.lsp.buf.code_action,
       {noremap = true, silent = true, desc = 'Code actions'})
+    map('n', '<Leader>lh', vim.lsp.buf.hover,
+        {noremap = true, silent = true, desc = 'Hover'})
 
     if client.resolved_capabilities.document_formatting then
       map('n', '<Leader>lf', vim.lsp.buf.formatting,

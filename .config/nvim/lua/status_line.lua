@@ -136,7 +136,7 @@ end
 
 vim.api.nvim_create_autocmd({'User'}, {
   pattern = {'LspProgressUpdate', 'LspRequest'},
-  group = vim.api.nvim_create_augroup('LSPIndicator', {clear = true}),
+  group = vim.api.nvim_create_augroup('StatusLineLSPIndicator', {clear = true}),
   desc = 'LSP indicator update',
   command = 'redrawstatus',
 })
@@ -151,10 +151,24 @@ end
 
 local scroll_bar_blocks = { '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█' }
 local function scroll_bar()
-  local cl = vim.api.nvim_win_get_cursor(0)[1]
   local tl = vim.api.nvim_buf_line_count(0)
-  return hi('ScrollBar', string.rep(scroll_bar_blocks[math.floor(cl/tl * 7) + 1], 2))
+  if tl == 0 then
+    return
+  end
+  local cl = vim.api.nvim_win_get_cursor(0)[1]
+  return hi('ScrollBar', string.rep(scroll_bar_blocks[math.floor(cl/tl * (#scroll_bar_blocks - 1)) + 1], 2))
 end
+
+-- vim.api.nvim_create_autocmd({'BufWinEnter'}, {
+--   callback = function(opts)
+--     vim.api.nvim_create_autocmd({'DiagnosticChanged'}, {
+--       buffer = opts.buf,
+--       group = vim.api.nvim_create_augroup('StatusLineDiagnostics', {clear = true}),
+--       desc = 'Update diagnostic statusline indicators',
+--       command = 'redrawstatus',
+--     })
+--   end,
+-- })
 
 -- TODO: conditional
 return function()

@@ -23,7 +23,6 @@ local function groupify(...)
   return formatify('%%1(%s%%)', ...)
 end
 
-
 local function value(...)
   return non_empty(fun.map(function(_, v)
     if type(v) == 'function' then
@@ -122,15 +121,25 @@ local function diagnostic_counts()
   }))
 end
 
-local function lsp_clients()
-  return join(hi('Separator', ' '), hify('LSPName', fun.map(function(_, c)
-    return c.name
-    -- TODO
-    -- return string.format('%s %s',
-    --   hi('LSPIndicator'..(next(c.requests) ~= nil and 'Working' or ''), '⚡'),
-    --   hi('LSPName', c.name))
-  end, ipairs(vim.lsp.buf_get_clients(0)))))
+local function lsp_indicator()
+  local cs = vim.lsp.get_active_clients()
+  if not next(cs) then
+    return
+  end
+  local is_working = fun.one(fun.map(function(_, c)
+    return next(c.requests) or fun.one(fun.map(function(_, p)
+      return not p.done
+    end, pairs(c.messages.progress)))
+  end, ipairs(cs)))
+  return hi('LSPIndicator'..(is_working and 'Working' or ''), '⚡')
 end
+
+vim.api.nvim_create_autocmd({'User'}, {
+  pattern = {'LspProgressUpdate', 'LspRequest'},
+  group = vim.api.nvim_create_augroup('LSPIndicator', {clear = true}),
+  desc = 'LSP indicator update',
+  command = 'redrawstatus',
+})
 
 local function cursor_position()
   return hi('CursorPosition', join(':', ipairs({'%3l', '%-2c'})))
@@ -159,7 +168,7 @@ return function()
     dap_status,
     join(hi('Separator', ' '), ipairs({
       diagnostic_counts,
-      lsp_clients,
+      lsp_indicator,
       cursor_position,
       percentage,
       scroll_bar,

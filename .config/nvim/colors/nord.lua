@@ -164,9 +164,8 @@ for g, opts in pairs({
 
   DAP = {link = 'ErrorMsg'},
 
-  LSPName             = {},
-  LspIndicatorOK      = {},
-  LspIndicatorWorking = {ctermfg = 2},
+  LSPIndicator        = {ctermfg = 8},
+  LSPIndicatorWorking = {ctermfg = 4},
 
   DiagnosticsInfo  = {ctermfg = 6},
   DiagnosticsHint  = {ctermfg = 4},

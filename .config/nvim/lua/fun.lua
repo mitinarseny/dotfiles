@@ -35,4 +35,22 @@ function M.icollect(...)
   return t
 end
 
+function M.one(...)
+  for _, v in ... do
+    if v then
+      return true
+    end
+  end
+  return false
+end
+
+function M.all(...)
+  for _, v in ... do
+    if not v then
+      return false
+    end
+  end
+  return true
+end
+
 return M

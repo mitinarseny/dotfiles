@@ -11,6 +11,7 @@ vim.opt.clipboard:append({'unnamedplus'}) -- use system clipboard
 
 -- TODO: set updatetime=500
 vim.g.mapleader = ' '
+vim.go.smarttab = true
 
 vim.o.ignorecase = true -- ignore case in search patterns
 -- enable command-line completion

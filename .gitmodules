@@ -31,9 +31,6 @@
 [submodule ".config/nvim/pack/plugins/start/bracketed-paste"]
 	path = .config/nvim/pack/plugins/start/bracketed-paste
 	url = https://github.com/ConradIrwin/vim-bracketed-paste
-[submodule ".config/nvim/pack/plugins/start/tcomment"]
-	path = .config/nvim/pack/plugins/start/tcomment
-	url = https://github.com/tomtom/tcomment_vim
 [submodule ".config/nvim/pack/plugins/start/colorizer"]
 	path = .config/nvim/pack/plugins/start/colorizer
 	url = https://github.com/chrisbra/Colorizer
@@ -61,15 +58,6 @@
 [submodule ".config/nvim/pack/plugins/start/cmp-cmdline"]
 	path = .config/nvim/pack/plugins/start/cmp-cmdline
 	url = https://github.com/hrsh7th/cmp-cmdline
-[submodule ".config/nvim/pack/plugins/start/nvim-cmp"]
-	path = .config/nvim/pack/plugins/start/nvim-cmp
-	url = https://github.com/hrsh7th/nvim-cmp
-[submodule ".config/nvim/pack/plugins/start/cmp-vsnip"]
-	path = .config/nvim/pack/plugins/start/cmp-vsnip
-	url = https://github.com/hrsh7th/cmp-vsnip
-[submodule ".config/nvim/pack/plugins/start/vim-vsnip"]
-	path = .config/nvim/pack/plugins/start/vim-vsnip
-	url = https://github.com/hrsh7th/vim-vsnip
 [submodule ".config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help"]
 	path = .config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help
 	url = https://github.com/hrsh7th/cmp-nvim-lsp-signature-help
@@ -115,3 +103,15 @@
 [submodule ".config/nvim/pack/plugins/start/autopairs"]
 	path = .config/nvim/pack/plugins/start/autopairs
 	url = https://github.com/windwp/nvim-autopairs
+[submodule ".config/nvim/pack/plugins/start/cmp"]
+	path = .config/nvim/pack/plugins/start/cmp
+	url = https://github.com/hrsh7th/nvim-cmp
+[submodule ".config/nvim/pack/plugins/start/LuaSnip"]
+	path = .config/nvim/pack/plugins/start/LuaSnip
+	url = https://github.com/L3MON4D3/LuaSnip
+[submodule ".config/nvim/pack/plugins/start/cmp_luasnip"]
+	path = .config/nvim/pack/plugins/start/cmp_luasnip
+	url = https://github.com/saadparwaiz1/cmp_luasnip
+[submodule ".config/nvim/pack/plugins/start/comment"]
+	path = .config/nvim/pack/plugins/start/comment
+	url = https://github.com/numToStr/Comment.nvim

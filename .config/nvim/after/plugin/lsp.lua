@@ -11,19 +11,21 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   end
 
   local cmp = require('cmp')
+  local luasnip = require('luasnip')
+  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
   cmp.setup({
     snippet = {
       expand = function(args)
-        vim.fn['vsnip#anonymous'](args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
-        elseif vim.fn['vsnip#available'](1) == 1 then
-          feedkey('<Plug>(vsnip-expand-or-jump)', '')
+        elseif luasnip.expand_or_locally_jumpable() then
+          luasnip.expand_or_jump()
         elseif has_words_before() then
           cmp.complete()
         else
@@ -33,30 +35,31 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
-        elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-          feedkey('<Plug>(vsnip-jump-prev)', '')
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
         else
           fallback()
         end
       end, { 'i', 'v' }),
-    },
+    }),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = "nvim_lsp_signature_help" },
-      { name = 'vsnip' },
+      { name = 'nvim_lsp_signature_help' },
+      { name = 'luasnip'},
     }, {
       { name = 'buffer' },
       { name = 'path' },
     }),
     formatting = {
-      format = function(entry, vim_item)
-        vim_item.menu = ({
-          buffer = '[Buffer]',
-          nvim_lsp = '[LSP]',
-          vsnip = '[Snip]',
-          path = '[Path]',
-        })[entry.source.name]
-        return vim_item
+      format = function(entry, item)
+        return vim.tbl_extend('force', item, {
+          menu = ({
+            nvim_lsp = '⚡',
+            luasnip  = '⇢',
+            buffer   = '☰',
+            path     = '/',
+          })[entry.source.name],
+        })
       end,
     }
   })
@@ -65,6 +68,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       entries = { name = 'wildmenu', separator = '|' },
     },
   })
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
   vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'preview'}
   end,
 })
@@ -127,6 +131,7 @@ for s, cfg in pairs({
       vim.keymap.set(mode, l, r, opts)
     end
 
+    local tb = require('telescope.builtin')
     local wk = require('which-key')
 
     wk.register({['<Leader>l'] = {name = 'LSP'}}, {buffer = bufnr})
@@ -145,6 +150,8 @@ for s, cfg in pairs({
       {noremap = true, silent = true, desc = 'Code actions'})
     map('n', '<Leader>lh', vim.lsp.buf.hover,
         {noremap = true, silent = true, desc = 'Hover'})
+    map('n', '<Leader>ls', tb.lsp_dynamic_workspace_symbols,
+        {noremap = true, silent = true, desc = 'Search symbols'})
 
     if client.resolved_capabilities.document_formatting then
       map('n', '<Leader>lf', vim.lsp.buf.formatting,
@@ -202,6 +209,7 @@ vim.api.nvim_create_autocmd({'UIEnter'}, {
       group = vim.api.nvim_create_augroup('LSPNotify', {clear = true}),
       desc = 'LSP progress notifications',
       callback = function()
+        -- TODO: use one spinner for all tokens of each client
         for _, c in ipairs(vim.lsp.get_active_clients()) do
           for token, ctx in pairs(c.messages.progress) do
             if not spinners[c.id] then

@@ -81,6 +81,7 @@ for g, opts in pairs({
 
   Identifier = {ctermfg = 4},
   Function = {ctermfg = 6},
+  Method = {ctermfg = 4},
 
   Statement = {ctermfg = 4},
   Conditional = {ctermfg = 4, cterm = {bold = true}},
@@ -97,6 +98,7 @@ for g, opts in pairs({
   PreCondit = {link = 'PreProc'},
 
   Type = {ctermfg = 4, cterm = {bold = true}},
+  Class = {link = 'Type'},
   StorageClass = {ctermfg = 4, cterm = {bold = true, italic = true}},
   --
   Special = {},
@@ -141,6 +143,32 @@ for g, opts in pairs({
   NotifyTRACEIcon   = {ctermfg = 1},
   NotifyTRACEBorder = {link = 'NotifyTRACEIcon'},
   NotifyTRACETitle  = {link = 'NotifyTRACEIcon'},
+
+  CmpItemMenu = {ctermfg = 8},
+  CmpItemKindMethod = {link = 'Method'},
+  CmpItemKindFunction = {link = 'Function'},
+  CmpItemKindConstructor = {link = 'Method'},
+  CmpItemKindField = {link = 'Identifier'},
+  CmpItemKindVariable = {link = 'Identifier'},
+  CmpItemKindClass = {link = 'Class'},
+  CmpItemKindInterface = {link = 'Class'},
+  CmpItemKindModule = {link = 'Class'},
+  CmpItemKindProperty = {link = 'Function'},
+  CmpItemKindUnit = {link = 'Class'},
+  CmpItemKindValue = {link = 'Constant'},
+  CmpItemKindEnum = {link = 'Class'},
+  CmpItemKindKeyword = {link = 'Keyword'},
+  CmpItemKindSnippet = {link = 'String'},
+  CmpItemKindColor = {link = 'Special'},
+  CmpItemKindFile = {ctermfg = 6},
+  CmpItemKindReference = {link = 'Identifier'},
+  CmpItemKindFolder = {ctermfg = 6},
+  CmpItemKindEnumMember = {link = 'Identifier'},
+  CmpItemKindConstant = {link = 'Constant'},
+  CmpItemKindStruct = {link = 'Class'},
+  CmpItemKindEvent = {link = 'Identifier'},
+  CmpItemKindOperator = {link = 'Operator'},
+  CmpItemKindTypeParameter = {link = 'Type'},
 }) do
   hi(g, opts)
 end
@@ -175,7 +203,7 @@ for g, opts in pairs({
   DAP = {link = 'ErrorMsg'},
 
   LSPIndicator        = {ctermfg = 8},
-  LSPIndicatorWorking = {ctermfg = 4},
+  LSPIndicatorWorking = {ctermfg = 5},
 
   DiagnosticsInfo  = {ctermfg = 6},
   DiagnosticsHint  = {ctermfg = 4},

@@ -111,7 +111,7 @@ local function diagnostic(name, severity)
     return ''
   end
   return hi(string.format('Diagnostics%s', name), ('%s%d'):format(
-    (vim.fn.sign_getdefined(('DiagnosticSign%s'):formay(name))[1] or {}).text or '', c))
+    (vim.fn.sign_getdefined(('DiagnosticSign%s'):format(name))[1] or {}).text or '', c))
 end
 
 local function diagnostic_counts()

@@ -46,10 +46,10 @@ t.setup({
     file_browser = {
       grouped = true,
       hidden = true,
+      cwd_to_path = true,
       dir_icon = '',
       hijack_netrw = true,
       -- TODO: clear empty prompt -> up
-      -- TODO: map to change cwd
     },
   },
 })

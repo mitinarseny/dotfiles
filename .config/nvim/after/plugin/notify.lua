@@ -15,10 +15,10 @@ vim.api.nvim_create_autocmd('UIEnter', {
       },
       render = 'default',
       stages = 'static',
-      max_width = function()
-        local c = vim.go.columns
-        return c > 80 and c/2 or c
-      end,
+      -- max_width = function()
+      --   local c = math.floor(vim.go.columns)
+      --   return c > 80 and c/2 or c
+      -- end,
       timeout = 3000,
     })
     vim.notify = notify

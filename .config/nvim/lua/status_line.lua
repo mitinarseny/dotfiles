@@ -14,8 +14,9 @@ function stringify(...)
 end
 
 local function formatify(f, ...)
+  assert(type(f) == 'string')
   return fun.map(function(_, v)
-    return string.format(f, v)
+    return f:format(v)
   end, ...)
 end
 
@@ -41,10 +42,11 @@ local function align(...)
 end
 
 local function hi(group, text)
-  return string.format('%%#Status%s#%s%%*', group, text)
+  return ('%%#Status%s#%s%%*'):format(group, text)
 end
 
 local function hify(group, ...)
+  assert(type(group) == 'string')
   return fun.map(function(_, s)
     return hi(group, s)
   end, ...)
@@ -66,7 +68,7 @@ local mode_hi = {
 }
 
 local function mode()
-  return hi(string.format('Mode%s', mode_hi[vim.fn.mode()] or ''), ' ')
+  return hi('Mode'..(mode_hi[vim.fn.mode()] or ''), ' ')
 end
 
 local function filename()
@@ -75,7 +77,7 @@ end
 
 local function git_head()
   local h = vim.b.gitsigns_head
-  return h and hi('GitHead', string.format('[%s]', h) or '')
+  return h and hi('GitHead', ('[%s]'):format(h) or '')
 end
 
 local function git_stats()
@@ -86,7 +88,7 @@ local function git_stats()
   local function count(typ, sign, hl)
     local c = gs[typ]
     if (c or 0) > 0 then
-      return hi(string.format('Git%s', hl), string.format('%s%d', sign, c))
+      return hi('Git'..hl, ('%s%d'):format(sign, c))
     end
   end
   return join(' ', ipairs({
@@ -100,7 +102,7 @@ local function dap_status()
   if not dap.session() then
     return
   end
-  return hi('DAP', string.format(' %s ', dap.status()))
+  return hi('DAP', (' %s '):format(dap.status()))
 end
 
 local function diagnostic(name, severity)
@@ -108,8 +110,8 @@ local function diagnostic(name, severity)
   if c == 0 then
     return ''
   end
-  return hi(string.format('Diagnostics%s', name), string.format('%s%d',
-    (vim.fn.sign_getdefined(string.format('DiagnosticSign%s', name))[1] or {}).text or '', c))
+  return hi(string.format('Diagnostics%s', name), ('%s%d'):format(
+    (vim.fn.sign_getdefined(('DiagnosticSign%s'):formay(name))[1] or {}).text or '', c))
 end
 
 local function diagnostic_counts()

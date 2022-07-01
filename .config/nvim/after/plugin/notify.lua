@@ -16,7 +16,8 @@ vim.api.nvim_create_autocmd('UIEnter', {
       render = 'default',
       stages = 'static',
       max_width = function()
-        return vim.go.columns / 2
+        local c = vim.go.columns
+        return c > 80 and c/2 or c
       end,
       timeout = 3000,
     })

@@ -1,6 +1,7 @@
 local M = {}
 
 function M.map(f, gen, ...)
+  assert(type(f) == 'function' and type(gen) == 'function')
   return function(...)
     local k, v = gen(...)
     if k then
@@ -10,6 +11,7 @@ function M.map(f, gen, ...)
 end
 
 function M.filter(f, gen, ...)
+  assert(type(f) == 'function' and type(gen) == 'function')
   return function(state, k)
     local v
     repeat

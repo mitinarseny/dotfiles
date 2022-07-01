@@ -201,7 +201,7 @@ vim.api.nvim_create_autocmd({'UIEnter'}, {
       if not percentage then
         return msg
       end
-      return string.format('%2d%%\t%s', percentage, msg)
+      return ('%2d%%\t%s'):format(percentage, msg)
     end
 
     vim.api.nvim_create_autocmd({'User'}, {
@@ -220,7 +220,7 @@ vim.api.nvim_create_autocmd({'UIEnter'}, {
               if not s then
                 spinners[c.id][token] = Spinner(
                   format_msg(ctx.message, ctx.percentage), vim.log.levels.INFO, {
-                    title = ctx.title and string.format('%s: %s', c.name, ctx.title) or c.name
+                    title = ctx.title and ('%s: %s'):format(c.name, ctx.title) or c.name
                   })
               else
                 s:update(format_msg(ctx.message, ctx.percentage))

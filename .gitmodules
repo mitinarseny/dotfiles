@@ -31,9 +31,6 @@
 [submodule ".config/nvim/pack/plugins/start/bracketed-paste"]
 	path = .config/nvim/pack/plugins/start/bracketed-paste
 	url = https://github.com/ConradIrwin/vim-bracketed-paste
-[submodule ".config/nvim/pack/plugins/start/colorizer"]
-	path = .config/nvim/pack/plugins/start/colorizer
-	url = https://github.com/chrisbra/Colorizer
 [submodule ".config/nvim/pack/plugins/opt/indent-blankline"]
 	path = .config/nvim/pack/plugins/opt/indent-blankline
 	url = https://github.com/lukas-reineke/indent-blankline.nvim
@@ -97,9 +94,6 @@
 [submodule ".config/nvim/pack/plugins/start/treesitter"]
 	path = .config/nvim/pack/plugins/start/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
-[submodule ".config/nvim/pack/plugins/start/which-key"]
-	path = .config/nvim/pack/plugins/start/which-key
-	url = https://github.com/folke/which-key.nvim
 [submodule ".config/nvim/pack/plugins/start/autopairs"]
 	path = .config/nvim/pack/plugins/start/autopairs
 	url = https://github.com/windwp/nvim-autopairs
@@ -115,3 +109,6 @@
 [submodule ".config/nvim/pack/plugins/start/comment"]
 	path = .config/nvim/pack/plugins/start/comment
 	url = https://github.com/numToStr/Comment.nvim
+[submodule ".config/nvim/pack/plugins/start/which-key"]
+	path = .config/nvim/pack/plugins/start/which-key
+	url = https://github.com/folke/which-key.nvim

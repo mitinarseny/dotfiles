@@ -119,6 +119,8 @@ for g, opts in pairs({
   DiagnosticError = {ctermfg = 1},
 
   LspReferenceText = {ctermbg = 0},
+  LspReferenceRead = {link = 'LspReferenceText'},
+  LspReferenceWrite = {link = 'LspReferenceText'},
 
   GitSignsAddNr    = {ctermfg = 2},
   GitSignsChangeNr = {ctermfg = 3},

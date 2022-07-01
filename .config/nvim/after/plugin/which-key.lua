@@ -1,4 +1,15 @@
 require('which-key').setup({
+  plugins = {
+    marks = true,
+    registers = true,
+    presets = {
+      operators = false,
+      motions = true,
+      text_objects = true,
+      windows = true,
+      nav = true,
+    },
+  },
   icons = {
     breadcrumb = '+',
     separator = '➜',

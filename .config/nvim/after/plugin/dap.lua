@@ -1,17 +1,18 @@
-local dap = require('dap')
-
-vim.fn.sign_define({
-  {name = 'DapBreakpoint',          text = '⬤', texthl = 'Debug'},
-  {name = 'DapBreakpointCondition', text = '🞉', texthl = 'Debug'},
-  {name = 'DapBreakpointRejected',  text = '☇', texthl = ''},
-})
 
 vim.api.nvim_create_autocmd('UIEnter', {
   once = true,
   callback = function()
-    local wk = require('which-key')
+    local dap = require('dap')
 
+    vim.fn.sign_define({
+      {name = 'DapBreakpoint',          text = '⬤', texthl = 'Debug'},
+      {name = 'DapBreakpointCondition', text = '🞉', texthl = 'Debug'},
+      {name = 'DapBreakpointRejected',  text = '☇', texthl = ''},
+    })
+
+    local wk = require('which-key')
     wk.register({['<Leader>d'] = {name = 'DAP'}})
+
     vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
       {noremap = true, silent = true, desc = 'Toggle breakpoint'})
     vim.keymap.set('n', '<Leader>dB', function()
@@ -36,29 +37,30 @@ vim.api.nvim_create_autocmd('UIEnter', {
       {noremap = true, silent = true, desc = 'Go up'})
     vim.keymap.set('n', '<Leader>d<Down>', dap.run_to_cursor,
       {noremap = true, silent = true, desc = 'Go down'})
+
+    require('dap-go').setup()
+
+    local lldb_vscode_executable = vim.fn.exepath('lldb-vscode')
+    if lldb_vscode_executable ~= '' then
+      dap.adapters.lldb = {
+        type = 'executable',
+        command = lldb_vscode_executable,
+        name = 'lldb',
+      }
+      dap.configurations.cpp = {
+        name = 'Launch',
+        type = 'lldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+      }
+      dap.configurations.c = dap.configurations.cpp
+      dap.configurations.rust = dap.configurations.cpp
+    end
   end,
 })
 
-require('dap-go').setup()
-
-local lldb_vscode_executable = vim.fn.exepath('lldb-vscode')
-if lldb_vscode_executable ~= '' then
-  dap.adapters.lldb = {
-    type = 'executable',
-    command = lldb_vscode_executable,
-    name = 'lldb',
-  }
-  dap.configurations.cpp = {
-    name = 'Launch',
-    type = 'lldb',
-    request = 'launch',
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = false,
-    args = {},
-  }
-  dap.configurations.c = dap.configurations.cpp
-  dap.configurations.rust = dap.configurations.cpp
-end

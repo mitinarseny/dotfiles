@@ -128,8 +128,8 @@ local function lsp_indicator()
   if not next(cs) then
     return
   end
-  local is_working = fun.one(fun.map(function(_, c)
-    return next(c.requests) or fun.one(fun.map(function(_, p)
+  local is_working = fun.any(fun.map(function(_, c)
+    return next(c.requests) or fun.any(fun.map(function(_, p)
       return not p.done
     end, pairs(c.messages.progress)))
   end, ipairs(cs)))

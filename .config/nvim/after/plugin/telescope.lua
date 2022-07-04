@@ -26,6 +26,10 @@ t.setup({
     layout_config = {
       prompt_position = 'top',
     },
+    path_display = {
+      smart = true,
+      shorten = 1,
+    },
     color_devicons = false,
     buffer_previewer_maker = limit_size_preview_maker,
     vimgrep_arguments = {
@@ -44,12 +48,20 @@ t.setup({
       tt.get_cursor()
     },
     file_browser = {
+      path_display = {},
       grouped = true,
       hidden = true,
       cwd_to_path = true,
       dir_icon = '',
       hijack_netrw = true,
       -- TODO: clear empty prompt -> up
+    },
+    lsp_handlers = {
+      location = {
+        telescope = {
+          trim_text = true,
+        },
+      },
     },
   },
 })

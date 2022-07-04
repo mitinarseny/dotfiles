@@ -37,7 +37,7 @@ function M.icollect(...)
   return t
 end
 
-function M.one(...)
+function M.any(...)
   for _, v in ... do
     if v then
       return true

@@ -1,5 +1,6 @@
 local t = require('telescope')
 local ta = require('telescope.actions')
+local tal = require('telescope.actions.layout')
 local tb = require('telescope.builtin')
 local tt = require('telescope.themes')
 local tp = require('telescope.previewers')
@@ -19,6 +20,7 @@ t.setup({
     mappings = {
       i = {
         ['<Esc>'] = ta.close,
+        ['<S-Esc>'] = tal.toggle_preview,
       },
     },
     sorting_strategy = 'ascending',
@@ -27,7 +29,7 @@ t.setup({
       prompt_position = 'top',
     },
     path_display = {
-      smart = true,
+      -- smart = true,
       shorten = 1,
     },
     color_devicons = false,
@@ -51,6 +53,7 @@ t.setup({
       path_display = {},
       grouped = true,
       hidden = true,
+      path = '%:p:h',
       cwd_to_path = true,
       dir_icon = '',
       hijack_netrw = true,

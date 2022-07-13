@@ -124,6 +124,7 @@ for g, opts in pairs({
   GitSignsAddNr    = {ctermfg = 2},
   GitSignsChangeNr = {ctermfg = 3},
   GitSignsDeleteNr = {ctermfg = 1},
+  GitSignsDeleteVirtLn = {link = 'GitSignsDeleteNr'},
 
   TelescopeBorder   = {link = 'Comment'},
   TelescopeTitle    = {link = 'Normal'},

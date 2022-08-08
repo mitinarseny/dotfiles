@@ -40,9 +40,6 @@
 [submodule ".config/nvim/pack/plugins/start/lspconfig"]
 	path = .config/nvim/pack/plugins/start/lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
-[submodule ".config/nvim/pack/plugins/start/lsp_entensions"]
-	path = .config/nvim/pack/plugins/start/lsp_entensions
-	url = https://github.com/nvim-lua/lsp_extensions.nvim
 [submodule ".config/nvim/pack/plugins/start/cmp-nvim-lsp"]
 	path = .config/nvim/pack/plugins/start/cmp-nvim-lsp
 	url = https://github.com/hrsh7th/cmp-nvim-lsp
@@ -58,9 +55,6 @@
 [submodule ".config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help"]
 	path = .config/nvim/pack/plugins/start/cmp-nvim-lsp-signature-help
 	url = https://github.com/hrsh7th/cmp-nvim-lsp-signature-help
-[submodule ".config/nvim/pack/plugins/start/rust-tools"]
-	path = .config/nvim/pack/plugins/start/rust-tools
-	url = https://github.com/simrat39/rust-tools.nvim
 [submodule ".config/nvim/pack/plugins/start/plenary"]
 	path = .config/nvim/pack/plugins/start/plenary
 	url = https://github.com/nvim-lua/plenary.nvim

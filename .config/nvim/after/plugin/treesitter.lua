@@ -1,6 +1,7 @@
 require('nvim-treesitter.configs').setup({
   ensure_installed = {
     'c', 'cpp',
+    'comment',
     'dockerfile',
     'go',
     'gomod',

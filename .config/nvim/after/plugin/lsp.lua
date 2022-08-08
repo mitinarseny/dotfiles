@@ -45,6 +45,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'nvim_lsp_signature_help' },
+    }, {
       { name = 'luasnip'},
     }, {
       { name = 'buffer' },
@@ -72,15 +73,6 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'preview'}
   end,
 })
-
-local function mapf(...)
-  local fs = {...}
-  return function(...)
-    for _, f in ipairs(fs) do
-      f(...)
-    end
-  end
-end
 
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -114,14 +106,14 @@ for s, cfg in pairs({
       ['rust-analyzer'] = {
         assist = {
           importGranularity = "module",
-          importPrefix      = "by_self",
+          importPrefix      = "self",
         },
       },
     },
   },
 }) do
   cfg.capabilities = vim.tbl_extend('keep', cfg.capabilities or {}, capabilities)
-  cfg.on_attach = mapf(function(client, bufnr)
+  cfg.on_attach = function(client, bufnr)
     vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
     vim.wo.signcolumn = 'yes'
 
@@ -152,6 +144,8 @@ for s, cfg in pairs({
         {noremap = true, silent = true, desc = 'Hover'})
     map('n', '<Leader>ls', tb.lsp_dynamic_workspace_symbols,
         {noremap = true, silent = true, desc = 'Search symbols'})
+    map('n', '<Leader>ld', vim.diagnostic.open_float,
+        {noremap = true, silent = true, desc = 'Line diagnostic'})
 
     if client.resolved_capabilities.document_formatting then
       map('n', '<Leader>lf', vim.lsp.buf.formatting,
@@ -174,21 +168,12 @@ for s, cfg in pairs({
       buffer = bufnr,
       callback = vim.lsp.buf.clear_references,
     })
+  end
 
-  
-  end, cfg.on_attach or function()
-  end)
   lspconfig[s].setup(cfg)
 end
 
-require('lsp_extensions').inlay_hints({
-  prefix = '=>',
-  highlight = 'Comment',
-  enabled = {
-    'TypeHint',
-    'ParameterHint',
-  },
-})
+-- require('rust-tools').setup({})
 
 vim.api.nvim_create_autocmd({'UIEnter'}, {
   once = true,

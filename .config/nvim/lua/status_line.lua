@@ -133,7 +133,7 @@ local function lsp_indicator()
       return not p.done
     end, pairs(c.messages.progress)))
   end, ipairs(cs)))
-  return hi('LSPIndicator'..(is_working and 'Working' or ''), '⚡')
+  return hi('LSPIndicator'..(is_working and 'Working' or ''), '🗲')
 end
 
 vim.api.nvim_create_autocmd({'User'}, {

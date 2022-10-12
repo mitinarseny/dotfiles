@@ -55,7 +55,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
       format = function(entry, item)
         return vim.tbl_extend('force', item, {
           menu = ({
-            nvim_lsp = '⚡',
+            nvim_lsp = '🗲',
             luasnip  = '⇢',
             buffer   = '☰',
             path     = '/',

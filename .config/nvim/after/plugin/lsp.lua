@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
         luasnip.lsp_expand(args.body)
       end,
     },
-    mapping = cmp.mapping.preset.insert({
+    mapping = {
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
           fallback()
         end
       end, { 'i', 'v' }),
-    }),
+    },
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'nvim_lsp_signature_help' },

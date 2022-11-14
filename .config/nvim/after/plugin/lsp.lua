@@ -102,6 +102,7 @@ for s, cfg in pairs({
   },
   pyright = {},
   rust_analyzer = {
+    cmd = { 'rustup', 'run', 'nightly', 'rust-analyzer' },
     settings = {
       ['rust-analyzer'] = {
         assist = {
@@ -127,47 +128,62 @@ for s, cfg in pairs({
     local wk = require('which-key')
 
     wk.register({['<Leader>l'] = {name = 'LSP'}}, {buffer = bufnr})
-    map('n', '<C-]>', vim.lsp.buf.definition,
-      {noremap = true, silent = true, desc = 'Definition'})
-    map('n', '<Leader>lt', vim.lsp.buf.type_definition,
-      {noremap = true, silent = true, desc = 'Type definition'})
-    map('n', '<Leader>lu', vim.lsp.with(vim.lsp.buf.references, {
-        includeDeclaration = false,
-      }), {noremap = true, silent = true, desc = 'References'})
-    map('n', '<Leader>li', vim.lsp.buf.implementation,
-      {noremap = true, silent = true, desc = 'Implementation'})
+    if client.server_capabilities.definitionProvider then
+      map('n', '<C-]>', vim.lsp.buf.definition,
+        {noremap = true, silent = true, desc = 'Definition'})
+    end
+    if client.server_capabilities.typeDefinitionProvider then
+      map('n', '<Leader>lt', vim.lsp.buf.type_definition,
+        {noremap = true, silent = true, desc = 'Type definition'})
+    end
+    if client.server_capabilities.referencesProvider then
+      map('n', '<Leader>lu', vim.lsp.with(vim.lsp.buf.references, {
+          includeDeclaration = false,
+        }), {noremap = true, silent = true, desc = 'References'})
+    end
+    if client.server_capabilities.implementationProvider then
+      map('n', '<Leader>li', vim.lsp.buf.implementation,
+        {noremap = true, silent = true, desc = 'Implementation'})
+    end
     map('n', '<Leader>lr', vim.lsp.buf.rename,
       {noremap = true, silent = true, desc = 'Rename'})
     map('n', '<Leader>la', vim.lsp.buf.code_action,
       {noremap = true, silent = true, desc = 'Code actions'})
-    map('n', '<Leader>lh', vim.lsp.buf.hover,
-        {noremap = true, silent = true, desc = 'Hover'})
-    map('n', '<Leader>ls', tb.lsp_dynamic_workspace_symbols,
-        {noremap = true, silent = true, desc = 'Search symbols'})
-    map('n', '<Leader>ld', vim.diagnostic.open_float,
-        {noremap = true, silent = true, desc = 'Line diagnostic'})
-
-    if client.resolved_capabilities.document_formatting then
-      map('n', '<Leader>lf', vim.lsp.buf.formatting,
+    if client.server_capabilities.hoverProvider then
+      map('n', '<Leader>lh', vim.lsp.buf.hover,
+          {noremap = true, silent = true, desc = 'Hover'})
+    end
+    if client.server_capabilities.workspaceSymbolProvider then
+      map('n', '<Leader>ls', tb.lsp_dynamic_workspace_symbols,
+          {noremap = true, silent = true, desc = 'Search symbols'})
+    end
+    if client.server_capabilities.diagnosticProvider then
+      map('n', '<Leader>ld', vim.diagnostic.open_float,
+          {noremap = true, silent = true, desc = 'Line diagnostic'})
+    end
+    if client.server_capabilities.documentFormattingProvider then
+      map('n', '<Leader>lf', vim.lsp.buf.format,
         {noremap = true, silent = true, desc = 'Format'})
     end
-    if client.resolved_capabilities.document_range_formatting then
-      map('v', '<Leader>lf', vim.lsp.buf.range_formatting,
+    if client.server_capabilities.documentRangeFormattingProvider then
+      map('v', '<Leader>lf', vim.lsp.buf.format,
         {noremap = true, silent = true, desc = 'Format'})
     end
 
-    vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-      buffer = bufnr,
-      callback = vim.lsp.buf.document_highlight,
-    })
-    vim.api.nvim_create_autocmd({
-      'CursorMoved', 'CursorMovedI',
-      'InsertLeavePre',
-      'TextChanged', 'TextChangedI',
-    }, {
-      buffer = bufnr,
-      callback = vim.lsp.buf.clear_references,
-    })
+    if client.server_capabilities.documentHighlightProvider then
+      vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+        buffer = bufnr,
+        callback = vim.lsp.buf.document_highlight,
+      })
+      vim.api.nvim_create_autocmd({
+        'CursorMoved', 'CursorMovedI',
+        'InsertLeavePre',
+        'TextChanged', 'TextChangedI',
+      }, {
+        buffer = bufnr,
+        callback = vim.lsp.buf.clear_references,
+      })
+    end
   end
 
   lspconfig[s].setup(cfg)

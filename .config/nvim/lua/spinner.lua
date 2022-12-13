@@ -9,6 +9,7 @@ setmetatable(Spinner, {
 })
 
 local fps = 10
+local last_for_ms = 2000
 local spinner_frames = { '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾' }
 
 function Spinner.new(msg, lvl, opts)
@@ -75,7 +76,7 @@ function Spinner:done(msg, lvl, opts)
 
   opts = opts or {}
   if opts.timeout == nil then
-    opts.timeout = 3000
+    opts.timeout = last_for_ms
   end
 
   self:_update(msg, lvl, opts)

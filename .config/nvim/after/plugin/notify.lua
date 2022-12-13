@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
       --   local c = math.floor(vim.go.columns)
       --   return c > 80 and c/2 or c
       -- end,
-      timeout = 3000,
+      timeout = 2000,
       stages = {
         function(state)
           local next_height = state.message.height + 2

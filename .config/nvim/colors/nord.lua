@@ -112,6 +112,8 @@ for g, opts in pairs({
 
   Todo = {ctermfg = 11},
 
+  ['@variable'] = {link = 'Normal'},
+
   DiagnosticInfo = {ctermfg = 6},
   DiagnosticHint = {ctermfg = 4},
   DiagnosticWarn = {ctermfg = 3},
@@ -151,7 +153,7 @@ for g, opts in pairs({
   CmpItemKindFunction = {link = 'Function'},
   CmpItemKindConstructor = {link = 'Method'},
   CmpItemKindField = {link = 'Identifier'},
-  CmpItemKindVariable = {link = 'Identifier'},
+  CmpItemKindVariable = {link = '@variable'},
   CmpItemKindClass = {link = 'Class'},
   CmpItemKindInterface = {link = 'Class'},
   CmpItemKindModule = {link = 'Class'},

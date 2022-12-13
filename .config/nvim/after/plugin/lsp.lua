@@ -75,7 +75,7 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 for s, cfg in pairs({
   clangd = {
     cmd = { 'clangd', '--background-index', '--enable-config' },
@@ -157,7 +157,7 @@ for s, cfg in pairs({
       map('n', '<Leader>ls', tb.lsp_dynamic_workspace_symbols,
           {noremap = true, silent = true, desc = 'Search symbols'})
     end
-    if client.server_capabilities.diagnosticProvider then
+    if client.server_capabilities.inlayHintProvider then
       map('n', '<Leader>ld', vim.diagnostic.open_float,
           {noremap = true, silent = true, desc = 'Line diagnostic'})
     end

@@ -8,7 +8,8 @@ setmetatable(Spinner, {
   end,
 })
 
-local spinner_frames = { '⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷' }
+local fps = 10
+local spinner_frames = { '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾' }
 
 function Spinner.new(msg, lvl, opts)
   local self = setmetatable({}, Spinner)
@@ -62,7 +63,7 @@ function Spinner:_spin()
   self.opts = nil
 
   self.timer = vim.loop.new_timer()
-  self.timer:start(1000/#spinner_frames, 0, vim.schedule_wrap(function()
+  self.timer:start(1000/fps, 0, vim.schedule_wrap(function()
     self:_spin()
   end))
 end

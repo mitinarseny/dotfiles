@@ -2,7 +2,7 @@
 
 ```sh
 $ git clone --bare https://github.com/mitinarseny/dotfiles ~/.dotfiles
-$ alias dots="git --git-dir=~/.dotfiles --work-tree=~"
+$ alias dots="git --git-dir ~/.dotfiles --work-tree ~"
 $ dots config --local status.showUntrackedFiles no
 $ dots submodule update --init --recursive
 $ dots checkout -f

@@ -7,7 +7,7 @@ window:
   # gtk_theme_variant: dark
 
 font:
-  size: 11.0
+  size: 14.0
   # The normal (roman) font face to use.
   normal:
     family: Fira Code

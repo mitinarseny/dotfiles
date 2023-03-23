@@ -1,0 +1,28 @@
+{
+    "workbench.colorTheme": "Dainty – Nord (chroma 0, lightness 0)",
+    "terminal.explorerKind": "external",
+    "terminal.external.osxExec": "Alacritty.app",
+    "terminal.external.linuxExec": "foot",
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "editor.fontSize": 14,
+    "editor.wordWrap": "on",
+    "window.restoreFullscreen": true,
+    "window.nativeTabs": true,
+    "editor.fontFamily": "'Fira Code', monospace",
+    "workbench.commandPalette.preserveInput": true,
+    "workbench.startupEditor": "readme",
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "[rust]": {
+
+    },
+    "rust-analyzer.typing.autoClosingAngleBrackets.enable": true,
+    "editor.bracketPairColorization.enabled": false,
+    "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+    "rust-analyzer.inlayHints.closureReturnTypeHints.enable": "always",
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "editor.inlayHints.padding": true,
+    // "git.defaultCloneDirectory": "${env:HOME}/dev"
+}

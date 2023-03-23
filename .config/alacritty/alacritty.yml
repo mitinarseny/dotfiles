@@ -1,9 +1,17 @@
+shell:
+  program: /bin/sh
+  args:
+    - -l
+    - -c
+    - "exec tmux -T '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title' new-session"
+
 window:
   padding:
     x: 2
     y: 2
-  #decorations: none
-  startup_mode: Maximized
+  decorations: buttonless
+  startup_mode: Fullscreen
+  option_as_alt: Both
   # gtk_theme_variant: dark
 
 font:

@@ -1,0 +1,18 @@
+import = [
+  "~/.config/alacritty/nord-theme.toml",
+  "~/.config/alacritty/fira-code-font.toml",
+]
+
+[shell]
+program = "/bin/sh"
+args = ["-l", "-c", "exec tmux -T '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title' new-session"]
+
+[window]
+decorations = "buttonless"
+option_as_alt = "Both"
+startup_mode = "Fullscreen"
+padding = { x = 2, y = 2 }
+
+[cursor]
+style = "Beam"
+unfocused_hollow = true

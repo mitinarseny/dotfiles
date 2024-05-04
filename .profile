@@ -4,3 +4,7 @@ if [ -d ${HOME}/.profile.d/ ]; then
   done
   unset f
 fi
+
+# use ~/.localrc for SUPER SECRET CRAP that you don't
+# want in your public repo.
+[ -r "${HOME}/.localrc" ] && . "${HOME}/.localrc"

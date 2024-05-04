@@ -275,10 +275,6 @@ zle -N _r_cut
 bindkey $'^Y' _r_copy
 bindkey $'^E' _r_cut
 
-# use ~/.localrc for SUPER SECRET CRAP that you don't
-# want in your public repo.
-[ -r "${HOME}/.localrc" ] && . "${HOME}/.localrc"
-
 # remove duplicated from PATH
 typeset -U PATH
 

@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "Dainty – Nord (chroma 0, lightness 0)",
+    "workbench.colorTheme": "Nord",
     "terminal.explorerKind": "external",
     "terminal.external.osxExec": "Alacritty.app",
     "terminal.external.linuxExec": "foot",
@@ -24,5 +24,7 @@
     "rust-analyzer.inlayHints.closureReturnTypeHints.enable": "always",
     "editor.inlayHints.enabled": "offUnlessPressed",
     "editor.inlayHints.padding": true,
+    "window.commandCenter": false,
+    "window.customTitleBarVisibility": "never",
     // "git.defaultCloneDirectory": "${env:HOME}/dev"
 }

@@ -5,7 +5,6 @@
     "terminal.external.linuxExec": "foot",
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.defaultProfile.osx": "zsh",
-    "editor.fontSize": 14,
     "editor.wordWrap": "on",
     "window.restoreFullscreen": true,
     "window.nativeTabs": true,
@@ -26,5 +25,23 @@
     "editor.inlayHints.padding": true,
     "window.commandCenter": false,
     "window.customTitleBarVisibility": "never",
+    "files.autoSave": "afterDelay",
+    "editor.semanticTokenColorCustomizations": {
+        "[Nord]": {
+            "enabled": true,
+            "rules": {
+                "attribute": "#5E81AC",
+                "attributeBracket": "#5E81AC",
+                "const": "#8FBCBB",
+                "decorator": "#5E81AC",
+                "derive": "#8FBCBB",
+                "enum": "#8FBCBB",
+                "enumMember": "#8FBCBB",
+                "interface": "#8FBCBB",
+                "namespace": "#81A1C1",
+                "struct": "#8FBCBB",
+                "typeParameter": "#8FBCBB",
+        }
+    },
     // "git.defaultCloneDirectory": "${env:HOME}/dev"
 }

@@ -5,18 +5,13 @@
     "terminal.external.linuxExec": "foot",
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.defaultProfile.osx": "zsh",
+    "editor.formatOnSave": true,
     "editor.wordWrap": "on",
     "window.restoreFullscreen": true,
     "window.nativeTabs": true,
     "editor.fontFamily": "'Fira Code', monospace",
     "workbench.commandPalette.preserveInput": true,
     "workbench.startupEditor": "readme",
-    "[python]": {
-        "editor.formatOnType": true
-    },
-    "[rust]": {
-
-    },
     "rust-analyzer.typing.autoClosingAngleBrackets.enable": true,
     "editor.bracketPairColorization.enabled": false,
     "rust-analyzer.inlayHints.closingBraceHints.enable": false,
@@ -41,7 +36,17 @@
                 "namespace": "#81A1C1",
                 "struct": "#8FBCBB",
                 "typeParameter": "#8FBCBB",
-        }
+            }
+        },
+        // "git.defaultCloneDirectory": "${env:HOME}/dev"
     },
-    // "git.defaultCloneDirectory": "${env:HOME}/dev"
+    "todo-tree.highlights.useColourScheme": true,
+    "todo-tree.tree.hideTreeWhenEmpty": true,
+    "git.autofetch": true,
+    "git.enableCommitSigning": true,
+    "go.toolsManagement.autoUpdate": true,
+    "workbench.editor.tabActionLocation": "left",
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "diffEditor.renderSideBySide": false,
+    "githubPullRequests.pullBranch": "never",
 }

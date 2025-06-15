@@ -1,9 +1,5 @@
-import = [
-  "~/.config/alacritty/nord-theme.toml",
-  "~/.config/alacritty/fira-code-font.toml",
-]
 
-[shell]
+[terminal.shell]
 program = "/bin/sh"
 args = ["-l", "-c", "exec tmux -T '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title' new-session"]
 
@@ -16,3 +12,11 @@ padding = { x = 2, y = 2 }
 [cursor]
 style = "Beam"
 unfocused_hollow = true
+
+[general]
+import = [
+  "~/.config/alacritty/nord-theme.toml",
+  "~/.config/alacritty/fira-code-font.toml",
+]
+
+[terminal]

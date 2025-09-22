@@ -15,13 +15,13 @@ require('which-key').setup({
     separator = '➜',
     group = '+',
   },
-  window = {
+  win = {
     border = 'none',
     position = 'bottom',
     margin = {1, 0, 1, 0},
-    padding = {1, 0, 1, 0},
+    padding = { 1, 0 },
   },
-  popup_mappings = {
+  keys = {
     scroll_down = '<C-Down>',
     scroll_up = '<C-Up>',
   },

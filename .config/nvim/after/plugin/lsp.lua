@@ -211,7 +211,7 @@ vim.api.nvim_create_autocmd({'UIEnter'}, {
       desc = 'LSP progress notifications',
       callback = function()
         -- TODO: use one spinner for all tokens of each client
-        for _, c in ipairs(vim.lsp.get_active_clients()) do
+        for _, c in ipairs(vim.lsp.get_clients()) do
           for token, ctx in pairs(c.messages.progress) do
             if not spinners[c.id] then
               spinners[c.id] = {}

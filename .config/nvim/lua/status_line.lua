@@ -124,7 +124,7 @@ local function diagnostic_counts()
 end
 
 local function lsp_indicator()
-  local cs = vim.lsp.get_active_clients()
+  local cs = vim.lsp.get_clients()
   if not next(cs) then
     return
   end

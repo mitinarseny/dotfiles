@@ -34,9 +34,9 @@ vim.api.nvim_create_autocmd('UIEnter', {
 
     vim.o.pumheight = 10
 
-    if tonumber(vim.o.t_Co) > 1 then
+    --if tonumber(t_Co) > 1 then
       vim.cmd([[syntax enable]]) -- enable syntax highlighting if terminal supports colors
-    end
+    --end
     vim.o.cursorline = true
   end,
 })

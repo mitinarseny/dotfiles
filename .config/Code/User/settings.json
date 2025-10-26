@@ -49,4 +49,5 @@
     "github-actions.workflows.pinned.refresh.enabled": true,
     "diffEditor.renderSideBySide": false,
     "githubPullRequests.pullBranch": "never",
+    "python.terminal.activateEnvironment": false,
 }

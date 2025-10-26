@@ -4,5 +4,5 @@ if command -v ssh-agent > /dev/null && [ -z "${SSH_AUTH_SOCK}" ]; then
 fi
 
 if command -v ssh-add > /dev/null && [ "$(uname)" == 'Darwin' ]; then
-  ssh-add --apple-load-keychain -q 2>/dev/null &
+  (ssh-add --apple-load-keychain -q >/dev/null 2>&1 &)
 fi

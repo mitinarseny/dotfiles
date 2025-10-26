@@ -1,7 +1,9 @@
-
 [terminal.shell]
 program = "/bin/sh"
-args = ["-l", "-c", "exec tmux -T '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title' new-session"]
+args = [
+  "-c",
+  "exec ${SHELL:-zsh} -l -c \"exec tmux -T '256,clipboard,ccolour,cstyle,focus,mouse,RGB,title' new-session\""
+]
 
 [window]
 decorations = "buttonless"
@@ -19,4 +21,3 @@ import = [
   "~/.config/alacritty/fira-code-font.toml",
 ]
 
-[terminal]

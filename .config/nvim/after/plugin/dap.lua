@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
     })
 
     local wk = require('which-key')
-    wk.register({['<Leader>d'] = {name = 'DAP'}})
+    wk.add({{'<Leader>d', group = 'DAP'}})
 
     vim.keymap.set('n', '<Leader>db', dap.toggle_breakpoint,
       {noremap = true, silent = true, desc = 'Toggle breakpoint'})

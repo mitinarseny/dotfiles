@@ -127,7 +127,7 @@ for s, cfg in pairs({
     local tb = require('telescope.builtin')
     local wk = require('which-key')
 
-    wk.register({['<Leader>l'] = {name = 'LSP'}}, {buffer = bufnr})
+    wk.add({{'<Leader>l', group = 'LSP'}}, {buffer = bufnr})
     if client.server_capabilities.definitionProvider then
       map('n', '<C-]>', vim.lsp.buf.definition,
         {noremap = true, silent = true, desc = 'Definition'})

@@ -50,4 +50,6 @@
     "diffEditor.renderSideBySide": false,
     "githubPullRequests.pullBranch": "never",
     "python.terminal.activateEnvironment": false,
+    "chat.agent.enabled": false,
+    "chat.disableAIFeatures": true,
 }

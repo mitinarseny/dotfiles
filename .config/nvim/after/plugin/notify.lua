@@ -60,7 +60,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
     })
     vim.notify = notify
 
-    wk.register({['<Leader>n'] = {name = 'notify'}})
+    wk.add({{'<Leader>n', group = 'notify'}})
     vim.keymap.set('n', '<Leader>nn', function()
       notify.dismiss({
         pending = true,

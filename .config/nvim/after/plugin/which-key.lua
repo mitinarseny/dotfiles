@@ -17,9 +17,6 @@ require('which-key').setup({
   },
   win = {
     border = 'none',
-    position = 'bottom',
-    margin = {1, 0, 1, 0},
-    padding = { 1, 0 },
   },
   keys = {
     scroll_down = '<C-Down>',

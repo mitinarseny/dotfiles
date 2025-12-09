@@ -52,4 +52,9 @@
     "python.terminal.activateEnvironment": false,
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
+    "git.confirmSync": false,
+    "claudeCode.preferredLocation": "panel",
+    "githubPullRequests.pushBranch": "always",
+    "rust-analyzer.assist.preferSelf": true,
+    "terminal.integrated.suggest.enabled": false,
 }

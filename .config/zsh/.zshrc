@@ -283,3 +283,8 @@ export LESS='-FSXiwMRj4a#4z-4'
 if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
   LESS+='--mouse --wheel-lines=2'
 fi
+
+# mise
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi

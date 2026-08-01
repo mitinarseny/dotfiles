@@ -86,4 +86,12 @@ if command -v docker-compose > /dev/null; then
   fpath+=( ${PLUGINS_DIR}/github.com/docker/compose/contrib/completion/zsh )
 fi
 
+if command -v rustup > /dev/null; then
+  for cmd in rustup cargo; do
+    if [ ! -r "${XDG_DATA_HOME}/zsh/site-functions/_${cmd}" ]; then
+      rustup completions zsh ${cmd} > "${XDG_DATA_HOME}/zsh/site-functions/_${cmd}"
+    fi
+  done
+fi
+
 unset PLUGINS_DIR
